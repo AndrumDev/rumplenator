@@ -27,8 +27,9 @@ class Rumplenator(commands.Bot):
         print(f'Ready | {self.nick}')
         await self._ws.send_privmsg(os.environ['CHANNEL'], f"/me has landed!")
 
-    async def event_message(self, message):
+    async def event_message(self, message: Message):
         print(message.content)
+        await ChannelCommands.check_pom_state(message)
         await self.handle_commands(message)
 
     #
@@ -66,6 +67,10 @@ class Rumplenator(commands.Bot):
     @commands.command(name=ChannelCommands.HYPE)
     async def hype(self, ctx: Message):
         await ChannelCommands.hype(ctx)
+
+    @commands.command(name=ChannelCommands.POMO)
+    async def pomo(self, ctx: Message):
+        await ChannelCommands.pomo(ctx)
 
     #
 

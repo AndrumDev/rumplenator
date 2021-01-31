@@ -1,3 +1,4 @@
+from .command_logic.pomo import check_active_user, handle_pomo
 from .command_logic.simp import get_simp_quote
 from random import randint
 from twitchio.dataclasses import Message
@@ -15,6 +16,7 @@ class ChannelCommands():
     SIMP = 'simp'
     WOWIE = 'wowie'
     HYPE = 'hype'
+    POMO = 'pomo'
 
     CHANNEL_COMMAND_LIST = [
         HI,
@@ -24,7 +26,8 @@ class ChannelCommands():
         SSIMP,
         SIMP,
         WOWIE,
-        HYPE
+        HYPE,
+        POMO
     ]
 
     ###############
@@ -55,5 +58,12 @@ class ChannelCommands():
 
     async def hype(ctx: Message):
         await ctx.send(f'andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype')
+
+    async def pomo(ctx: Message):
+        await handle_pomo(ctx)
+
+    async def check_pom_state(ctx: Message):
+        if not f"!{ChannelCommands.POMO}" in ctx.content:
+            await check_active_user(ctx)
 
     #################

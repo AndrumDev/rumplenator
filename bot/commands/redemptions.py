@@ -110,7 +110,7 @@ class RedemptionCommands():
             await ctx.send(f'/me ' +message+ " got booped ☆ヾ(￣ω ￣｡)ノ")
 
     async def tuck(ctx: Message):
-        message = get_message_content(ctx.content, FLAWER_TUCK)
+        username = get_message_content(ctx.content, FLAWER_TUCK)
         if username is '':
             return()
         else:

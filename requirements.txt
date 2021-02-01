@@ -12,6 +12,7 @@ multidict==5.1.0
 pycodestyle==2.6.0
 pyflakes==2.2.0
 pylint==2.6.0
+python-dotenv==0.15.0
 six==1.15.0
 toml==0.10.2
 twitchio==1.2.1

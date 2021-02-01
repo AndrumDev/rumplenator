@@ -103,15 +103,15 @@ class RedemptionCommands():
         await ctx.send(f'/me {ctx.author.name} has dropkissed ' + message + ' (on the cheeks cuz we are PG) and now ' + message + ' is not alone in this vast abyss  (ᵔᴥᵔ)')
 
     async def boop(ctx: Message):
-        message = get_message_content(ctx.content, MABLE_BOOP)
-        if "rumplenator" in username:
+        message = get_message_content(ctx.content, RedemptionCommands.MABLE_BOOP)
+        if "rumplenator" in message:
             await ctx.send(f'/me I got booped ☆ヾ(￣ω ￣｡)ノ')
         else:
-            await ctx.send(f'/me ' +message+ " got booped ☆ヾ(￣ω ￣｡)ノ")
+            await ctx.send(f'/me {message} got booped ☆ヾ(￣ω ￣｡)ノ")
 
     async def tuck(ctx: Message):
-        username = get_message_content(ctx.content, FLAWER_TUCK)
-        if username is '':
+        message = get_message_content(ctx.content, RedemptionCommands.FLAWER_TUCK)
+        if message is '':
             return()
         else:
-            await ctx.send(f"/me it\'s "+username+"\'s bedtime! get comfy in bed and have sweet dreams my friend! thanks for being here, we\'ll miss you! (︶｡︶✽)zzz")
+            await ctx.send(f"/me it\'s {message}\'s bedtime! get comfy in bed and have sweet dreams my friend! thanks for being here, we\'ll miss you! (︶｡︶✽)zzz")

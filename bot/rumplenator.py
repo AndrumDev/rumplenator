@@ -124,4 +124,12 @@ class Rumplenator(commands.Bot):
     async def cointoss(self, ctx: Message):
         await RedemptionCommands.cointoss(ctx)
 
+    @commands.command(name=RedemptionCommands.MABLE_BOOP)
+    async def boop(self, ctx: Message):
+        await RedemptionCommands.boop(ctx)
+
+    @commands.command(name=RedemptionCommands.FLAWER_TUCK)
+    async def tuck(self, ctx: Message):
+        await RedemptionCommands.tuck(ctx)
+
     #

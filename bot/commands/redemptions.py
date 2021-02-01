@@ -21,8 +21,10 @@ class RedemptionCommands():
     GRANT_SKWIRL = 'mrskwirl'
     MCLOVIN_MCLOVIN = 'mclovin'
     MABLE_SLEEPY = 'sleepy'
+    MABLE_BOOP = 'boop'
     MABLE_COINTOSS = 'cointoss'
     FLAWER_PAT = 'pat'
+    FLAWER_TUCK = 'tuck'
     SKY_DROPKICK = 'dropkick'
     SKP_DROPKISS = 'dropkiss'
 
@@ -34,9 +36,11 @@ class RedemptionCommands():
         FLIP_FLIP,
         GRANT_SKWIRL,
         MCLOVIN_MCLOVIN,
+        MABLE_BOOP,
         MABLE_SLEEPY,
         MABLE_COINTOSS,
         FLAWER_PAT,
+        FLAWER_TUCK,
         SKY_DROPKICK,
         SKP_DROPKISS
     ]
@@ -97,3 +101,17 @@ class RedemptionCommands():
     async def dropkiss(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.SKP_DROPKISS)
         await ctx.send(f'/me {ctx.author.name} has dropkissed ' + message + ' (on the cheeks cuz we are PG) and now ' + message + ' is not alone in this vast abyss  (ᵔᴥᵔ)')
+
+    async def boop(ctx: Message):
+        message = get_message_content(ctx.content, RedemptionCommands.MABLE_BOOP)
+        if "rumplenator" in message:
+            await ctx.send(f'/me I got booped ☆ヾ(￣ω ￣｡)ノ')
+        else:
+            await ctx.send(f'/me {message} got booped ☆ヾ(￣ω ￣｡)ノ")
+
+    async def tuck(ctx: Message):
+        message = get_message_content(ctx.content, RedemptionCommands.FLAWER_TUCK)
+        if message is '':
+            return()
+        else:
+            await ctx.send(f"/me it\'s {message}\'s bedtime! get comfy in bed and have sweet dreams my friend! thanks for being here, we\'ll miss you! (︶｡︶✽)zzz")

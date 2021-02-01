@@ -7,6 +7,10 @@ import threading
 import time
 import asyncio
 
+MIN_WORK_MINUTES = 10
+MIN_BREAK_MINUTES = 3
+
+MAX_TOTAL_MINUTES = 300
 
 #####
 
@@ -76,9 +80,11 @@ class PomoTimerThread (threading.Thread):
     async def __start_countdown(self, state: Literal['break', 'work'] = 'work'):
         self.state = state
         self.minutes_remaining = self.work_minutes if self.state == 'work' else self.break_minutes
-        while self.minutes_remaining and not self.__cancelled:
+        seconds = self.minutes_remaining * 60
+        while seconds and not self.__cancelled:
             time.sleep(1)
-            self.minutes_remaining -= 1
+            seconds -= 1
+            self.minutes_remaining = (seconds // 60) + 1
 
     async def __notify_user(self, message: str):
         time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
@@ -142,6 +148,9 @@ async def handle_pomo(ctx: Message):
         return
 
     work_time, break_time, sessions, topic = __get_pom_args(args)
+
+    if work_time < MIN_WORK_MINUTES or break_time < MIN_BREAK_MINUTES or (work_time + break_time) * sessions > MAX_TOTAL_MINUTES:
+        await ctx.channel.send(f"@{username}, oops! Please note min work is 10, min break is 3, and max total minutes is 300")
 
     def on_complete():
         del __pomo_users[username]

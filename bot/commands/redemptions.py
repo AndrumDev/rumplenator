@@ -107,7 +107,7 @@ class RedemptionCommands():
         if "rumplenator" in message:
             await ctx.send(f'/me I got booped ☆ヾ(￣ω ￣｡)ノ')
         else:
-            await ctx.send(f'/me {message} got booped ☆ヾ(￣ω ￣｡)ノ")
+            await ctx.send(f'/me {message} got booped ☆ヾ(￣ω ￣｡)ノ')
 
     async def tuck(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.FLAWER_TUCK)

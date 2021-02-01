@@ -21,8 +21,10 @@ class RedemptionCommands():
     GRANT_SKWIRL = 'mrskwirl'
     MCLOVIN_MCLOVIN = 'mclovin'
     MABLE_SLEEPY = 'sleepy'
+    MABLE_BOOP = 'boop'
     MABLE_COINTOSS = 'cointoss'
     FLAWER_PAT = 'pat'
+    FLAWER_TUCK = 'tuck'
     SKY_DROPKICK = 'dropkick'
     SKP_DROPKISS = 'dropkiss'
 
@@ -37,6 +39,7 @@ class RedemptionCommands():
         MABLE_SLEEPY,
         MABLE_COINTOSS,
         FLAWER_PAT,
+        FLAWER_TUCK,
         SKY_DROPKICK,
         SKP_DROPKISS
     ]

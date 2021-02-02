@@ -152,8 +152,9 @@ async def handle_pomo(ctx: Message):
 
     work_time, break_time, sessions, topic = __get_pom_args(args)
 
-    if work_time < MIN_WORK_MINUTES or break_time < MIN_BREAK_MINUTES or (work_time + break_time) * sessions > MAX_TOTAL_MINUTES:
+    if work_time < MIN_WORK_MINUTES or (break_time != 0 and break_time < MIN_BREAK_MINUTES) or (work_time + break_time) * sessions > MAX_TOTAL_MINUTES:
         await ctx.channel.send(f"@{username}, oops! Please note min work is 10, min break is 3, and max total minutes is 300")
+        return
 
     def on_complete():
         del __pomo_users[username]

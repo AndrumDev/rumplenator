@@ -40,4 +40,3 @@ python -m pytest
 ```
 python -m main.py
 ```
-

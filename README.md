@@ -1,3 +1,5 @@
+[![Build Status](https://www.travis-ci.com/AndrumDev/rumplenator.svg?branch=main)](https://www.travis-ci.com/AndrumDev/rumplenator)
+
 # rumplenator
 Code for the twitch chatbot on andrumpleteazer's stream ( twitch.tv/andrumpleteazer )
 

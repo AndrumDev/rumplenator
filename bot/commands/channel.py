@@ -1,6 +1,5 @@
-from .command_logic.pomo import check_active_user, handle_pomo
-from .command_logic.simp import get_simp_quote
-from random import randint
+from bot.commands.command_logic.pomo import check_active_user, handle_pomo
+from bot.commands.command_logic.simp import get_simp_quote
 from twitchio.dataclasses import Message
 
 
@@ -35,29 +34,29 @@ class ChannelCommands():
     ### FUNCTIONS ###
 
     async def hi(ctx: Message):
-        await ctx.send(f'Hello {ctx.author.name}!')
+        await ctx.send('Hello {ctx.author.name}!')
 
     async def kill(ctx: Message):
-        await ctx.send(f'I cannot be killed™'.encode("utf-8").decode("utf-8"))
+        await ctx.send('I cannot be killed™'.encode("utf-8").decode("utf-8"))
 
     async def bot_love(ctx: Message):
-        await ctx.send(f'aaawh thank you {ctx.author.name} andrumHeart If I was sentient I would love you too! xxx')
+        await ctx.send('aaawh thank you {ctx.author.name} andrumHeart If I was sentient I would love you too! xxx')
 
     async def raid(ctx: Message):
-        await ctx.send(f' Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype')
+        await ctx.send(' Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype')
 
     async def ssimp(ctx: Message):
-        await ctx.send(f'does she speak? notice me. u r beetiful asian quenn. can i wife u? oh you have a bf? im out.')
+        await ctx.send('does she speak? notice me. u r beetiful asian quenn. can i wife u? oh you have a bf? im out.')
 
     async def simp(ctx: Message):
         message = await get_simp_quote()
         await ctx.send(message)
 
     async def wowie(ctx: Message):
-        await ctx.send(f'Thats awesome! But ur not just awesome, ur WOWIE! andrumHeart ')
+        await ctx.send('Thats awesome! But ur not just awesome, ur WOWIE! andrumHeart ')
 
     async def hype(ctx: Message):
-        await ctx.send(f'andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype')
+        await ctx.send('andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype')
 
     async def pomo(ctx: Message):
         await handle_pomo(ctx)

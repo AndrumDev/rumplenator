@@ -7,9 +7,12 @@ import threading
 import time
 import asyncio
 
+
+DEFAULT_BREAK_TIME_MINS = 0
+DEFAULT_NUM_SESSIONS = 1
+
 MIN_WORK_MINUTES = 10
 MIN_BREAK_MINUTES = 3
-
 MAX_TOTAL_MINUTES = 300
 
 #####
@@ -175,23 +178,22 @@ async def check_active_user(ctx: Message):
 
 
 async def __show_pomo_info(username: str, ctx: Message, message=''):
-    message = f"Want to start your own pomodoro timer? Type !pomo[number] to set a personalised timer(mins). The full argument list is !pomo [work mins] [break mins] [# pomo sessions] [project name]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions. Good luck!!"
+    message = "Want to start your own pomodoro timer? Type !pomo[number] to set a personalised timer(mins). The full argument list is !pomo [work mins] [break mins] [# pomo sessions] [project name]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions. Good luck!!"
     await ctx.channel.send(message)
 
 
-def __cancel_pomo(username: str):
+def __cancel_pomo(username: str) -> None:
     if __pomo_users[username]:
         __pomo_users[username].cancel()
 
 
-def __get_message_args(message: str):
+def __get_message_args(message: str) -> List[str]:
     m = get_message_content(message, 'pomo')
     args = m.split()
     return args
 
 
-def __get_pom_args(args: List[str]):
-
+def __get_pom_args(args: List[str]) -> (int, int, int, str):
     topic_idx = -1
     for idx, val in enumerate(args):
         if not val.isdigit():
@@ -202,21 +204,12 @@ def __get_pom_args(args: List[str]):
             topic_idx = idx
             break
 
-    break_time = 0
-    sessions = 1
-    topic = ''
-
-    pom_times = args[:topic_idx] if topic_idx != -1 else args
-
+    has_topic = topic_idx != -1
+    pom_times = args[:topic_idx] if has_topic else args
+    
     work_time = int(pom_times[0])
-
-    if len(pom_times) >= 2:
-        break_time = int(pom_times[1])
-
-    if len(pom_times) >= 3:
-        sessions = int(pom_times[2])
-
-    if topic_idx != -1:
-        topic = ' '.join([str(n) for n in args[topic_idx:]])
+    break_time = int(pom_times[1]) if len(pom_times) > 1 else DEFAULT_BREAK_TIME_MINS
+    sessions = int(pom_times[2]) if len(pom_times) > 2 else DEFAULT_NUM_SESSIONS
+    topic = ' '.join([str(n) for n in args[topic_idx:]]) if has_topic else ''
 
     return work_time, break_time, sessions, topic

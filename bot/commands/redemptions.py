@@ -1,7 +1,7 @@
 ### CONSTANTS ###
 
-from .command_logic.dyson import get_dyson_message
-from .command_logic.tom2 import get_tom2_message
+from bot.commands.command_logic.dyson import get_dyson_message
+from bot.commands.command_logic.tom2 import get_tom2_message
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
 from twitchio.dataclasses import Message

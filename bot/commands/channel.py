@@ -34,13 +34,13 @@ class ChannelCommands():
     ### FUNCTIONS ###
 
     async def hi(ctx: Message):
-        await ctx.send('Hello {ctx.author.name}!')
+        await ctx.send(f'Hello {ctx.author.name}!')
 
     async def kill(ctx: Message):
         await ctx.send('I cannot be killed™'.encode("utf-8").decode("utf-8"))
 
     async def bot_love(ctx: Message):
-        await ctx.send('aaawh thank you {ctx.author.name} andrumHeart If I was sentient I would love you too! xxx')
+        await ctx.send(f'aaawh thank you {ctx.author.name} andrumHeart If I was sentient I would love you too! xxx')
 
     async def raid(ctx: Message):
         await ctx.send(' Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype')

@@ -53,7 +53,7 @@ class RedemptionCommands():
 
     async def onlyfans(ctx: Message):
         message = get_dyson_message('fan')
-        await ctx.send(f'FANS YOU SAY?')
+        await ctx.send('FANS YOU SAY?')
         time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
         await ctx.send(message)
 
@@ -64,20 +64,20 @@ class RedemptionCommands():
         await ctx.send(wtf_message)
 
     async def giveup(ctx: Message):
-        await ctx.send(f'NEVER GIVE UP https://www.youtube.com/watch?v=tYzMYcUty6s&ab_channel=MetalGearFro')
+        await ctx.send('NEVER GIVE UP https://www.youtube.com/watch?v=tYzMYcUty6s&ab_channel=MetalGearFro')
 
     async def flip(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.FLIP_FLIP)
         if "!" not in message:
             await ctx.send(f'{message[::-1]}')
         else:
-            await ctx.send(f'are you tryna do something sneaky..?')
+            await ctx.send('are you tryna do something sneaky..?')
 
     async def mrskwirl(ctx: Message):
-        await ctx.send(f'Every Skwirl needs its NUT :peanuts:')
+        await ctx.send('Every Skwirl needs its NUT :peanuts:')
 
     async def mclovin(ctx: Message):
-        await ctx.send(f'According to Urban Dictionary Colored McLovin is the cutest E-girl known to man. His uwus have created peace in times of turmoil, and his gamer girl bath water quenched the thirst of people without clean water. McLovin truly is the queen of all.')
+        await ctx.send('According to Urban Dictionary Colored McLovin is the cutest E-girl known to man. His uwus have created peace in times of turmoil, and his gamer girl bath water quenched the thirst of people without clean water. McLovin truly is the queen of all.')
 
     async def sleepy(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.MABLE_SLEEPY)
@@ -92,26 +92,26 @@ class RedemptionCommands():
 
     async def pat(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.FLAWER_PAT)
-        await ctx.send(f'/me gentle pats on ' + message + '\'s head. well done! you\'re doin great my friend (ｏ・・)ノ”(ᴗ ᴗ。) <3 ')
+        await ctx.send(f'/me gentle pats on {message}\'s head. well done! you\'re doin great my friend (ｏ・・)ノ”(ᴗ ᴗ。) <3 ')
 
     async def dropkick(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.SKY_DROPKICK)
-        await ctx.send(f'/me '+message+f' has been dropkicked by {ctx.author.name} and sent into the abyss never to be loved again (•̀ᴗ•́ )و')
+        await ctx.send(f'/me {message} has been dropkicked by {ctx.author.name} and sent into the abyss never to be loved again (•̀ᴗ•́ )و')
 
     async def dropkiss(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.SKP_DROPKISS)
-        await ctx.send(f'/me {ctx.author.name} has dropkissed ' + message + ' (on the cheeks cuz we are PG) and now ' + message + ' is not alone in this vast abyss  (ᵔᴥᵔ)')
+        await ctx.send(f'/me {ctx.author.name} has dropkissed {message} (on the cheeks cuz we are PG) and now {message} is not alone in this vast abyss (ᵔᴥᵔ)')
 
     async def boop(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.MABLE_BOOP)
         if "rumplenator" in message:
-            await ctx.send(f'/me I got booped ☆ヾ(￣ω ￣｡)ノ')
+            await ctx.send('/me I got booped ☆ヾ(￣ω ￣｡)ノ')
         else:
             await ctx.send(f'/me {message} got booped ☆ヾ(￣ω ￣｡)ノ')
 
     async def tuck(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.FLAWER_TUCK)
-        if message is '':
+        if message == '':
             return()
         else:
             await ctx.send(f"/me it\'s {message}\'s bedtime! get comfy in bed and have sweet dreams my friend! thanks for being here, we\'ll miss you! (︶｡︶✽)zzz")

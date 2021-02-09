@@ -1,11 +1,11 @@
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
-from os import stat
-from typing import Dict, List, Literal
+from typing import Dict, List, Tuple
 from twitchio.dataclasses import Message
 import threading
 import time
 import asyncio
+import enum
 
 
 DEFAULT_BREAK_TIME_MINS = 0
@@ -18,6 +18,11 @@ MAX_TOTAL_MINUTES = 300
 #####
 
 
+class PomoState(enum.Enum):
+    WORK = 0
+    BREAK = 1
+
+
 class PomoTimerThread (threading.Thread):
 
     username: str
@@ -28,19 +33,18 @@ class PomoTimerThread (threading.Thread):
     sessions_remaining: int
     topic: str
 
-    state: Literal['break', 'work'] = 'work'
+    state: PomoState = PomoState.WORK
 
-    __ctx: Message
-    __cancelled = False
+    __cancelled: bool = False
+    __cancelled_by: str = None
 
     @property
     def sessions_done(self):
         return self.total_sessions - self.sessions_remaining
 
-    def __init__(self, username: str, ctx: Message, work_minutes: int, break_minutes: int, sessions: int, topic: str, on_complete):
+    def __init__(self, username: str, work_minutes: int, break_minutes: int, sessions: int, topic: str, on_complete, notify_user):
         threading.Thread.__init__(self)
 
-        self.__ctx = ctx
         self.name = username
         self.username = username
 
@@ -49,13 +53,18 @@ class PomoTimerThread (threading.Thread):
         self.total_sessions = sessions
         self.sessions_remaining = sessions
         self.topic = topic
+
         self.__on_complete = on_complete
+        self.__notify_user = notify_user
 
     def run(self):
         asyncio.run(self.__start_pomo())
         self.__on_complete()
 
-    def cancel(self):
+    def cancel(self, username=''):
+        if username != '':
+            self.__cancelled_by = username
+
         self.__cancelled = True
 
     async def __start_pomo(self):
@@ -63,8 +72,8 @@ class PomoTimerThread (threading.Thread):
         while(self.sessions_remaining and not self.__cancelled):
             work_start_message = self.__get_work_start_text()
 
-            await self.__notify_user(work_start_message)
-            await self.__start_countdown('work')
+            await self.__notify_user(self.username, work_start_message)
+            await self.__start_countdown(PomoState.WORK)
             self.sessions_remaining -= 1
 
             only_one_break = self.total_sessions == 1 and self.break_minutes != 0
@@ -72,26 +81,25 @@ class PomoTimerThread (threading.Thread):
 
             if((only_one_break or several_sessions_left) and not self.__cancelled):
                 break_start_message = self.__get_break_start_text()
-                await self.__notify_user(break_start_message)
-                await self.__start_countdown('break')
+                await self.__notify_user(self.username, break_start_message)
+                await self.__start_countdown(PomoState.BREAK)
 
         if(self.__cancelled):
-            await self.__notify_user(f"pomo session cancelled")
+            if self.__cancelled_by:
+                await self.__notify_user(self.username, f"Your pomo session has been cancelled by {self.__cancelled_by}")
+            else:
+                await self.__notify_user(self.username, "Your pomo session has been cancelled")
         else:
-            await self.__notify_user(f"Your pomodoro sessions have finished, well done!")
+            await self.__notify_user(self.username, "Your pomodoro sessions have finished, well done!")
 
-    async def __start_countdown(self, state: Literal['break', 'work'] = 'work'):
+    async def __start_countdown(self, state: PomoState):
         self.state = state
-        self.minutes_remaining = self.work_minutes if self.state == 'work' else self.break_minutes
+        self.minutes_remaining = self.work_minutes if self.state == PomoState.WORK else self.break_minutes
         seconds = self.minutes_remaining * 60
         while seconds and not self.__cancelled:
             time.sleep(1)
             seconds -= 1
             self.minutes_remaining = (seconds // 60) + 1
-
-    async def __notify_user(self, message: str):
-        time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
-        await self.__ctx.channel.send(f"@{self.username}, {message}")
 
     def __get_work_start_text(self):
         if self.total_sessions == 1:
@@ -119,73 +127,104 @@ class PomoTimerThread (threading.Thread):
 #####
 
 
-__pomo_users: Dict[str, PomoTimerThread] = {}
+__active_timers: Dict[str, PomoTimerThread] = {}
+
+# public methods
 
 
-async def handle_pomo(ctx: Message):
+async def handle_pomo(ctx: Message) -> None:
     args: List[str] = __get_message_args(ctx.content)
     username = ctx.author.name
 
-    current_pomo = __pomo_users.get(username)
-
-    if current_pomo:
-        if len(args) and args[0] == 'cancel':
-            __cancel_pomo(username)
-        else:
-            if current_pomo.state == 'work':
-                await ctx.channel.send(f'@{username}, stay focussed! Only {current_pomo.minutes_remaining} minutes left. You got this!')
-            else:
-                await ctx.channel.send(f'@{username}, you still have {current_pomo.minutes_remaining} minutes left on your break. Prepare yourself')
-        return
+    current_pomo = __active_timers.get(username)
 
     if len(args) == 0:
-        await __show_pomo_info(username, ctx)
+        if current_pomo:
+            await __show_pomo_update(current_pomo, ctx)
+        else:
+            await __show_pomo_info(ctx)
+
+        return
+
+    if args[0] == 'cancel':
+        if ctx.author.is_mod and len(args) >= 2 and args[1][0] == '@':
+            target_user_name = args[1][1::]
+            target_pomo = __active_timers.get(target_user_name)
+            if not target_pomo:
+                await ctx.channel.send(f'@{username}, {target_user_name} does not have an active pomo timer')
+            else:
+                __cancel_pomo(target_user_name, username)
+        elif current_pomo:
+            __cancel_pomo(username)
+        else:
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+
+        return
+
+    if args[0] == 'check':
+        if current_pomo:
+            await __show_pomo_update(current_pomo, ctx)
+        else:
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+
         return
 
     if not args[0].isdigit():
-        if args[0] == 'cancel':
-            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
-        else:
-            await __show_pomo_info(username, ctx)
-
+        await __show_pomo_info(ctx)
         return
 
     work_time, break_time, sessions, topic = __get_pom_args(args)
 
     if work_time < MIN_WORK_MINUTES or (break_time != 0 and break_time < MIN_BREAK_MINUTES) or (work_time + break_time) * sessions > MAX_TOTAL_MINUTES:
-        await ctx.channel.send(f"@{username}, oops! Please note min work is 10, min break is 3, and max total minutes is 300")
+        await ctx.channel.send(f"@{username}, oops! Please note min work is {MIN_WORK_MINUTES}, min break is {MIN_BREAK_MINUTES}, and max total minutes is {MAX_TOTAL_MINUTES}")
         return
 
     def on_complete():
-        del __pomo_users[username]
+        del __active_timers[username]
+
+    async def notify_user(username: str, message: str):
+        time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
+        await ctx.channel.send(f'@{username}, {message}')
 
     timerThread = PomoTimerThread(
-        username,
-        ctx,
-        work_time,
-        break_time,
-        sessions,
-        topic,
-        on_complete
+        username=username,
+        work_minutes=work_time,
+        break_minutes=break_time,
+        sessions=sessions,
+        topic=topic,
+        on_complete=on_complete,
+        notify_user=notify_user
     )
-    __pomo_users[username] = timerThread
+
+    __active_timers[username] = timerThread
     timerThread.start()
 
 
-async def check_active_user(ctx: Message):
-    pom_timer = __pomo_users.get(ctx.author.name)
-    if pom_timer and pom_timer.state == 'work' and pom_timer.minutes_remaining:
+async def check_active_user(ctx: Message) -> None:
+    pom_timer = __active_timers.get(ctx.author.name)
+    if pom_timer and pom_timer.state == PomoState.WORK and pom_timer.minutes_remaining:
         await ctx.channel.send(f"@{ctx.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
 
+#
 
-async def __show_pomo_info(username: str, ctx: Message, message=''):
+# private methods
+
+
+async def __show_pomo_info(ctx: Message, message='') -> None:
     message = "Want to start your own pomodoro timer? Type !pomo[number] to set a personalised timer(mins). The full argument list is !pomo [work mins] [break mins] [# pomo sessions] [project name]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions. Good luck!!"
     await ctx.channel.send(message)
 
 
-def __cancel_pomo(username: str) -> None:
-    if __pomo_users[username]:
-        __pomo_users[username].cancel()
+async def __show_pomo_update(pomo: PomoTimerThread, ctx: Message) -> None:
+    if pomo.state == PomoState.WORK:
+        await ctx.channel.send(f'@{pomo.username}, you have {pomo.minutes_remaining} minutes left on your work session. You got this!')
+    else:
+        await ctx.channel.send(f'@{pomo.username}, you still have {pomo.minutes_remaining} minutes left on your break. Prepare yourself')
+
+
+def __cancel_pomo(username: str, cancelled_by: str = '') -> None:
+    if __active_timers[username]:
+        __active_timers[username].cancel(cancelled_by)
 
 
 def __get_message_args(message: str) -> List[str]:
@@ -194,7 +233,7 @@ def __get_message_args(message: str) -> List[str]:
     return args
 
 
-def __get_pom_args(args: List[str]) -> (int, int, int, str):
+def __get_pom_args(args: List[str]) -> Tuple[int, int, int, str]:
     topic_idx = -1
     for idx, val in enumerate(args):
         if not val.isdigit():
@@ -207,10 +246,12 @@ def __get_pom_args(args: List[str]) -> (int, int, int, str):
 
     has_topic = topic_idx != -1
     pom_times = args[:topic_idx] if has_topic else args
-    
+
     work_time = int(pom_times[0])
     break_time = int(pom_times[1]) if len(pom_times) > 1 else DEFAULT_BREAK_TIME_MINS
     sessions = int(pom_times[2]) if len(pom_times) > 2 else DEFAULT_NUM_SESSIONS
     topic = ' '.join([str(n) for n in args[topic_idx:]]) if has_topic else ''
 
     return work_time, break_time, sessions, topic
+
+#

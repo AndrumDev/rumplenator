@@ -1,11 +1,12 @@
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
 from os import stat
-from typing import Dict, List, Literal
+from typing import Dict, List
 from twitchio.dataclasses import Message
 import threading
 import time
 import asyncio
+import enum
 
 MIN_WORK_MINUTES = 10
 MIN_BREAK_MINUTES = 3
@@ -13,6 +14,11 @@ MIN_BREAK_MINUTES = 3
 MAX_TOTAL_MINUTES = 300
 
 #####
+
+
+class PomoState(enum.Enum):
+    WORK = 0
+    BREAK = 1
 
 
 class PomoTimerThread (threading.Thread):
@@ -25,7 +31,7 @@ class PomoTimerThread (threading.Thread):
     sessions_remaining: int
     topic: str
 
-    state: Literal['break', 'work'] = 'work'
+    state: PomoState = PomoState.WORK
 
     __ctx: Message
     __cancelled = False
@@ -73,13 +79,13 @@ class PomoTimerThread (threading.Thread):
                 await self.__start_countdown('break')
 
         if(self.__cancelled):
-            await self.__notify_user(f"pomo session cancelled")
+            await self.__notify_user(f"Your pomo session has been cancelled")
         else:
             await self.__notify_user(f"Your pomodoro sessions have finished, well done!")
 
-    async def __start_countdown(self, state: Literal['break', 'work'] = 'work'):
+    async def __start_countdown(self, state: PomoState):
         self.state = state
-        self.minutes_remaining = self.work_minutes if self.state == 'work' else self.break_minutes
+        self.minutes_remaining = self.work_minutes if self.state == PomoState.WORK else self.break_minutes
         seconds = self.minutes_remaining * 60
         while seconds and not self.__cancelled:
             time.sleep(1)
@@ -125,32 +131,45 @@ async def handle_pomo(ctx: Message):
 
     current_pomo = __pomo_users.get(username)
 
-    if current_pomo:
-        if len(args) and args[0] == 'cancel':
-            __cancel_pomo(username)
-        else:
-            if current_pomo.state == 'work':
-                await ctx.channel.send(f'@{username}, stay focussed! Only {current_pomo.minutes_remaining} minutes left. You got this!')
-            else:
-                await ctx.channel.send(f'@{username}, you still have {current_pomo.minutes_remaining} minutes left on your break. Prepare yourself')
-        return
-
     if len(args) == 0:
-        await __show_pomo_info(username, ctx)
-        return
-
-    if not args[0].isdigit():
-        if args[0] == 'cancel':
-            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+        if current_pomo:
+            await __show_pomo_update(username, current_pomo, ctx)
         else:
             await __show_pomo_info(username, ctx)
 
         return
 
+    if args[0] == 'cancel':
+        if ctx.author.is_mod and len(args) >= 2 and args[1][0] == '@':
+            target_user_name = args[1][1::]
+            target_pomo = __pomo_users.get(target_user_name)
+            if not target_pomo:
+                await ctx.channel.send(f'@{username}, {target_user_name} does not have an active pomo timer')
+            else:
+                __cancel_pomo(target_user_name)
+        elif current_pomo:
+            __cancel_pomo(username)
+        else:
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+
+        return
+
+    if args[0] == 'check':
+        if current_pomo:
+            await __show_pomo_update(username, current_pomo, ctx)
+        else:
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+
+        return
+
+    if not args[0].isdigit():
+        await __show_pomo_info(username, ctx)
+        return
+
     work_time, break_time, sessions, topic = __get_pom_args(args)
 
     if work_time < MIN_WORK_MINUTES or (break_time != 0 and break_time < MIN_BREAK_MINUTES) or (work_time + break_time) * sessions > MAX_TOTAL_MINUTES:
-        await ctx.channel.send(f"@{username}, oops! Please note min work is 10, min break is 3, and max total minutes is 300")
+        await ctx.channel.send(f"@{username}, oops! Please note min work is {MIN_WORK_MINUTES}, min break is {MIN_BREAK_MINUTES}, and max total minutes is {MAX_TOTAL_MINUTES}")
         return
 
     def on_complete():
@@ -171,13 +190,20 @@ async def handle_pomo(ctx: Message):
 
 async def check_active_user(ctx: Message):
     pom_timer = __pomo_users.get(ctx.author.name)
-    if pom_timer and pom_timer.state == 'work' and pom_timer.minutes_remaining:
+    if pom_timer and pom_timer.state == PomoState.WORK and pom_timer.minutes_remaining:
         await ctx.channel.send(f"@{ctx.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
 
 
 async def __show_pomo_info(username: str, ctx: Message, message=''):
     message = f"Want to start your own pomodoro timer? Type !pomo[number] to set a personalised timer(mins). The full argument list is !pomo [work mins] [break mins] [# pomo sessions] [project name]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions. Good luck!!"
     await ctx.channel.send(message)
+
+
+async def __show_pomo_update(username: str, pomo: PomoTimerThread, ctx: Message):
+    if pomo.state == PomoState.WORK:
+        await ctx.channel.send(f'@{username}, stay focussed! Only {pomo.minutes_remaining} minutes left. You got this!')
+    else:
+        await ctx.channel.send(f'@{username}, you still have {pomo.minutes_remaining} minutes left on your break. Prepare yourself')
 
 
 def __cancel_pomo(username: str):

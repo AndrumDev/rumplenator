@@ -1,6 +1,6 @@
 from twitchio.dataclasses import Message
-from .commands.redemptions import RedemptionCommands
-from .commands.channel import ChannelCommands
+from bot.commands.redemptions import RedemptionCommands
+from bot.commands.channel import ChannelCommands
 from twitchio.ext import commands
 import os
 
@@ -11,7 +11,7 @@ class Rumplenator(commands.Bot):
 
     def __init__(self):
         super().__init__(
-          irc_token=os.environ['TMI_TOKEN'],
+            irc_token=os.environ['TMI_TOKEN'],
             client_id=os.environ['CLIENT_ID'],
             nick=os.environ['BOT_NICK'],
             prefix=os.environ['BOT_PREFIX'],
@@ -21,11 +21,11 @@ class Rumplenator(commands.Bot):
     #
 
     # events
-    # events don't need decorators when subclassed
+    ## events don't need decorators when subclassed
 
     async def event_ready(self):
         print(f'Ready | {self.nick}')
-        await self._ws.send_privmsg(os.environ['CHANNEL'], f"/me has landed!")
+        await self._ws.send_privmsg(os.environ['CHANNEL'], "/me has landed!")
 
     async def event_message(self, message: Message):
         print(message.content)

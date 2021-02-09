@@ -65,7 +65,7 @@ class PomoTimerThread (threading.Thread):
     def cancel(self, username=''):
         if username != '':
             self.__cancelled_by = username
-        
+
         self.__cancelled = True
 
     async def __start_pomo(self):
@@ -89,9 +89,9 @@ class PomoTimerThread (threading.Thread):
             if self.__cancelled_by:
                 await self.__notify_user(f"Your pomo session has been cancelled by {self.__cancelled_by}")
             else:
-                await self.__notify_user(f"Your pomo session has been cancelled")
+                await self.__notify_user("Your pomo session has been cancelled")
         else:
-            await self.__notify_user(f"Your pomodoro sessions have finished, well done!")
+            await self.__notify_user("Your pomodoro sessions have finished, well done!")
 
     async def __start_countdown(self, state: PomoState):
         self.state = state
@@ -134,6 +134,8 @@ class PomoTimerThread (threading.Thread):
 
 __pomo_users: Dict[str, PomoTimerThread] = {}
 
+# public methods
+
 
 async def handle_pomo(ctx: Message) -> None:
     args: List[str] = __get_message_args(ctx.content)
@@ -145,7 +147,7 @@ async def handle_pomo(ctx: Message) -> None:
         if current_pomo:
             await __show_pomo_update(username, current_pomo, ctx)
         else:
-            await __show_pomo_info(username, ctx)
+            await __show_pomo_info(ctx)
 
         return
 
@@ -173,7 +175,7 @@ async def handle_pomo(ctx: Message) -> None:
         return
 
     if not args[0].isdigit():
-        await __show_pomo_info(username, ctx)
+        await __show_pomo_info(ctx)
         return
 
     work_time, break_time, sessions, topic = __get_pom_args(args)
@@ -203,8 +205,12 @@ async def check_active_user(ctx: Message) -> None:
     if pom_timer and pom_timer.state == PomoState.WORK and pom_timer.minutes_remaining:
         await ctx.channel.send(f"@{ctx.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
 
+#
 
-async def __show_pomo_info(username: str, ctx: Message, message='') -> None:
+# private methods
+
+
+async def __show_pomo_info(ctx: Message, message='') -> None:
     message = "Want to start your own pomodoro timer? Type !pomo[number] to set a personalised timer(mins). The full argument list is !pomo [work mins] [break mins] [# pomo sessions] [project name]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions. Good luck!!"
     await ctx.channel.send(message)
 
@@ -240,10 +246,12 @@ def __get_pom_args(args: List[str]) -> Tuple[int, int, int, str]:
 
     has_topic = topic_idx != -1
     pom_times = args[:topic_idx] if has_topic else args
-    
+
     work_time = int(pom_times[0])
     break_time = int(pom_times[1]) if len(pom_times) > 1 else DEFAULT_BREAK_TIME_MINS
     sessions = int(pom_times[2]) if len(pom_times) > 2 else DEFAULT_NUM_SESSIONS
     topic = ' '.join([str(n) for n in args[topic_idx:]]) if has_topic else ''
 
     return work_time, break_time, sessions, topic
+
+#

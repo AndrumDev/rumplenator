@@ -21,7 +21,7 @@ class Rumplenator(commands.Bot):
     #
 
     # events
-    ## events don't need decorators when subclassed
+    # events don't need decorators when subclassed
 
     async def event_ready(self):
         print(f'Ready | {self.nick}')

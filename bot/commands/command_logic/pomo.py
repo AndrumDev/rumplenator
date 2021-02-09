@@ -1,7 +1,6 @@
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
-from os import stat
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from twitchio.dataclasses import Message
 import threading
 import time
@@ -136,7 +135,7 @@ class PomoTimerThread (threading.Thread):
 __pomo_users: Dict[str, PomoTimerThread] = {}
 
 
-async def handle_pomo(ctx: Message):
+async def handle_pomo(ctx: Message) -> None:
     args: List[str] = __get_message_args(ctx.content)
     username = ctx.author.name
 
@@ -199,18 +198,18 @@ async def handle_pomo(ctx: Message):
     timerThread.start()
 
 
-async def check_active_user(ctx: Message):
+async def check_active_user(ctx: Message) -> None:
     pom_timer = __pomo_users.get(ctx.author.name)
     if pom_timer and pom_timer.state == PomoState.WORK and pom_timer.minutes_remaining:
         await ctx.channel.send(f"@{ctx.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
 
 
-async def __show_pomo_info(username: str, ctx: Message, message=''):
+async def __show_pomo_info(username: str, ctx: Message, message='') -> None:
     message = "Want to start your own pomodoro timer? Type !pomo[number] to set a personalised timer(mins). The full argument list is !pomo [work mins] [break mins] [# pomo sessions] [project name]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions. Good luck!!"
     await ctx.channel.send(message)
 
 
-async def __show_pomo_update(username: str, pomo: PomoTimerThread, ctx: Message):
+async def __show_pomo_update(username: str, pomo: PomoTimerThread, ctx: Message) -> None:
     if pomo.state == PomoState.WORK:
         await ctx.channel.send(f'@{username}, you have {pomo.minutes_remaining} minutes left on your work session. You got this!')
     else:
@@ -228,7 +227,7 @@ def __get_message_args(message: str) -> List[str]:
     return args
 
 
-def __get_pom_args(args: List[str]) -> (int, int, int, str):
+def __get_pom_args(args: List[str]) -> Tuple[int, int, int, str]:
     topic_idx = -1
     for idx, val in enumerate(args):
         if not val.isdigit():

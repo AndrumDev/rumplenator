@@ -72,7 +72,7 @@ class PomoTimerThread (threading.Thread):
         while(self.sessions_remaining and not self.__cancelled):
             work_start_message = self.__get_work_start_text()
 
-            await self.__notify_user(work_start_message)
+            await self.__notify_user(self.username, work_start_message)
             await self.__start_countdown(PomoState.WORK)
             self.sessions_remaining -= 1
 
@@ -81,16 +81,16 @@ class PomoTimerThread (threading.Thread):
 
             if((only_one_break or several_sessions_left) and not self.__cancelled):
                 break_start_message = self.__get_break_start_text()
-                await self.__notify_user(break_start_message)
+                await self.__notify_user(self.username, break_start_message)
                 await self.__start_countdown(PomoState.BREAK)
 
         if(self.__cancelled):
             if self.__cancelled_by:
-                await self.__notify_user(f"Your pomo session has been cancelled by {self.__cancelled_by}")
+                await self.__notify_user(self.username, f"Your pomo session has been cancelled by {self.__cancelled_by}")
             else:
-                await self.__notify_user("Your pomo session has been cancelled")
+                await self.__notify_user(self.username, "Your pomo session has been cancelled")
         else:
-            await self.__notify_user("Your pomodoro sessions have finished, well done!")
+            await self.__notify_user(self.username, "Your pomodoro sessions have finished, well done!")
 
     async def __start_countdown(self, state: PomoState):
         self.state = state
@@ -100,10 +100,6 @@ class PomoTimerThread (threading.Thread):
             time.sleep(1)
             seconds -= 1
             self.minutes_remaining = (seconds // 60) + 1
-
-    # async def __notify_user(self, message: str):
-    #     time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
-    #     await self.__ctx.channel.send(f"@{self.username}, {message}")
 
     def __get_work_start_text(self):
         if self.total_sessions == 1:

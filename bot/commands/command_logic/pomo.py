@@ -35,7 +35,6 @@ class PomoTimerThread (threading.Thread):
 
     state: PomoState = PomoState.WORK
 
-    __ctx: Message
     __cancelled: bool = False
     __cancelled_by: str = None
 
@@ -43,7 +42,7 @@ class PomoTimerThread (threading.Thread):
     def sessions_done(self):
         return self.total_sessions - self.sessions_remaining
 
-    def __init__(self, username: str, ctx: Message, work_minutes: int, break_minutes: int, sessions: int, topic: str, on_complete):
+    def __init__(self, username: str, work_minutes: int, break_minutes: int, sessions: int, topic: str, on_complete, notify_user):
         threading.Thread.__init__(self)
 
         self.name = username
@@ -55,8 +54,8 @@ class PomoTimerThread (threading.Thread):
         self.sessions_remaining = sessions
         self.topic = topic
 
-        self.__ctx = ctx
         self.__on_complete = on_complete
+        self.__notify_user = notify_user
 
     def run(self):
         asyncio.run(self.__start_pomo())
@@ -102,9 +101,9 @@ class PomoTimerThread (threading.Thread):
             seconds -= 1
             self.minutes_remaining = (seconds // 60) + 1
 
-    async def __notify_user(self, message: str):
-        time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
-        await self.__ctx.channel.send(f"@{self.username}, {message}")
+    # async def __notify_user(self, message: str):
+    #     time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
+    #     await self.__ctx.channel.send(f"@{self.username}, {message}")
 
     def __get_work_start_text(self):
         if self.total_sessions == 1:
@@ -187,15 +186,20 @@ async def handle_pomo(ctx: Message) -> None:
     def on_complete():
         del __active_timers[username]
 
+    async def notify_user(username: str, message: str):
+        time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
+        await ctx.channel.send(f'@{username}, {message}')
+
     timerThread = PomoTimerThread(
-        username,
-        ctx,
-        work_time,
-        break_time,
-        sessions,
-        topic,
-        on_complete
+        username=username,
+        work_minutes=work_time,
+        break_minutes=break_time,
+        sessions=sessions,
+        topic=topic,
+        on_complete=on_complete,
+        notify_user=notify_user
     )
+
     __active_timers[username] = timerThread
     timerThread.start()
 

@@ -37,7 +37,7 @@ class PomoTimerThread (threading.Thread):
 
     __ctx: Message
     __cancelled: bool = False
-    __cancelled_by: str = ''
+    __cancelled_by: str = None
 
     @property
     def sessions_done(self):
@@ -132,7 +132,7 @@ class PomoTimerThread (threading.Thread):
 #####
 
 
-__pomo_users: Dict[str, PomoTimerThread] = {}
+__active_timers: Dict[str, PomoTimerThread] = {}
 
 # public methods
 
@@ -141,11 +141,11 @@ async def handle_pomo(ctx: Message) -> None:
     args: List[str] = __get_message_args(ctx.content)
     username = ctx.author.name
 
-    current_pomo = __pomo_users.get(username)
+    current_pomo = __active_timers.get(username)
 
     if len(args) == 0:
         if current_pomo:
-            await __show_pomo_update(username, current_pomo, ctx)
+            await __show_pomo_update(current_pomo, ctx)
         else:
             await __show_pomo_info(ctx)
 
@@ -154,7 +154,7 @@ async def handle_pomo(ctx: Message) -> None:
     if args[0] == 'cancel':
         if ctx.author.is_mod and len(args) >= 2 and args[1][0] == '@':
             target_user_name = args[1][1::]
-            target_pomo = __pomo_users.get(target_user_name)
+            target_pomo = __active_timers.get(target_user_name)
             if not target_pomo:
                 await ctx.channel.send(f'@{username}, {target_user_name} does not have an active pomo timer')
             else:
@@ -168,7 +168,7 @@ async def handle_pomo(ctx: Message) -> None:
 
     if args[0] == 'check':
         if current_pomo:
-            await __show_pomo_update(username, current_pomo, ctx)
+            await __show_pomo_update(current_pomo, ctx)
         else:
             await ctx.channel.send(f'@{username}, you do not have a running pomo session')
 
@@ -185,7 +185,7 @@ async def handle_pomo(ctx: Message) -> None:
         return
 
     def on_complete():
-        del __pomo_users[username]
+        del __active_timers[username]
 
     timerThread = PomoTimerThread(
         username,
@@ -196,12 +196,12 @@ async def handle_pomo(ctx: Message) -> None:
         topic,
         on_complete
     )
-    __pomo_users[username] = timerThread
+    __active_timers[username] = timerThread
     timerThread.start()
 
 
 async def check_active_user(ctx: Message) -> None:
-    pom_timer = __pomo_users.get(ctx.author.name)
+    pom_timer = __active_timers.get(ctx.author.name)
     if pom_timer and pom_timer.state == PomoState.WORK and pom_timer.minutes_remaining:
         await ctx.channel.send(f"@{ctx.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
 
@@ -215,16 +215,16 @@ async def __show_pomo_info(ctx: Message, message='') -> None:
     await ctx.channel.send(message)
 
 
-async def __show_pomo_update(username: str, pomo: PomoTimerThread, ctx: Message) -> None:
+async def __show_pomo_update(pomo: PomoTimerThread, ctx: Message) -> None:
     if pomo.state == PomoState.WORK:
-        await ctx.channel.send(f'@{username}, you have {pomo.minutes_remaining} minutes left on your work session. You got this!')
+        await ctx.channel.send(f'@{pomo.username}, you have {pomo.minutes_remaining} minutes left on your work session. You got this!')
     else:
-        await ctx.channel.send(f'@{username}, you still have {pomo.minutes_remaining} minutes left on your break. Prepare yourself')
+        await ctx.channel.send(f'@{pomo.username}, you still have {pomo.minutes_remaining} minutes left on your break. Prepare yourself')
 
 
 def __cancel_pomo(username: str, cancelled_by: str = '') -> None:
-    if __pomo_users[username]:
-        __pomo_users[username].cancel(cancelled_by)
+    if __active_timers[username]:
+        __active_timers[username].cancel(cancelled_by)
 
 
 def __get_message_args(message: str) -> List[str]:

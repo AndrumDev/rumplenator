@@ -7,9 +7,15 @@ Code for the twitch chatbot on andrumpleteazer's stream ( twitch.tv/andrumpletea
 
 1. In the root folder, create a virtual environment
 
+On mac/linux:
+
 ```
 virtualenv venv
 ```
+
+On windows:
+
+See: [https://docs.python.org/3/library/venv.html](https://docs.python.org/3/library/venv.html)
 
 2. Activate the virtual environment
 

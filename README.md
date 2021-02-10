@@ -29,10 +29,10 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-1. Run the tests (pass `-s` to prevent stdout from being suppressed):
+4. Run the tests: (pass `-s` to prevent stdout from being suppressed):
 
 ```
-python -m pytest -s
+python -m pytest 
 ```
 
 5. Set local environment variables by copying `.example.env` to a new file named `.env`, and setting `TMI_TOKEN` and `CLIENT_ID`.

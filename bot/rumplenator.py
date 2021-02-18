@@ -1,6 +1,7 @@
 from bot.commands.redemptions import RedemptionCommands
 from bot.commands.channel import ChannelCommands
 from config import get_config
+from twitchio.dataclasses import Message
 from twitchio.ext import commands
 from twitchio.dataclasses import Message
 import os

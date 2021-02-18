@@ -1,4 +1,4 @@
-import pathlib
+from pathlib import Path
 import os
 from dotenv import load_dotenv
 
@@ -13,7 +13,7 @@ __conf = {
     'TEST': {
         'irc_token': os.environ['TMI_TOKEN'],
         'client_id': os.environ['CLIENT_ID'],
-        'resource_dir': pathlib.Path(__file__).parent / 'test' / 'resources',
+        'resource_dir': Path(__file__).resolve().parent / 'test' / 'resources',
         'bot_nick': os.getenv('BOT_NICK', default='rumplenator_test'),
         'bot_prefix': '!',
         'channel': os.getenv('CHANNEL', default='channel_test')
@@ -21,7 +21,7 @@ __conf = {
     'LOCAL': {
         'irc_token': os.environ['TMI_TOKEN'],
         'client_id': os.environ['CLIENT_ID'],
-        'resource_dir': pathlib.Path(__file__) / 'bot' / 'resources',
+        'resource_dir': Path(__file__).resolve().parent / 'bot' / 'resources',
         'bot_nick': os.getenv('BOT_NICK', default='rumplenator_dev'),
         'bot_prefix': '!',
         'channel': os.getenv('CHANNEL', default='tabi_twitchett')
@@ -29,7 +29,7 @@ __conf = {
     'PROD': {
         'irc_token': os.environ['TMI_TOKEN'],
         'client_id': os.environ['CLIENT_ID'],
-        'resource_dir': pathlib.Path(__file__) / 'bot' / 'resources',
+        'resource_dir': Path(__file__).resolve().parent / 'bot' / 'resources',
         'bot_nick': os.getenv('BOT_NICK', default='rumplenator'),
         'bot_prefix': '!',
         'channel': os.getenv('CHANNEL', default='AndRumpleteazer')

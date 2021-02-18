@@ -1,0 +1,61 @@
+# Hair Dryer === (!dyson dry)
+dry The Dyson Supersonic™ hairdryer provides high-velocity airflow, providing controlled and fast drying times
+dry The Dyson Supersonic™ turned convention on its head and put the motor in the handle. Completely rebalancing the dryer's weight and shape.
+dry The Dyson Supersonic™ stays cool to the touch. With Heat Shield technology, the surfaces of the attachments stay cool. Even during close-up styling.
+dry The Dyson Supersonic™ provides easy control by with 4 precise heat settings: 100°C Fast drying, Styling 80°C, Regular drying 60°C  and Gentle drying 28 °C Constant cold.
+dry The Dyson Supersonic™ Helps prevent extreme heat damage to protect natural shine. Air temperature is measured 20 times every second, keeping the temperature under control.
+dry The Dyson Supersonic™ comes with magnetic attachments – so you can adjust attachments quickly and easily.
+dry The Dyson Supersonic™ comes with packaged with the Dyson Styling concentrator, allowing you to shape your hair one section at a time – without worrying about disturbing the rest.
+dry The Dyson Supersonic™ comes with packaged with the Dyson diffuser, dispersing air evenly around your curls, helping to reduce frizz and improve definition.
+dry The Dyson Supersonic™ comes with packaged with the Dyson Smoothing nozzle, drying hair gently using smooth, wide air.
+
+# Hair Styler === (!dyson style)
+style The Dyson Airwrap™ comes with a combination of 30mm and 40mm barrels, allowing you to create and set both voluminous or loose curls or waves.
+style The Dyson Airwrap™ comes with a variety of brushes, ideal for straightening, blow-drying, and volumising.
+style The Dyson Airwrap™ comes with a unique Pre-styling dryer, taking your hair from wet to damp, ready for styling.
+style The Dyson Airwrap™ is powered by the Dyson digital motor V9. Its 13-blade impeller spins at up to 110,000rpm, generating 3.2kPa of pressure - enough to create the Coanda effect.
+style The Dyson Airwrap™ attracts and wraps hair, using air. The Coanda effect attracts hair to the barrel, then wraps it for you. No clamping, gloves, or awkward winding mechanisms. Just voluminous curls and waves.
+style The Dyson Airwrap™ protects your hair from extreme heat. Intelligent heat control measures airflow temperature over 40 times a second and regulates heat, to ensure it always stays below 150°C.
+style The Dyson Airwrap™ styler combines powerful airflow with controlled heat, to dry and style your hair from damp – with no extreme heat.
+style The Dyson Airwrap™ smoothing brushes harness the Coanda effect to attract hair to the surface of the brush, propelling air along the strands, to mimic a stylist’s blow-dry technique.
+style The Dyson Airwrap™ comes with a stylish storage case that protects and neatly stores your Dyson Airwrap™ styler and its attachments. Finished in tan, cushioned with soft fabric, and secured by a magnetic clasp.
+
+#== Vacuum === (!dyson vac)
+vac The Dyson Cyclone V10 Absolute™ comes with the most powerful suction of any cordless vacuum, create 14 cyclones that generate forces of more than 79,000G to fling microscopic particles – such as pollen and bacteria – into the bin.
+vac The Dyson Cyclone V10 Absolute™ comes with a seven-cell, nickel-cobalt-aluminum battery that has the fade-free power to clean here, there and everywhere around your home.
+vac The Dyson Cyclone V10 Absolute™ is acoustically engineered to absorb vibrations and dampen sound, to keep sound levels down.
+vac The Dyson Cyclone V10 Absolute™ is built with a unique in-line configuration. The motor, bin, and cyclone are aligned, so air is drawn into the cyclones in a straight line – creating more suction power than the Dyson V8™ vacuum cleaner.
+vac The Dyson Cyclone V10 Absolute™ quickly transforms to a handheld vacuum cleaner and back again, in jest one click
+vac The Dyson Cyclone V10 Absolute™'s unique 'point and shoot' mechanism hygienically ejects dust and debris deep into your bin, in one action – so there's no need to touch the dirt.
+vac The Dyson Cyclone V10 Absolute™ vacuum drops into the wall-mounted dock, to recharge and to tidily store the tools, ready to grab and go.
+vac The Dyson Cyclone V10 Absolute™ comes with three power modes, providing you the right power when you need it. Three modes to choose from, to suit any task on any floor type.
+vac The Dyson Cyclone V10 Absolute™ boasts up to 60 minutes of fade-free suction. It can be programmed to turn off after preset intervals, from 15 minutes to 9 hours.
+vac The Dyson Cyclone V10 Absolute™ is certified asthma and allergy friendly™. It exceeds standards for effectively removing allergen-containing dust from carpets and hard floors. Certified by Allergy Standards Limited.
+
+#==Fan== (!dyson fan)
+fan The Dyson Pure Cool™ purifier fan removes 99.95% of allergens and pollutants as small as 0.1 microns from the air.
+fan With all the benefits of Dyson's Air Multiplier technology, it also has a 360° vacuum-sealed HEPA filter to capture other ultrafine particles from the air.
+fan The Dyson Pure Cool™ eliminates potentially toxic fumes and odors with a layer of activated carbon granules that eliminates odors and potentially harmful toxins such as paint fumes.
+fan The Dyson Pure Cool™ Provides year-round purification and circulation. Smooth, long-range personal cooling in summer
+fan The Dyson Pure Cool™ is simple and easy to maintain. No need for regular monthly filter maintenance. It takes less than 60 seconds to replace the filter. And only after a year of using it for 12 hours every day
+fan The Dyson Pure Cool™ boasts compact technology and size using a small, efficient DC motor, wrapped by a 360° Glass HEPA filter.
+fan The Quiet Mark-accredited Dyson Pure Cool™ purifier fan is engineered for night-long purification. Its built-in sleep timer can be set for up to 9 hours.
+fan The Dyson Pure Cool™ comes with a convenient remote control with 10 precise airflow settings. Magnetized to store on the machine.
+
+#==Heater== (!dyson heat)
+heat The Dyson AM09™ Hot+Cool Fan Heater uses Air Multiplier™ technology to create a powerful stream of uninterrupted airflow. Air is accelerated through an annular aperture, creating a high-velocity jet of air. This passes over an airfoil-shaped ramp, channeling its direction and creating areas of low pressure behind and around the fan. The change in pressure forces surrounding air to be drawn into the airflow, resulting in a powerful stream of smooth cooling air.
+heat The Dyson AM09™ Hot+Cool Fan Heater provides long-range heat projection so you feel direct heat throughout the room.
+heat The Dyson AM09™ Hot+Cool Fan Heater pivots on its center of gravity, staying put without clamping. It tilts 10° from upright in both directions, so you can direct airflow where you want it.
+heat The Dyson AM09™ Hot+Cool Fan Heater comes with remote control. It can be used to turn the machine on and off and to adjust oscillation, temperature, and airflow power. It’s curved and magnetized to store neatly on top of the machine.
+heat The Dyson AM09™ Hot+Cool Fan Heater Select target temperature to the degree. Easy touch-tilt, oscillation, variable airflow control and remote control
+heat The Dyson AM09™ Hot+Cool Fan Heater is easy to clean, with no awkward safety grilles or blades.
+heat The Dyson AM09™ Hot+Cool Fan Heater is safe to keep around the house with no fast-spinning blades
+heat The Dyson AM09™ Hot+Cool Fan Heater maintains a temperature below dust burning point. Avoiding a burning smell during use.
+
+#==Hand Dryer== (!dyson hand)
+hand The Dyson Airblade™ Wash+Dry gives you all the benefits of Airblade™ technology in a tap. Hands can be dried at the sink in just 14 seconds. No need to move to a separate drying area.
+hand The Dyson Airblade™ Wash+Dry forces up to 21 liters of air per second through the apertures up to 0.55mm wide. The result - 549km/h sheets of air that scrape water from hands, drying them hygienically in just 14 seconds
+hand The Dyson Airblade™ Wash+Dry costs an average of just $34 a year to run. That’s up to 76% less than other hand dryers, and up to 98% less than paper towels
+hand The Dyson Airblade™ Wash+Dry has a lower environmental impact than other hand drying methods. It produces 3.6g of CO2 per dry - up to 79% less than other hand dryers and up to 79% less than paper towels
+hand The Dyson Airblade™ Wash+Dry sports a V4 Dyson digital motor - one of the world's smallest fully-integrated 1000W motors. It spins up to 81,000 times a minute and is the only hand dryer motor powerful enough to make Airblade™ technology possible
+hand The Dyson Airblade™ Wash+Dry uses a HEPA filter that captures 99.95% of bacteria and viruses from the air used to dry hands. The 

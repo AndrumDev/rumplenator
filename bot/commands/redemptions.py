@@ -18,6 +18,7 @@ class RedemptionCommands():
     UNDEFINED_TOM = 'tom2'
     UNDEFINED_GIVE_UP = 'giveup'
     FLIP_FLIP = 'flip'
+    FLIP_WHIP = 'whip'
     GRANT_SKWIRL = 'mrskwirl'
     MCLOVIN_MCLOVIN = 'mclovin'
     MABLE_SLEEPY = 'sleepy'
@@ -27,6 +28,7 @@ class RedemptionCommands():
     FLAWER_TUCK = 'tuck'
     SKY_DROPKICK = 'dropkick'
     SKP_DROPKISS = 'dropkiss'
+    KARANT_VIBE = 'vibe'
 
     REDEMPTION_COMMAND_LIST = [
         UNDEFINED_DYSON,
@@ -34,6 +36,7 @@ class RedemptionCommands():
         UNDEFINED_TOM,
         UNDEFINED_GIVE_UP,
         FLIP_FLIP,
+        FLIP_WHIP,
         GRANT_SKWIRL,
         MCLOVIN_MCLOVIN,
         MABLE_BOOP,
@@ -42,7 +45,8 @@ class RedemptionCommands():
         FLAWER_PAT,
         FLAWER_TUCK,
         SKY_DROPKICK,
-        SKP_DROPKISS
+        SKP_DROPKISS,
+        KARANT_VIBE
     ]
 
     # FUNCTIONS
@@ -115,3 +119,11 @@ class RedemptionCommands():
             return()
         else:
             await ctx.send(f"/me it\'s {message}\'s bedtime! get comfy in bed and have sweet dreams my friend! thanks for being here, we\'ll miss you! (︶｡︶✽)zzz")
+
+    async def whip(ctx: Message):
+        message = get_message_content(ctx.content, RedemptionCommands.FLIP_WHIP)
+        await ctx.send(f'/me *cracks whip* BACK TO WORK!')
+
+    async def vibe(ctx: Message):
+        message = get_message_content(ctx.content, RedemptionCommands.KARANT_VIBE)
+        await ctx.send(f'/me We vibin\'! andrumHype andrumSmug We vibin\'! andrumHype andrumSmug We vibin\'! andrumHype andrumSmug ')

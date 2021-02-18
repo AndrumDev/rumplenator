@@ -1,8 +1,5 @@
 .vscode
-<<<<<<< HEAD
 *.DS_STORE
-=======
->>>>>>> main
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

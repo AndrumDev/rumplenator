@@ -15,7 +15,7 @@ deploy:
   app: rumplenator
   bucket: andrumdev-rumplenator-bucket
   on:
-    branch: dockerize # testing, change this to main
+    branch: tgoodall/dockerize # testing, change this to main
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh

@@ -50,3 +50,4 @@ python -m main.py
 - install wsl and the kernel update
 - run PowerShell ISE as an administrator
 - if the docker daemon complains about needing elevated privileges, run `& 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchDaemon`
+- making scripts executable: https://www.scivision.dev/git-windows-chmod-executable/

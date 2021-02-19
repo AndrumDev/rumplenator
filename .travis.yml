@@ -1,6 +1,4 @@
 language: python
-python:
-  - "3.9.1"
 services:
   - docker
 before_script:
@@ -10,8 +8,8 @@ script:
 deploy:
   provider: script
   script: bash travis_deploy.sh
-  # on:
-  #   branch: main
+  on:
+    branch: dockerize # testing, change this to main
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh

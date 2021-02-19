@@ -7,6 +7,11 @@ before_script:
   - docker build -t andrumdev/rumplenator:$TRAVIS_COMMIT .
 script:
   - docker run --env-file .test.env andrumdev/rumplenator:$TRAVIS_COMMIT python -m pytest -s
+deploy:
+  provider: script
+  script: bash travis_deploy.sh
+  # on:
+  #   branch: main
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh

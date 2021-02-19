@@ -48,3 +48,11 @@ python -m pytest -s
 ```
 python -m main.py
 ```
+
+
+# setup notes if you need to run the docker container on windows
+
+- install docker desktop
+- install wsl and the kernel update
+- run PowerShell ISE as an administrator
+- if the docker daemon complains about needing elevated privileges, run `& 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchDaemon`

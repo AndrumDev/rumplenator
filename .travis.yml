@@ -13,8 +13,8 @@ after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh failure $WEBHOOK_URL
-before_deploy:
-  - cp .prod.env .env
+# before_deploy:
+#   - cp .prod.env .env
 deploy:
   # use v2: https://docs.travis-ci.com/user/deployment-v2
   edge: true
@@ -23,7 +23,7 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   region: eu-central-1
   app: rumplenator
-  env: Rumplenator-env
-  bucket: andrumdev-rumplenator-bucket
+  env: andrumpleteazer-rumplenator
+  bucket: rumplenator-source
   on:
     branch: tgoodall/dockerize # testing, change this to main

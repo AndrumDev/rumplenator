@@ -29,6 +29,7 @@ class RedemptionCommands():
     SKY_DROPKICK = 'dropkick'
     SKP_DROPKISS = 'dropkiss'
     KARANT_VIBE = 'vibe'
+    TEACHERLY_CONGRATS = 'congrats'
 
     REDEMPTION_COMMAND_LIST = [
         UNDEFINED_DYSON,
@@ -46,7 +47,8 @@ class RedemptionCommands():
         FLAWER_TUCK,
         SKY_DROPKICK,
         SKP_DROPKISS,
-        KARANT_VIBE
+        KARANT_VIBE,
+        TEACHERLY_CONGRATS
     ]
 
     # FUNCTIONS
@@ -126,4 +128,8 @@ class RedemptionCommands():
 
     async def vibe(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.KARANT_VIBE)
-        await ctx.send(f'/me We vibin\'! andrumHype andrumSmug We vibin\'! andrumHype andrumSmug We vibin\'! andrumHype andrumSmug ')
+        await ctx.send(f'/me We vibin\'! andrumHype andrumSmug blobDance We vibin\'! andrumHype andrumSmug blobDance We vibin\'! andrumHype andrumSmug blobDance ')
+
+    async def congrats(ctx: Message):
+        message = get_message_content(ctx.content, RedemptionCommands.TEACHERLY_CONGRATS)
+        await ctx.send(f'/me Hurray for {message}! Compliments, cheers, and congratulations on your wonderful accomplishment! andrumHype andrumHeart andrumHype ')

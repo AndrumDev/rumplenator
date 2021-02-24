@@ -135,4 +135,11 @@ class Rumplenator(commands.Bot):
     async def tuck(self, ctx: Message):
         await RedemptionCommands.tuck(ctx)
 
+    @commands.command(name=RedemptionCommands.FLIP_WHIP)
+    async def whip(self, ctx: Message):
+        await RedemptionCommands.whip(ctx)
+
+    @commands.command(name=RedemptionCommands.KARANT_VIBE)
+    async def vibe(self, ctx: Message):
+        await RedemptionCommands.vibe(ctx)
     #

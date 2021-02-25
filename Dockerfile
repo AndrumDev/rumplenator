@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 9000
 
 ENTRYPOINT [ "python", "-m" ]
-CMD ["main.py" ]
+CMD [ "main.py" ]

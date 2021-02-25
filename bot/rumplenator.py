@@ -4,7 +4,6 @@ from config import get_config
 from twitchio.dataclasses import Message
 from twitchio.ext import commands
 from twitchio.dataclasses import Message
-import os
 
 
 class Rumplenator(commands.Bot):
@@ -28,7 +27,7 @@ class Rumplenator(commands.Bot):
 
     async def event_ready(self):
         print(f'Ready | {self.nick}')
-        await self._ws.send_privmsg(os.environ['CHANNEL'], "/me has landed!")
+        await self._ws.send_privmsg(get_config().get('channel'), "/me has landed!")
 
     async def event_message(self, message: Message):
         print(message.content)

@@ -21,7 +21,7 @@ deploy:
   secret_access_key: $AWS_SECRET_ACCESS_KEY
   region: eu-central-1
   app: rumplenator-prod-app
-  env: rumplenator-prod
+  env: rumplenator-prod-env
   bucket: rumplenator-source
   on:
     branch: tgoodall/dockerize # testing, change this to main

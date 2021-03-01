@@ -51,6 +51,7 @@ class RedemptionCommands():
         KARANT_VIBE,
         TEACHERLY_CONGRATS,
         HAM_FOCUS
+
     ]
 
     # FUNCTIONS

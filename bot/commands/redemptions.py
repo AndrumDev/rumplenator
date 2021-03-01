@@ -29,6 +29,8 @@ class RedemptionCommands():
     SKY_DROPKICK = 'dropkick'
     SKP_DROPKISS = 'dropkiss'
     KARANT_VIBE = 'vibe'
+    TEACHERLY_CONGRATS = 'congrats'
+    HAM_FOCUS = 'focus'
 
     REDEMPTION_COMMAND_LIST = [
         UNDEFINED_DYSON,
@@ -46,7 +48,10 @@ class RedemptionCommands():
         FLAWER_TUCK,
         SKY_DROPKICK,
         SKP_DROPKISS,
-        KARANT_VIBE
+        KARANT_VIBE,
+        TEACHERLY_CONGRATS,
+        HAM_FOCUS
+
     ]
 
     # FUNCTIONS
@@ -126,4 +131,13 @@ class RedemptionCommands():
 
     async def vibe(ctx: Message):
         message = get_message_content(ctx.content, RedemptionCommands.KARANT_VIBE)
-        await ctx.send(f'/me We vibin\'! andrumHype andrumSmug We vibin\'! andrumHype andrumSmug We vibin\'! andrumHype andrumSmug ')
+        await ctx.send(f'/me We vibin\'! andrumHype andrumSmug blobDance We vibin\'! andrumHype andrumSmug blobDance We vibin\'! andrumHype andrumSmug blobDance ')
+
+    async def congrats(ctx: Message):
+        message = get_message_content(ctx.content, RedemptionCommands.TEACHERLY_CONGRATS)
+        await ctx.send(f'/me Hurray for {message}! Compliments, cheers, and congratulations on your wonderful accomplishment! andrumHype andrumHeart andrumHype ')
+
+    async def focus(ctx: Message):
+        message = get_message_content(ctx.content, RedemptionCommands.HAM_FOCUS)
+        await ctx.send(f'/me {ctx.author.name} is requesting that {message} focus on the task at hand! Never give up!')
+

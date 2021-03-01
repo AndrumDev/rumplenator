@@ -142,4 +142,13 @@ class Rumplenator(commands.Bot):
     @commands.command(name=RedemptionCommands.KARANT_VIBE)
     async def vibe(self, ctx: Message):
         await RedemptionCommands.vibe(ctx)
+
+    @commands.command(name=RedemptionCommands.TEACHERLY_CONGRATS)
+    async def congrats(self, ctx: Message):
+        await RedemptionCommands.congrats(ctx)
+        
+    @commands.command(name=RedemptionCommands.HAM_FOCUS)
+    async def focus(self, ctx: Message):
+        await RedemptionCommands.congrats(ctx)
+
     #

@@ -1,7 +1,9 @@
-from twitchio.dataclasses import Message
 from bot.commands.redemptions import RedemptionCommands
 from bot.commands.channel import ChannelCommands
+from config import get_config
+from twitchio.dataclasses import Message
 from twitchio.ext import commands
+from twitchio.dataclasses import Message
 import os
 
 
@@ -10,12 +12,13 @@ class Rumplenator(commands.Bot):
     # init
 
     def __init__(self):
+        config = get_config()
         super().__init__(
-            irc_token=os.environ['TMI_TOKEN'],
-            client_id=os.environ['CLIENT_ID'],
-            nick=os.environ['BOT_NICK'],
-            prefix=os.environ['BOT_PREFIX'],
-            initial_channels=[os.environ['CHANNEL']]
+            irc_token=config['irc_token'],
+            client_id=config['client_id'],
+            nick=config['bot_nick'],
+            prefix=config['bot_prefix'],
+            initial_channels=[config['channel']]
         )
 
     #
@@ -143,4 +146,5 @@ class Rumplenator(commands.Bot):
     @commands.command(name=RedemptionCommands.TEACHERLY_CONGRATS)
     async def congrats(self, ctx: Message):
         await RedemptionCommands.congrats(ctx)
+
     #

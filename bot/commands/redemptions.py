@@ -30,6 +30,7 @@ class RedemptionCommands():
     SKP_DROPKISS = 'dropkiss'
     KARANT_VIBE = 'vibe'
     TEACHERLY_CONGRATS = 'congrats'
+>
 
     REDEMPTION_COMMAND_LIST = [
         UNDEFINED_DYSON,
@@ -49,6 +50,8 @@ class RedemptionCommands():
         SKP_DROPKISS,
         KARANT_VIBE,
         TEACHERLY_CONGRATS
+        KARANT_VIBE
+
     ]
 
     # FUNCTIONS

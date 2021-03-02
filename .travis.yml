@@ -24,4 +24,5 @@ deploy:
   env: rumplenator-prod-env
   bucket: rumplenator-source
   on:
-    branch: tgoodall/dockerize # testing, change this to main
+    branch: main
+  

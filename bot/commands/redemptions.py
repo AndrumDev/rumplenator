@@ -50,8 +50,8 @@ class RedemptionCommands():
         SKY_DROPKICK,
         SKP_DROPKISS,
         KARANT_VIBE,
-        TEACHERLY_CONGRATS
-        KARANT_VIBE
+        TEACHERLY_CONGRATS,
+        KARANT_VIBE,
         TEACHERLY_CONGRATS,
         HAM_FOCUS
     ]

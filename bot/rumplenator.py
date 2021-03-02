@@ -1,9 +1,10 @@
-from bot.commands.redemptions import RedemptionCommands
-from bot.commands.channel import ChannelCommands
+from bot.commands import bot_commands
+from bot.commands.command_logic.pomo import check_active_user
 from config import get_config
 from twitchio.dataclasses import Message
 from twitchio.ext import commands
 from twitchio.dataclasses import Message
+from functools import wraps
 
 
 class Rumplenator(commands.Bot):
@@ -19,135 +20,47 @@ class Rumplenator(commands.Bot):
             prefix=config['bot_prefix'],
             initial_channels=[config['channel']]
         )
+        self.register_commands()
 
-    #
-
-    # events
-    # events don't need decorators when subclassed
 
     async def event_ready(self):
         print(f'Ready | {self.nick}')
         await self._ws.send_privmsg(get_config().get('channel'), "/me has landed!")
 
+
     async def event_message(self, message: Message):
-        print(message.content)
-        await ChannelCommands.check_pom_state(message)
+        await self.check_pom_state(message)
         await self.handle_commands(message)
+     
 
-    #
+    def register_commands(self):
+        '''
+        Registers all command names in the commands list with the generic run_command method.
+        This is the equivalent of using the decorator
+        @commands.command(name='dyson') on individual methods.
+        '''
+        run_command_method = getattr(self, 'run_command')
+        command_list = [e.value for e in bot_commands.CommandKeys if e.name.startswith('CMD')]
+        for command_name in command_list:
+            self.add_command(commands.command(name=command_name)(run_command_method))
 
-    # channel commands
 
-    @commands.command(name=ChannelCommands.HI)
-    async def hi(self, ctx: Message):
-        await ChannelCommands.hi(ctx)
+    async def run_command(self, ctx: Message):
+        '''
+        Generic run command method. Given a Message object, it looks up the command
+        invoked and calls the corresponding method from the bot_commands module. 
+        Throws and error if a method with the command name was not found.
+        '''
+        command_key = ctx.content.split()[0][1:] # extracts substring 'dyson' from string '!dyson fan'
+        command_method = None
+        try:
+            command_method = getattr(bot_commands, command_key)
+            await command_method(ctx)
+        except AttributeError:
+            raise NotImplementedError(f"Class `{bot_commands.__name__}` does not implement `{command_key}`.")
 
-    @commands.command(name=ChannelCommands.KILL)
-    async def kill(self, ctx: Message):
-        await ChannelCommands.kill(ctx)
+    
+    async def check_pom_state(self, ctx: Message):
+        if not f"!{bot_commands.CommandKeys.CMD_POMO.value}" in ctx.content:
+            await check_active_user(ctx)
 
-    @commands.command(name=ChannelCommands.BOT_LOVE)
-    async def bot_love(self, ctx: Message):
-        await ChannelCommands.bot_love(ctx)
-
-    @commands.command(name=ChannelCommands.RAID)
-    async def raid(self, ctx: Message):
-        await ChannelCommands.raid(ctx)
-
-    @commands.command(name=ChannelCommands.SSIMP)
-    async def ssimp(self, ctx: Message):
-        await ChannelCommands.ssimp(ctx)
-
-    @commands.command(name=ChannelCommands.SIMP)
-    async def simp(self, ctx: Message):
-        await ChannelCommands.simp(ctx)
-
-    @commands.command(name=ChannelCommands.WOWIE)
-    async def wowie(self, ctx: Message):
-        await ChannelCommands.wowie(ctx)
-
-    @commands.command(name=ChannelCommands.HYPE)
-    async def hype(self, ctx: Message):
-        await ChannelCommands.hype(ctx)
-
-    @commands.command(name=ChannelCommands.POMO)
-    async def pomo(self, ctx: Message):
-        await ChannelCommands.pomo(ctx)
-
-    #
-
-    # redemption commands
-
-    @commands.command(name=RedemptionCommands.UNDEFINED_DYSON)
-    async def dyson(self, ctx: Message):
-        await RedemptionCommands.dyson(ctx)
-
-    @commands.command(name=RedemptionCommands.UNDEFINED_ONLYFANS)
-    async def onlyfans(self, ctx: Message):
-        await RedemptionCommands.onlyfans(ctx)
-
-    @commands.command(name=RedemptionCommands.FLIP_FLIP)
-    async def flip(self, ctx: Message):
-        await RedemptionCommands.flip(ctx)
-
-    @commands.command(name=RedemptionCommands.GRANT_SKWIRL)
-    async def mrskwirl(self, ctx: Message):
-        await RedemptionCommands.mrskwirl(ctx)
-
-    @commands.command(name=RedemptionCommands.MCLOVIN_MCLOVIN)
-    async def mclovinscommand(self, ctx: Message):
-        await RedemptionCommands.mclovin(ctx)
-
-    @commands.command(name=RedemptionCommands.UNDEFINED_TOM)
-    async def tom2(self, ctx: Message):
-        await RedemptionCommands.tom2(ctx)
-
-    @commands.command(name=RedemptionCommands.UNDEFINED_GIVE_UP)
-    async def giveup(self, ctx: Message):
-        await RedemptionCommands.giveup(ctx)
-
-    @commands.command(name=RedemptionCommands.MABLE_SLEEPY)
-    async def sleepy(self, ctx: Message):
-        await RedemptionCommands.sleepy(ctx)
-
-    @commands.command(name=RedemptionCommands.FLAWER_PAT)
-    async def pat(self, ctx: Message):
-        await RedemptionCommands.pat(ctx)
-
-    @commands.command(name=RedemptionCommands.SKY_DROPKICK)
-    async def dropkick(self, ctx: Message):
-        await RedemptionCommands.dropkick(ctx)
-
-    @commands.command(name=RedemptionCommands.SKP_DROPKISS)
-    async def dropkiss(self, ctx: Message):
-        await RedemptionCommands.dropkiss(ctx)
-
-    @commands.command(name=RedemptionCommands.MABLE_COINTOSS)
-    async def cointoss(self, ctx: Message):
-        await RedemptionCommands.cointoss(ctx)
-
-    @commands.command(name=RedemptionCommands.MABLE_BOOP)
-    async def boop(self, ctx: Message):
-        await RedemptionCommands.boop(ctx)
-
-    @commands.command(name=RedemptionCommands.FLAWER_TUCK)
-    async def tuck(self, ctx: Message):
-        await RedemptionCommands.tuck(ctx)
-
-    @commands.command(name=RedemptionCommands.FLIP_WHIP)
-    async def whip(self, ctx: Message):
-        await RedemptionCommands.whip(ctx)
-
-    @commands.command(name=RedemptionCommands.KARANT_VIBE)
-    async def vibe(self, ctx: Message):
-        await RedemptionCommands.vibe(ctx)
-
-    @commands.command(name=RedemptionCommands.TEACHERLY_CONGRATS)
-    async def congrats(self, ctx: Message):
-        await RedemptionCommands.congrats(ctx)
-        
-    @commands.command(name=RedemptionCommands.HAM_FOCUS)
-    async def focus(self, ctx: Message):
-        await RedemptionCommands.congrats(ctx)
-
-    #

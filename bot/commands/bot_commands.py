@@ -11,6 +11,13 @@ import time
 
 
 class CommandKeys(Enum):
+    '''
+    This set of properties defines the commands that can be invoked from chat, e.g. !hi
+
+    The enum value is the command itself and MUST match a name of a method in this file,
+    otherwise there will be an error when the command is invoked
+    '''
+
     # channel commands
     CMD_HI = 'hi'
     CMD_KILL = 'kill'

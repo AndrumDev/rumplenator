@@ -28,9 +28,10 @@ class RedemptionCommands():
     FLAWER_TUCK = 'tuck'
     SKY_DROPKICK = 'dropkick'
     SKP_DROPKISS = 'dropkiss'
-    KARANT_VIBE = 'vibe'
     TEACHERLY_CONGRATS = 'congrats'
+    KARANT_VIBE = 'vibe'
     HAM_FOCUS = 'focus'
+    
 
     REDEMPTION_COMMAND_LIST = [
         UNDEFINED_DYSON,
@@ -49,9 +50,10 @@ class RedemptionCommands():
         SKY_DROPKICK,
         SKP_DROPKISS,
         KARANT_VIBE,
+        TEACHERLY_CONGRATS
+        KARANT_VIBE
         TEACHERLY_CONGRATS,
         HAM_FOCUS
-
     ]
 
     # FUNCTIONS

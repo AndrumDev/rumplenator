@@ -1,9 +1,10 @@
 from bot.commands import bot_commands
+from bot.commands.bot_commands import CommandKeys
 from bot.commands.command_logic.pomo import check_active_user
+from bot.helpers.functions import get_message_command
 from config import get_config
 from twitchio.dataclasses import Message, Context
 from twitchio.ext import commands
-from functools import wraps
 
 
 class Rumplenator(commands.Bot):
@@ -39,7 +40,7 @@ class Rumplenator(commands.Bot):
         @commands.command(name='dyson') on individual methods.
         '''
         run_command_method = getattr(self, 'run_command')
-        command_list = [e.value for e in bot_commands.CommandKeys if e.name.startswith('CMD')]
+        command_list = [e.value for e in CommandKeys if e.name.startswith('CMD')]
         for command_name in command_list:
             self.add_command(commands.command(name=command_name)(run_command_method))
 
@@ -50,7 +51,7 @@ class Rumplenator(commands.Bot):
         invoked and calls the corresponding method from the bot_commands module. 
         Throws and error if a method with the command name was not found.
         '''
-        command_key = ctx.content.split()[0][1:] # extracts substring 'dyson' from string '!dyson fan'
+        command_key = get_message_command(ctx.content)
         command_method = None
         try:
             command_method = getattr(bot_commands, command_key)
@@ -60,6 +61,6 @@ class Rumplenator(commands.Bot):
 
     
     async def check_pom_state(self, ctx: Message):
-        if not f"!{bot_commands.CommandKeys.CMD_POMO.value}" in ctx.content:
+        if get_message_command(ctx.content) != CommandKeys.CMD_POMO.value:
             await check_active_user(ctx)
 

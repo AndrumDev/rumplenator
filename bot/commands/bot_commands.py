@@ -93,8 +93,8 @@ async def onlyfans(ctx: Context):
     await ctx.send(message)
 
 async def dyson(ctx: Context):
-        message = get_dyson_message()
-        await ctx.send(message)
+    message = get_dyson_message()
+    await ctx.send(message)
 
 async def tom2(ctx: Context):
     bf_message, wtf_message = get_tom2_message()

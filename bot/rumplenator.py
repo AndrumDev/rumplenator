@@ -10,15 +10,14 @@ class Rumplenator(commands.Bot):
 
     # init
 
-    def __init__(self, event_loop=None):
+    def __init__(self):
         config = get_config()
         super().__init__(
             irc_token=config['irc_token'],
             client_id=config['client_id'],
             nick=config['bot_nick'],
             prefix=config['bot_prefix'],
-            initial_channels=[config['channel']],
-            loop=event_loop
+            initial_channels=[config['channel']]
         )
         self.register_commands()
 

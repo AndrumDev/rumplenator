@@ -1,9 +1,8 @@
 from bot.commands import bot_commands
 from bot.commands.command_logic.pomo import check_active_user
 from config import get_config
-from twitchio.dataclasses import Message
+from twitchio.dataclasses import Message, Context
 from twitchio.ext import commands
-from twitchio.dataclasses import Message
 from functools import wraps
 
 
@@ -11,14 +10,15 @@ class Rumplenator(commands.Bot):
 
     # init
 
-    def __init__(self):
+    def __init__(self, event_loop=None):
         config = get_config()
         super().__init__(
             irc_token=config['irc_token'],
             client_id=config['client_id'],
             nick=config['bot_nick'],
             prefix=config['bot_prefix'],
-            initial_channels=[config['channel']]
+            initial_channels=[config['channel']],
+            loop=event_loop
         )
         self.register_commands()
 
@@ -45,7 +45,7 @@ class Rumplenator(commands.Bot):
             self.add_command(commands.command(name=command_name)(run_command_method))
 
 
-    async def run_command(self, ctx: Message):
+    async def run_command(self, ctx: Context):
         '''
         Generic run command method. Given a Message object, it looks up the command
         invoked and calls the corresponding method from the bot_commands module. 

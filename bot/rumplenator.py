@@ -1,6 +1,6 @@
 from bot.commands import bot_commands
 from bot.commands.bot_commands import CommandKeys
-from bot.commands.command_logic.pomo import check_active_user
+from bot.commands.command_logic.pomo.pomo_command import warn_active_user
 from bot.helpers.functions import get_message_command
 from config import get_config
 from twitchio.dataclasses import Message, Context
@@ -62,5 +62,4 @@ class Rumplenator(commands.Bot):
     
     async def check_pom_state(self, ctx: Message):
         if get_message_command(ctx.content) != CommandKeys.CMD_POMO.value:
-            await check_active_user(ctx)
-
+            await warn_active_user(ctx)

@@ -1,4 +1,4 @@
-from bot.commands.command_logic.pomo import __get_pom_args
+from bot.commands.command_logic.pomo.pomo_command import __get_pom_args
 
 
 def test_get_pom_args_with_all_args():

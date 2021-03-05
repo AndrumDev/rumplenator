@@ -41,6 +41,12 @@ pip install -r requirements.txt
 python -m pytest -s
 ```
 
+on windows, the dyson tests will fail. Run:
+
+```
+python -m pytest -s --ignore-glob="*dyson*"
+```
+
 5. Set local environment variables by copying `.example.env` to a new file named `.env`, and setting `TMI_TOKEN` and `CLIENT_ID`.
 
 6. Run the bot locally:

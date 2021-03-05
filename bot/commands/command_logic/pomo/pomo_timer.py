@@ -12,6 +12,11 @@ class PomoState(enum.Enum):
     COMPLETE = 'complete'
 
 
+class PomoTimerError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class PomoTimer():
 
     def __init__(self, username: str, work_minutes: int, break_minutes: int, sessions: int, topic: str, on_pomo_complete: Callable, notify_user: Callable):
@@ -62,9 +67,11 @@ class PomoTimer():
         if self.state == PomoState.WORK:
             start_message = self.__get_work_start_text()
             countdown_minutes = self.work_minutes
-        else:
+        elif self.state == PomoState.BREAK:
             start_message = self.__get_break_start_text()
             countdown_minutes = self.break_minutes
+        else:
+            raise PomoTimerError(f"Cannot start countdown, PomoTimer is invalid state (state = {self.state})")
         
         asyncio.create_task(self.__notify_user(self.username, start_message))
 
@@ -89,8 +96,8 @@ class PomoTimer():
             self.sessions_remaining -= 1
 
         if self.sessions_remaining > 0:
-            self.state = PomoState.BREAK if PomoState.WORK else PomoState.WORK
-            await self.__start_countdown()
+            self.state = PomoState.BREAK if self.state == PomoState.WORK else PomoState.WORK
+            self.__start_countdown()
         else:
             self.state = PomoState.COMPLETE
             await self.__notify_user(self.username, "your pomodoro sessions have finished, well done!")

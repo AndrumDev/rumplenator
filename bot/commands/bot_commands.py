@@ -48,6 +48,7 @@ class CommandKeys(Enum):
     CMD_TEACHERLY_CONGRATS = 'congrats'
     CMD_KARANT_VIBE = 'vibe'
     CMD_HAM_FOCUS = 'focus'
+    CMD_TIME_LURKY = 'lurky'
 
 
 ### Channel commands ###
@@ -168,3 +169,9 @@ async def congrats(ctx: Context):
 async def focus(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_HAM_FOCUS.value)
     await ctx.send(f'/me {ctx.author.name} is requesting that {message} focus on the task at hand! Never give up!')
+
+async def lurky(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_TIME_LURKY.value)
+    await ctx.send(f'/me if you aint lurking ~(˘▾˘~) you aint working (~˘▾˘)~')
+
+    

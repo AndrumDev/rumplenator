@@ -154,10 +154,10 @@ class PomoTimer():
     @staticmethod
     def __countdown(event: Event, timeout: int, event_loop, on_complete: Callable = None, on_cancel: Callable = None):
         logging.info(f'{current_thread()}: counting down {timeout} minutes')
-        # timeout_seconds = timeout * 60
-        timeout_seconds = timeout
+        timeout_seconds = timeout * 60
         # blocking call
         cancelled = event.wait(timeout=timeout_seconds)
+        # run the callbacks on the main thread
         if not cancelled:
             asyncio.run_coroutine_threadsafe(on_complete(), event_loop)
         else:

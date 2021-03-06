@@ -60,6 +60,6 @@ class Rumplenator(commands.Bot):
             raise NotImplementedError(f"Class `{bot_commands.__name__}` does not implement `{command_key}`.")
 
     
-    async def check_pom_state(self, ctx: Message):
-        if get_message_command(ctx.content) != CommandKeys.CMD_POMO.value:
-            await warn_active_user(ctx)
+    async def check_pom_state(self, msg: Message):
+        if get_message_command(msg.content) != CommandKeys.CMD_POMO.value:
+            await warn_active_user(msg)

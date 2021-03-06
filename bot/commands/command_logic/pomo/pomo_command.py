@@ -3,14 +3,15 @@ from bot.helpers.functions import get_message_content
 from bot.commands.command_logic.pomo.pomo_timer import PomoTimer, PomoState
 from config import get_config
 from typing import Dict, List, Tuple
-from twitchio.dataclasses import Message
+from twitchio.dataclasses import Message, Context
 import time
+import asyncio
 
 DEFAULT_BREAK_TIME_MINS = 0
 DEFAULT_NUM_SESSIONS = 1
 
-MIN_WORK_MINUTES = 10
-MIN_BREAK_MINUTES = 3
+MIN_WORK_MINUTES = 0
+MIN_BREAK_MINUTES = 0
 MAX_TOTAL_MINUTES = 300
 
 __active_timers: Dict[str, PomoTimer] = {}
@@ -69,6 +70,7 @@ async def handle_pomo(ctx: Message) -> None:
         del __active_timers[username]
         # TODO tabi update pomo file here
 
+    
     async def notify_user(username: str, message: str):
         time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
         await ctx.channel.send(f'@{username}, {message}')
@@ -86,13 +88,13 @@ async def handle_pomo(ctx: Message) -> None:
     __active_timers[username] = pomo_timer
 
     # TODO tabi update pomo file here
-    pomo_timer.begin()
+    asyncio.create_task(pomo_timer.begin())
 
 
-async def warn_active_user(ctx: Message) -> None:
-    pom_timer = __active_timers.get(ctx.author.name)
+async def warn_active_user(msg: Message) -> None:
+    pom_timer = __active_timers.get(msg.author.name)
     if pom_timer and pom_timer.state == PomoState.WORK and pom_timer.minutes_remaining:
-        await ctx.channel.send(f"@{ctx.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
+        await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
 
 #
 

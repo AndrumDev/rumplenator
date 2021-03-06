@@ -1,8 +1,9 @@
-from threading import Event, Thread
+from threading import Event, Thread, current_thread
 from typing import Callable
 import enum
 import asyncio
 import time
+import logging
 
 
 class PomoState(enum.Enum):
@@ -37,13 +38,15 @@ class PomoTimer():
 
 
     @property
-    def sessions_done(self):
+    def sessions_done(self) -> int:
         return self.total_sessions - self.sessions_remaining
 
 
-    def begin(self):
+    async def begin(self):
+        logging.info(f'{current_thread()}: beginning new pomo for {self.username}')
+
         self.state = PomoState.WORK
-        self.__start_countdown()
+        await self.__start_countdown()
         
 
     def cancel(self, username=''):
@@ -54,12 +57,14 @@ class PomoTimer():
         self.__countdown_cancelled_event.set()
 
 
-    def __start_countdown(self):
+    async def __start_countdown(self):
         '''
-        Starts a single countdown. A countdown can be one work or break session. This method spawns a thread that waits until the countdown is over, 
+        Starts a single countdown in a new thread. A countdown can be one work or break session. The thread waits until the countdown is over, 
         and then invokes a callback function. An Event object is used to share state between the timer thread and the main thread.
         By calling event.set() from the main thread, the timer can be cancelled.
         '''
+        logging.info(f'{current_thread()}: creating new thread for {self.state} countdown for {self.username}')
+
         start_message = None
         countdown_minutes = None
         event_loop = asyncio.get_running_loop()
@@ -73,7 +78,7 @@ class PomoTimer():
         else:
             raise PomoTimerError(f"Cannot start countdown, PomoTimer is invalid state (state = {self.state})")
         
-        asyncio.create_task(self.__notify_user(self.username, start_message))
+        await self.__notify_user(self.username, start_message)
 
         # https://docs.python.org/3/library/threading.html#threading.Event
         self.__countdown_cancelled_event = Event()
@@ -92,12 +97,14 @@ class PomoTimer():
         '''
         Handler called at the end of every countdown (i.e. when an individual work or break session is over)
         '''
+        logging.info(f'{current_thread()}: countdown complete for user {self.username}')
+
         if self.state == PomoState.BREAK:
             self.sessions_remaining -= 1
 
         if self.sessions_remaining > 0:
             self.state = PomoState.BREAK if self.state == PomoState.WORK else PomoState.WORK
-            self.__start_countdown()
+            await self.__start_countdown()
         else:
             self.state = PomoState.COMPLETE
             await self.__notify_user(self.username, "your pomodoro sessions have finished, well done!")
@@ -108,6 +115,8 @@ class PomoTimer():
         '''
         Handler called when a user or mod cancels the countdown with !pomo cancel
         '''
+        logging.info(f'{current_thread()}: countdown cancelled for user {self.username}')
+
         self.state = PomoState.CANCELLED
         if self.__cancelled_by:
             await self.__notify_user(self.username, f"your pomo session has been cancelled by {self.__cancelled_by}")
@@ -144,7 +153,9 @@ class PomoTimer():
 
     @staticmethod
     def __countdown(event: Event, timeout: int, event_loop, on_complete: Callable = None, on_cancel: Callable = None):
-        timeout_seconds = timeout * 60
+        logging.info(f'{current_thread()}: counting down {timeout} minutes')
+        # timeout_seconds = timeout * 60
+        timeout_seconds = timeout
         # blocking call
         cancelled = event.wait(timeout=timeout_seconds)
         if not cancelled:

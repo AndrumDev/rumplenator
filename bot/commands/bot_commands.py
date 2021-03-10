@@ -49,6 +49,7 @@ class CommandKeys(Enum):
     CMD_KARANT_VIBE = 'vibe'
     CMD_HAM_FOCUS = 'focus'
     CMD_TIME_LURKY = 'lurky'
+    CMD_DUCKIE_TWIN = 'duckietwin'
 
 
 ### Channel commands ###
@@ -174,4 +175,9 @@ async def lurky(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_TIME_LURKY.value)
     await ctx.send(f'/me if you aint lurking ~(˘▾˘~) you aint working (~˘▾˘)~')
 
-    
+duckietwin_counter = 0 
+async def duckietwin(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_DUCKIE_TWIN.value)
+    duckietwin_counter += 1
+    await ctx.send(f'Rumpy and Duckie have been the same person {duckietwin_counter} times!（ ＾○＾）人（＾○＾ ）')
+

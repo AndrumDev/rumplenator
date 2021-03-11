@@ -179,5 +179,5 @@ duckietwin_counter = 0
 async def duckietwin(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_DUCKIE_TWIN.value)
     duckietwin_counter += 1
-    await ctx.send(f'Rumpy and Duckie have been the same person {duckietwin_counter} times!（ ＾○＾）人（＾○＾ ）')
+    await ctx.send(f'/me Rumpy and Duckie have been the same person {duckietwin_counter} times!（ ＾○＾）人（＾○＾ ）')
 

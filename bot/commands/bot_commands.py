@@ -34,6 +34,7 @@ class CommandKeys(Enum):
     CMD_UNDEFINED_ONLYFANS = 'onlyfans'
     CMD_UNDEFINED_TOM = 'tom2'
     CMD_UNDEFINED_GIVE_UP = 'giveup'
+    CMD_UNDEFINED_LMGTFY = 'lmgtfy'
     CMD_FLIP_FLIP = 'flip'
     CMD_FLIP_WHIP = 'whip'
     CMD_GRANT_SKWIRL = 'mrskwirl'
@@ -50,6 +51,7 @@ class CommandKeys(Enum):
     CMD_HAM_FOCUS = 'focus'
     CMD_TIME_LURKY = 'lurky'
     CMD_DUCKIE_TWIN = 'duckietwin'
+    
 
 
 ### Channel commands ###
@@ -181,3 +183,9 @@ async def duckietwin(ctx: Context):
     duckietwin_counter += 1
     await ctx.send(f'/me Rumpy and Duckie have been the same person {duckietwin_counter} times!（ ＾○＾）人（＾○＾ ）')
 
+async def lmgtfy(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_UNDEFINED_LMGTFY.value)
+    message = message.split(" ")
+    username = "".join([name for name in message if "@" in name])
+    search_term = "+".join([words for words in message if "@" not in words])
+        await ctx.send(f'Here you go {username}: https://letmegooglethat.com/?q={search_term}')

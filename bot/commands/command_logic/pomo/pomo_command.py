@@ -1,7 +1,7 @@
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
 from bot.commands.command_logic.pomo.pomo_timer import PomoTimer, PomoState
-from config import get_config
+from bot.commands.command_logic.pomo import pomo_store
 from typing import Dict, List, Tuple
 from twitchio.dataclasses import Message, Context
 import time
@@ -14,10 +14,27 @@ MIN_WORK_MINUTES = 0
 MIN_BREAK_MINUTES = 0
 MAX_TOTAL_MINUTES = 300
 
+# MIN_WORK_MINUTES = 10
+# MIN_BREAK_MINUTES = 3
+# MAX_TOTAL_MINUTES = 300
+
 __active_timers: Dict[str, PomoTimer] = {}
 
 
 # public methods
+
+def load_pomos() -> None:
+    '''
+    
+    '''
+    timer_configs = pomo_store.read_timers()
+    for config in timer_configs:
+        from datetime import datetime, timezone
+        time_elapsed = datetime.now(timezone.utc) - config.get('start_time')
+        timer = PomoTimer(
+
+        )
+        __active_timers[timer.username] = timer
 
 
 async def handle_pomo(ctx: Message) -> None:
@@ -68,8 +85,9 @@ async def handle_pomo(ctx: Message) -> None:
 
     def on_complete():
         del __active_timers[username]
-        # TODO tabi update pomo file here
-
+        # WARNING: values() returns a view: i.e. it is not immutable and it will
+        # update when the dict changes. i don't think that will cause problems here? but ugh
+        pomo_store.update_timers(__active_timers.values())
     
     async def notify_user(username: str, message: str):
         time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
@@ -87,7 +105,7 @@ async def handle_pomo(ctx: Message) -> None:
 
     __active_timers[username] = pomo_timer
 
-    # TODO tabi update pomo file here
+    pomo_store.add_timer(pomo_timer)
     asyncio.create_task(pomo_timer.begin())
 
 

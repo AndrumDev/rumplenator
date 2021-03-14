@@ -1,8 +1,12 @@
+from config import get_config
 from threading import Event, Thread, current_thread
 from typing import Callable
+from datetime import datetime, timezone
+from pathlib import Path
 import enum
 import asyncio
 import time
+import math
 import logging
 
 
@@ -20,14 +24,15 @@ class PomoTimerError(Exception):
 
 class PomoTimer():
 
-    def __init__(self, username: str, work_minutes: int, break_minutes: int, sessions: int, topic: str, on_pomo_complete: Callable, notify_user: Callable):
+    def __init__(self, username: str, work_minutes: int, break_minutes: int, num_sessions: int, topic: str,
+                on_pomo_complete: Callable, notify_user: Callable, start_time: datetime = None):
         self.name: str = username
         self.username: str = username
 
         self.work_minutes: int = work_minutes
         self.break_minutes: int = break_minutes
-        self.total_sessions: int = sessions
-        self.sessions_remaining: int = sessions
+        self.total_sessions: int = num_sessions
+        self.sessions_remaining: int = num_sessions
         self.topic: str = topic
         self.state: PomoState = None
         
@@ -35,6 +40,10 @@ class PomoTimer():
         self.__cancelled_by: str = None
         self.__on_pomo_complete: Callable = on_pomo_complete
         self.__notify_user: Callable = notify_user
+        self.__counter_file: Path = None
+
+        if start_time is not None:
+            self.start_time = start_time
 
 
     @property
@@ -43,10 +52,17 @@ class PomoTimer():
 
 
     async def begin(self):
-        logging.info(f'{current_thread()}: beginning new pomo for {self.username}')
+        logging.info(f'{current_thread()}: beginning pomo for {self.username}')
 
-        self.state = PomoState.WORK
-        await self.__start_countdown()
+        if self.start_time:
+            await self.__resume_countdown()
+        else:
+            self.start_time = datetime.now(timezone.utc)
+            self.state = PomoState.WORK
+            self.__counter_file = get_config().get('storage_dir') / f'{self.username}_{self.start_time}'
+            with open(self.__counter_file, 'w') as f:
+                f.write(str(0))
+            await self.__start_countdown()
         
 
     def cancel(self, username=''):
@@ -55,6 +71,46 @@ class PomoTimer():
 
         # setting this event interrupts the countdown timer thread
         self.__countdown_cancelled_event.set()
+
+
+    async def __resume_countdown(self):
+        '''
+        '''
+        time_elapsed_delta = datetime.now(timezone.utc) - self.start_time
+        time_elapsed_mins = time_elapsed_delta.total_seconds() / 60
+        cycle_length_mins = self.work_minutes + self.break_minutes
+        # total_pomo_mins = cycle_length_mins * self.total_sessions
+
+        self.sessions_remaining = self.total_sessions - math.floor((time_elapsed_mins / cycle_length_mins))
+
+        cycle_time_remaining = time_elapsed_mins % cycle_length_mins
+
+        if cycle_time_remaining == 0:
+            self.state = PomoState.WORK
+            await self.__start_countdown()
+        elif cycle_time_remaining == self.break_minutes:
+            self.state = PomoState.BREAK
+            await self.__start_countdown()
+        else:
+            if cycle_time_remaining < self.break_minutes:
+                self.state = PomoState.BREAK
+                countdown_mins = cycle_time_remaining
+            else:
+                self.state = PomoState.WORK
+                countdown_mins = cycle_time_remaining - self.break_minutes
+
+            # https://docs.python.org/3/library/threading.html#threading.Event
+            self.__countdown_cancelled_event = Event()
+            event_loop = asyncio.get_running_loop()
+            Thread(
+                target=PomoTimer.__countdown,
+                args=(self.__countdown_cancelled_event, countdown_mins, event_loop),
+                kwargs={
+                    'on_complete': self.__on_countdown_complete,
+                    'on_cancel': self.__on_countdown_cancelled
+                },
+                daemon=True
+            ).start()
 
 
     async def __start_countdown(self):
@@ -84,7 +140,7 @@ class PomoTimer():
         self.__countdown_cancelled_event = Event()
         Thread(
             target=PomoTimer.__countdown,
-            args=(self.__countdown_cancelled_event, countdown_minutes, event_loop),
+            args=(self.__countdown_cancelled_event, countdown_minutes, event_loop, self.__counter_file),
             kwargs={
                 'on_complete': self.__on_countdown_complete,
                 'on_cancel': self.__on_countdown_cancelled
@@ -152,9 +208,16 @@ class PomoTimer():
             return f"work session {self.sessions_done + 1} is complete! Enjoy your {self.break_minutes} minute break!"
 
     @staticmethod
-    def __countdown(event: Event, timeout: int, event_loop, on_complete: Callable = None, on_cancel: Callable = None):
+    def __countdown(event: Event, timeout: int, event_loop, counter_file: Path, on_complete: Callable = None, on_cancel: Callable = None):
         logging.info(f'{current_thread()}: counting down {timeout} minutes')
         timeout_seconds = timeout * 60
+
+        # increment the value in the counter file
+        with open(counter_file, 'r') as f:
+            count = int(f.read().strip())
+        with open(counter_file, "w") as f:
+            f.write(str(count + 1))
+
         # blocking call
         cancelled = event.wait(timeout=timeout_seconds)
         # run the callbacks on the main thread

@@ -51,6 +51,7 @@ class CommandKeys(Enum):
     CMD_HAM_FOCUS = 'focus'
     CMD_TIME_LURKY = 'lurky'
     CMD_DUCKIE_TWIN = 'duckietwin'
+    CMD_FABE_BAN = "ban"
     
 
 
@@ -189,3 +190,7 @@ async def lmgtfy(ctx: Context):
     username = "".join([name for name in message if "@" in name])
     search_term = "+".join([words for words in message if "@" not in words])
     await ctx.send(f'Here you go {username}: https://letmegooglethat.com/?q={search_term}')
+
+async def ban(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_FABE_BAN.value)
+    await ctx.send(f'/me {ctx.author.name} tried to banish {message} with the ban hammer! But {message} dodges ε=ε=ε=ε=┏( ￣▽￣)┛ hehe')

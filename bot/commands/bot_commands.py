@@ -53,6 +53,7 @@ class CommandKeys(Enum):
     CMD_DUCKIE_TWIN = 'duckietwin'
     CMD_FABE_BAN = "ban"
     CMD_HUTCH_HUTCH = "hutch"
+    CMD_HAMLIN_TEAZE = 'teaze'
     
 
 
@@ -198,4 +199,9 @@ async def ban(ctx: Context):
 
 async def hutch(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_HUTCH_HUTCH.value)
-    await ctx.send(f'/The resident best D.Va player who got an epic team kill on OW, is an elder of the stream, and an overall legend KEKW' )
+    await ctx.send(f'/me The resident best D.Va player who got an epic team kill on OW, is an elder of the stream, and an overall legend KEKW' )
+
+async def teaze(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_HAMLIN_TEAZE.value)
+    word = str.capitalize(message)
+    await ctx.send(f'/me And{word}teazer')

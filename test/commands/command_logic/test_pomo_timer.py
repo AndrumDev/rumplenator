@@ -45,7 +45,7 @@ def test_break_minutes_remaining():
     assert pomo_timer.minutes_remaining == 8
 
 
-def test_less_than_one_minute_remaining():
+def test_minutes_remaining_with_31_seconds_left_rounds_up():
     pomo_timer = PomoTimer(
         username='test_user',
         work_minutes=20,
@@ -55,11 +55,26 @@ def test_less_than_one_minute_remaining():
         on_pomo_complete=_mock_on_complete,
         notify_user=_mock_notify_user
     )
-    # the user has 29 seconds left on their counter
-    pomo_timer.set_countdown_started(datetime.now(timezone.utc) - timedelta(minutes = 10, seconds=29))
+    pomo_timer.set_countdown_started(datetime.now(timezone.utc) - timedelta(minutes = 19, seconds=29))
     pomo_timer.state = PomoState.WORK
 
     assert pomo_timer.minutes_remaining == 1
+
+
+def test_minutes_remaining_with_29_seconds_left_rounds_down():
+    pomo_timer = PomoTimer(
+        username='test_user',
+        work_minutes=20,
+        break_minutes=10,
+        sessions=1,
+        topic='lel',
+        on_pomo_complete=_mock_on_complete,
+        notify_user=_mock_notify_user
+    )
+    pomo_timer.set_countdown_started(datetime.now(timezone.utc) - timedelta(minutes = 19, seconds=31))
+    pomo_timer.state = PomoState.WORK
+
+    assert pomo_timer.minutes_remaining == 0
 
 
 def test_minutes_remaining_not_started():

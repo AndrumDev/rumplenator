@@ -93,7 +93,10 @@ async def handle_pomo(ctx: Message) -> None:
 async def warn_active_user(msg: Message) -> None:
     pom_timer = __active_timers.get(msg.author.name)
     if pom_timer and pom_timer.state == PomoState.WORK:
-        await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
+        if pom_timer.minutes_remaining > 0:
+            await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
+        else:
+            await msg.channel.send(f"@{msg.author.name} your work session is ALMOST complete! sit tight!")
 
 #
 

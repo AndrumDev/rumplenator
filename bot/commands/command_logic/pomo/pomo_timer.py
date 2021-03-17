@@ -33,7 +33,7 @@ class PomoTimer():
         self.state: PomoState = None
         
         self.__countdown_cancelled_event: Event = None
-        self.__countdown_started_time = None
+        self.__countdown_started_time: datetime = None
         self.__cancelled_by: str = None
         self.__on_pomo_complete: Callable = on_pomo_complete
         self.__notify_user: Callable = notify_user
@@ -182,7 +182,7 @@ class PomoTimer():
             asyncio.run_coroutine_threadsafe(on_cancel(), event_loop)
 
 
-    def set_countdown_started(self, started_time):
+    def set_countdown_started(self, started_time: datetime):
         '''
         Allow private variable __countdown_started_time to be modified by unit tests
         '''

@@ -54,7 +54,7 @@ class CommandKeys(Enum):
     CMD_FABE_BAN = "ban"
     CMD_HUTCH_HUTCH = "hutch"
     CMD_HAMLIN_TEAZE = 'teaze'
-    
+
 
 
 ### Channel commands ###

@@ -24,7 +24,7 @@ class Rumplenator(commands.Bot):
 
 
     async def event_ready(self):
-        print(f'Ready | {self.nick}')
+        print(f'Ready | {self.nick} on {self.initial_channels}')
         await self._ws.send_privmsg(get_config().get('channel'), "/me has landed!")
 
 

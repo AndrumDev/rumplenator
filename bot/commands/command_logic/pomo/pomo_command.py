@@ -10,8 +10,8 @@ import asyncio
 DEFAULT_BREAK_TIME_MINS = 0
 DEFAULT_NUM_SESSIONS = 1
 
-MIN_WORK_MINUTES = 0
-MIN_BREAK_MINUTES = 0
+MIN_WORK_MINUTES = 10
+MIN_BREAK_MINUTES = 3
 MAX_TOTAL_MINUTES = 300
 
 __active_timers: Dict[str, PomoTimer] = {}
@@ -69,7 +69,6 @@ async def handle_pomo(ctx: Message) -> None:
     def on_complete():
         del __active_timers[username]
         # TODO tabi update pomo file here
-
     
     async def notify_user(username: str, message: str):
         time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
@@ -93,7 +92,7 @@ async def handle_pomo(ctx: Message) -> None:
 
 async def warn_active_user(msg: Message) -> None:
     pom_timer = __active_timers.get(msg.author.name)
-    if pom_timer and pom_timer.state == PomoState.WORK and pom_timer.minutes_remaining:
+    if pom_timer and pom_timer.state == PomoState.WORK:
         await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
 
 #

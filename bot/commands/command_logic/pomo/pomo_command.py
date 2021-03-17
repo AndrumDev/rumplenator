@@ -110,9 +110,18 @@ async def __show_pomo_info(ctx: Message, message='') -> None:
 
 async def __show_pomo_update(pomo: PomoTimer, ctx: Message) -> None:
     if pomo.state == PomoState.WORK:
-        await ctx.channel.send(f'@{pomo.username}, you have {pomo.minutes_remaining} minutes left on your work session. You got this!')
+        await ctx.channel.send(f'@{pomo.username}, you have {__get_mins_remaining_string(pomo)} left on your work session. You got this!')
+    elif pomo.state == PomoState.BREAK:
+        await ctx.channel.send(f'@{pomo.username}, you still have {__get_mins_remaining_string(pomo)} left on your break. Prepare yourself')
+
+
+def __get_mins_remaining_string(pomo: PomoTimer) -> str:
+    if pomo.minutes_remaining > 1:
+        return f'{pomo.minutes_remaining} minutes'
+    elif pomo.pomo.minutes_remaining == 1:
+        return f'{pomo.minutes_remaining} minute'
     else:
-        await ctx.channel.send(f'@{pomo.username}, you still have {pomo.minutes_remaining} minutes left on your break. Prepare yourself')
+        return 'under a minute'
 
 
 def __cancel_pomo(username: str, cancelled_by: str = '') -> None:

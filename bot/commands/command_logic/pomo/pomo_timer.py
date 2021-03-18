@@ -1,5 +1,5 @@
 from threading import Event, Thread, current_thread
-from typing import Callable
+from typing import Callable, Optional
 from datetime import datetime, timezone, timedelta
 import enum
 import asyncio
@@ -21,12 +21,12 @@ class PomoTimerError(Exception):
 
 class PomoTimer():
 
-    def __init__(self, username: str, work_minutes: int, break_minutes: int, sessions: int, topic: str, on_pomo_complete: Callable, notify_user: Callable):
+    def __init__(self, username: str, work_minutes: int, break_minutes: Optional[int], sessions: int, topic: str, on_pomo_complete: Callable, notify_user: Callable):
         self.name: str = username
         self.username: str = username
 
         self.work_minutes: int = work_minutes
-        self.break_minutes: int = break_minutes
+        self.break_minutes: Optional[int] = break_minutes
         self.total_sessions: int = sessions
         self.sessions_remaining: int = sessions
         self.topic: str = topic
@@ -111,7 +111,9 @@ class PomoTimer():
         '''
         logging.info(f'{current_thread()}: countdown complete for user {self.username}')
 
-        if self.state == PomoState.BREAK:
+        # the session boundary is after the BREAK countdown, unless there is only one work session
+        # in which case there is no break, and the pomo completes
+        if self.state == PomoState.BREAK or self.total_sessions == 1:
             self.sessions_remaining -= 1
 
         if self.sessions_remaining > 0:

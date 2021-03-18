@@ -2,16 +2,14 @@ from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
 from bot.commands.command_logic.pomo.pomo_timer import PomoTimer, PomoState
 from config import get_config
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 from twitchio.dataclasses import Message, Context
 import time
 import asyncio
 
-DEFAULT_BREAK_TIME_MINS = 0
 DEFAULT_NUM_SESSIONS = 1
-
-MIN_WORK_MINUTES = 10
-MIN_BREAK_MINUTES = 3
+MIN_WORK_MINUTES = 0
+MIN_BREAK_MINUTES = 0
 MAX_TOTAL_MINUTES = 300
 
 __active_timers: Dict[str, PomoTimer] = {}
@@ -62,7 +60,10 @@ async def handle_pomo(ctx: Message) -> None:
 
     work_time, break_time, sessions, topic = __get_pom_args(args)
 
-    if work_time < MIN_WORK_MINUTES or (break_time != 0 and break_time < MIN_BREAK_MINUTES) or (work_time + break_time) * sessions > MAX_TOTAL_MINUTES:
+    invalid_work_time = work_time < MIN_WORK_MINUTES
+    invalid_break_time = break_time is not None and break_time < MIN_BREAK_MINUTES
+    invalid_total_time = ((work_time + break_time) if break_time is not None else work_time) * sessions > MAX_TOTAL_MINUTES
+    if invalid_work_time or invalid_break_time or invalid_total_time:
         await ctx.channel.send(f"@{username}, oops! Please note min work is {MIN_WORK_MINUTES}, min break is {MIN_BREAK_MINUTES}, and max total minutes is {MAX_TOTAL_MINUTES}")
         return
 
@@ -118,7 +119,7 @@ async def __show_pomo_update(pomo: PomoTimer, ctx: Message) -> None:
 def __get_mins_remaining_string(pomo: PomoTimer) -> str:
     if pomo.minutes_remaining > 1:
         return f'{pomo.minutes_remaining} minutes'
-    elif pomo.pomo.minutes_remaining == 1:
+    elif pomo.minutes_remaining == 1:
         return f'{pomo.minutes_remaining} minute'
     else:
         return 'under a minute'
@@ -135,7 +136,7 @@ def __get_message_args(message: str) -> List[str]:
     return args
 
 
-def __get_pom_args(args: List[str]) -> Tuple[int, int, int, str]:
+def __get_pom_args(args: List[str]) -> Tuple[int, Optional[int], int, str]:
     topic_idx = -1
     for idx, val in enumerate(args):
         if not val.isdigit():
@@ -150,7 +151,7 @@ def __get_pom_args(args: List[str]) -> Tuple[int, int, int, str]:
     pom_times = args[:topic_idx] if has_topic else args
 
     work_time = int(pom_times[0])
-    break_time = int(pom_times[1]) if len(pom_times) > 1 else DEFAULT_BREAK_TIME_MINS
+    break_time = int(pom_times[1]) if len(pom_times) > 1 else None
     sessions = int(pom_times[2]) if len(pom_times) > 2 else DEFAULT_NUM_SESSIONS
     topic = ' '.join([str(n) for n in args[topic_idx:]]) if has_topic else ''
 

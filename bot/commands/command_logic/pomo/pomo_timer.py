@@ -163,7 +163,7 @@ class PomoTimer():
         if self.total_sessions == 1:
             return f"work session is complete! Enjoy your {self.break_minutes} minute break!"
         else:
-            return f"work session {self.sessions_done + 1} is complete! Enjoy your {self.break_minutes} minute break!"
+            return f"work session {self.sessions_done + 1} of {self.total_sessions} is complete! Enjoy your {self.break_minutes} minute break!"
 
 
     def __calculate_remaining_minutes(self, time_started, total_minutes):

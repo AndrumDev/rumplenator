@@ -53,8 +53,8 @@ class CommandKeys(Enum):
     CMD_DUCKIE_TWIN = 'duckietwin'
     CMD_FABE_BAN = "ban"
     CMD_HUTCH_HUTCH = "hutch"
-    CMD_HAMLIN_TEAZE = 'teaze'
-
+    CMD_HAMLIN_TEAZE = "teaze"
+    CMD_STEVIE_BRB = "brb"
 
 
 ### Channel commands ###
@@ -205,3 +205,10 @@ async def teaze(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_HAMLIN_TEAZE.value)
     word = str.capitalize(message)
     await ctx.send(f'/me And{word}teazer')
+
+async def brb(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_STEVIE_BRB.value)
+    if ctx.author.name == 'AndRumpleteazer':
+        await ctx.send(f'/Rumple will be right back! Yakky will watch over you while she\'s gone. Best behaviour now everyone... andrumSmug')
+    else:
+        await ctx.send(f'/Okiedokie {ctx.author.name}, catch you later! We\'ll miss you in the meantime~ andrumHeart')

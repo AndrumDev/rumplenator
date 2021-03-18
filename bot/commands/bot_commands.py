@@ -2,8 +2,10 @@ from bot.commands.command_logic.dyson import get_dyson_message
 from bot.commands.command_logic.tom2 import get_tom2_message
 from bot.commands.command_logic.pomo import check_active_user, handle_pomo
 from bot.commands.command_logic.simp import get_simp_quote
+from bot.commands.command_logic.pun import fetch_pun
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
+from config import get_config
 from twitchio.dataclasses import Context
 from random import randint
 from enum import Enum
@@ -42,6 +44,7 @@ class CommandKeys(Enum):
     CMD_MABLE_SLEEPY = 'sleepy'
     CMD_MABLE_BOOP = 'boop'
     CMD_MABLE_COINTOSS = 'cointoss'
+    CMD_FABE_BAN = 'ban'
     CMD_FLAWER_PAT = 'pat'
     CMD_FLAWER_TUCK = 'tuck'
     CMD_SKY_DROPKICK = 'dropkick'
@@ -51,9 +54,9 @@ class CommandKeys(Enum):
     CMD_HAM_FOCUS = 'focus'
     CMD_TIME_LURKY = 'lurky'
     CMD_DUCKIE_TWIN = 'duckietwin'
-    CMD_FABE_BAN = "ban"
-    CMD_HUTCH_HUTCH = "hutch"
+    CMD_HUTCH_HUTCH = 'hutch'
     CMD_HAMLIN_TEAZE = 'teaze'
+    CMD_FABE_PUN = 'pun'
 
 
 
@@ -205,3 +208,7 @@ async def teaze(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_HAMLIN_TEAZE.value)
     word = str.capitalize(message)
     await ctx.send(f'/me And{word}teazer')
+
+async def pun(ctx: Context):
+    pun_text = fetch_pun(get_config().get('pun_url'))
+    await ctx.send(f'/me {pun_text}')

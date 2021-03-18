@@ -16,7 +16,8 @@ __conf = {
         'resource_dir': Path(__file__).resolve().parent / 'test' / 'resources',
         'bot_nick': os.getenv('BOT_NICK', default='rumplenator_test'),
         'bot_prefix': '!',
-        'channel': os.getenv('CHANNEL', default='channel_test')
+        'channel': os.getenv('CHANNEL', default='channel_test'),
+        'pun_url': 'https://pun.me/id/88/'
     },
     'LOCAL': {
         'irc_token': os.environ['TMI_TOKEN'],
@@ -24,7 +25,8 @@ __conf = {
         'resource_dir': Path(__file__).resolve().parent / 'bot' / 'resources',
         'bot_nick': os.getenv('BOT_NICK', default='rumplenator_dev'),
         'bot_prefix': '!',
-        'channel': os.getenv('CHANNEL', default='tabi_twitchett')
+        'channel': os.getenv('CHANNEL', default='tabi_twitchett'),
+        'pun_url': 'https://pun.me/random/'
     },
     'PROD': {
         'irc_token': os.environ['TMI_TOKEN'],
@@ -32,7 +34,8 @@ __conf = {
         'resource_dir': Path(__file__).resolve().parent / 'bot' / 'resources',
         'bot_nick': os.getenv('BOT_NICK', default='rumplenator'),
         'bot_prefix': '!',
-        'channel': os.getenv('CHANNEL', default='AndRumpleteazer')
+        'channel': os.getenv('CHANNEL', default='AndRumpleteazer'),
+        'pun_url': 'https://pun.me/random/'
     },
 }
 

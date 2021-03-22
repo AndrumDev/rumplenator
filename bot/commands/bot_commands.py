@@ -55,7 +55,8 @@ class CommandKeys(Enum):
     CMD_HUTCH_HUTCH = "hutch"
     CMD_HAMLIN_TEAZE = 'teaze'
     CMD_STEVIE_BRB = 'brb'
-
+    CMD_BIK_RELAX = 'relax'
+    CMD_SPHYNX_WELCOMEJK = 'welcomejk'
 
 ### Channel commands ###
 
@@ -212,3 +213,11 @@ async def brb(ctx: Context):
         await ctx.send(f'/Rumple will be right back! Yakky will watch over you while she\'s gone. Best behaviour now everyone... andrumSmug')
     else:
         await ctx.send(f'/Okiedokie {ctx.author.name}, catch you later! We\'ll miss you in the meantime~ andrumHeart')
+
+async def relax(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_BIK_RELAX.value)
+    await ctx.send(f'/me {ctx.author.name} has finished their work and is here to relax and chill~ goodluck to everyone else!')
+
+async def welcomejk(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_WELCOMEJK.value)
+    await ctx.send(f'/me Welcome {message} to the Co-Procrastinating Stream. Where we attempt to... Wait... What was I supposed to be doing?')

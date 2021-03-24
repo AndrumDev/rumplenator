@@ -57,6 +57,9 @@ class CommandKeys(Enum):
     CMD_STEVIE_BRB = 'brb'
     CMD_BIK_RELAX = 'relax'
     CMD_SPHYNX_WELCOMEJK = 'welcomejk'
+    CMD_LENNY_HELLO = 'hello'
+    CMD_EVEREST_EVEREST = 'everest'
+    CMD_SPHYNX_PAP = 'pap'
 
 
 ### Channel commands ###
@@ -222,3 +225,15 @@ async def relax(ctx: Context):
 async def welcomejk(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_WELCOMEJK.value)
     await ctx.send(f'/me Welcome {message} to the Co-Procrastinating Stream. Where we attempt to... Wait... What was I supposed to be doing?')
+
+async def hello(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_HELLO.value)
+    await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Eat healthy, drink water and be mind-full! :heart: ')
+
+async def everest(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_EVEREST_EVEREST.value)
+    await ctx.send(f'/me Everest gives a hug to everyone in the chat and requests all to hug him back. :heart:' )
+
+async def pap(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_PAP.value)
+    await ctx.send(f'/me No... just no... stop! Go. Away. Please... NotLikeThis ' ) 

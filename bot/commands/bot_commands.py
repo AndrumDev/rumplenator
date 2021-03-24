@@ -58,6 +58,7 @@ class CommandKeys(Enum):
     CMD_BIK_RELAX = 'relax'
     CMD_SPHYNX_WELCOMEJK = 'welcomejk'
 
+
 ### Channel commands ###
 
 

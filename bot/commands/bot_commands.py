@@ -60,8 +60,10 @@ class CommandKeys(Enum):
     CMD_LENNY_HELLO = 'hello'
     CMD_EVEREST_EVEREST = 'everest'
     CMD_SPHYNX_PAP = 'pap'
+    CMD_UNWAZ_SIGH = 'sigh'
+    CMD_JED_SMILE = 'smile'
 
-
+    
 ### Channel commands ###
 
 
@@ -228,12 +230,20 @@ async def welcomejk(ctx: Context):
 
 async def hello(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_HELLO.value)
-    await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Eat healthy, drink water and be mind-full! :heart: ')
+    await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Eat healthy, drink water and be mind-full! andrumHeart ')
 
 async def everest(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_EVEREST_EVEREST.value)
-    await ctx.send(f'/me Everest gives a hug to everyone in the chat and requests all to hug him back. :heart:' )
+    await ctx.send(f'/me Everest gives a hug to everyone in the chat and requests all to hug him back. andrumHeart ' )
 
 async def pap(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_PAP.value)
     await ctx.send(f'/me No... just no... stop! Go. Away. Please... NotLikeThis ' ) 
+
+async def sigh(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_UNWAZ_SIGH.value)
+    await ctx.send(f'/me (* ´ Д｀)=з   ( ￣_￣)    (ᇂ_ᇂ|||)    (;¬_¬)' ) 
+
+async def smile(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_JED_SMILE.value)
+    await ctx.send(f'/me Hey Jay! andrumHeart Just a reminder: You so precious when you S-M-I-L-E andrumSmug' )

@@ -61,7 +61,9 @@ class CommandKeys(Enum):
     CMD_EVEREST_EVEREST = 'everest'
     CMD_SPHYNX_PAP = 'pap'
     CMD_UNWAZ_SIGH = 'sigh'
-    CMD_JED_SMILE = 'smile'
+    CMD_JED_SMILEJAY = 'smilejay'
+    CMD_KP_FLUG = 'flug'
+    CMD_LENNY_JOKE = 'joke'
 
     
 ### Channel commands ###
@@ -181,7 +183,10 @@ async def congrats(ctx: Context):
 
 async def focus(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_HAM_FOCUS.value)
-    await ctx.send(f'/me {ctx.author.name} is requesting that {message} focus on the task at hand! Never give up!')
+    if message == '':
+        await ctx.send(f'/me {ctx.author.name} is requesting that Rumple focus on the task at hand! Never give up!')
+    else: 
+        await ctx.send(f'/me {ctx.author.name} is requesting that {message} focus on the task at hand! Never give up!')
 
 async def lurky(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_TIME_LURKY.value)
@@ -215,7 +220,7 @@ async def teaze(ctx: Context):
 
 async def brb(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_STEVIE_BRB.value)
-    if ctx.author.name == 'AndRumpleteazer':
+    if ctx.author.name == '@AndRumpleteazer':
         await ctx.send(f'/Rumple will be right back! Yakky will watch over you while she\'s gone. Best behaviour now everyone... andrumSmug')
     else:
         await ctx.send(f'/Okiedokie {ctx.author.name}, catch you later! We\'ll miss you in the meantime~ andrumHeart')
@@ -244,6 +249,14 @@ async def sigh(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_UNWAZ_SIGH.value)
     await ctx.send(f'/me (* ´ Д｀)=з   ( ￣_￣)    (ᇂ_ᇂ|||)    (;¬_¬)' ) 
 
-async def smile(ctx: Context):
-    message = get_message_content(ctx.content, CommandKeys.CMD_JED_SMILE.value)
+async def smilejay(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_JED_SMILEJAY.value)
     await ctx.send(f'/me Hey Jay! andrumHeart Just a reminder: You so precious when you S-M-I-L-E andrumSmug' )
+
+async def flug(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_KP_FLUG.value)
+    await ctx.send(f'/me hwy {message} ley ne hokd ypu tiggt tught tighy, I gorchu my frwn uwy')
+
+async def joke(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_JOKE.value)
+    await ctx.send(f'/me Why did the chicken cross the Moebius strip?........To get to the same side!')

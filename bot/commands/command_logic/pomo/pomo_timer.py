@@ -1,8 +1,9 @@
 from config import get_config
 from threading import Event, Thread, current_thread
 from typing import Callable
-from datetime import datetime, timezone
 from pathlib import Path
+from typing import Callable, Optional
+from datetime import datetime, timezone, timedelta
 import enum
 import asyncio
 import time
@@ -24,19 +25,19 @@ class PomoTimerError(Exception):
 
 class PomoTimer():
 
-    def __init__(self, username: str, work_minutes: int, break_minutes: int, num_sessions: int, topic: str,
-                on_pomo_complete: Callable, notify_user: Callable, start_time: datetime = None):
+    def __init__(self, username: str, work_minutes: int, break_minutes: Optional[int], sessions: int, topic: str, on_pomo_complete: Callable, notify_user: Callable):
         self.name: str = username
         self.username: str = username
 
         self.work_minutes: int = work_minutes
-        self.break_minutes: int = break_minutes
-        self.total_sessions: int = num_sessions
-        self.sessions_remaining: int = num_sessions
+        self.break_minutes: Optional[int] = break_minutes
+        self.total_sessions: int = sessions
+        self.sessions_remaining: int = sessions
         self.topic: str = topic
         self.state: PomoState = None
         
         self.__countdown_cancelled_event: Event = None
+        self.__countdown_started_time: datetime = None
         self.__cancelled_by: str = None
         self.__on_pomo_complete: Callable = on_pomo_complete
         self.__notify_user: Callable = notify_user
@@ -45,6 +46,15 @@ class PomoTimer():
         if start_time is not None:
             self.start_time = start_time
 
+    @property
+    def minutes_remaining(self) -> int:
+        '''
+        Returns the minutes remaining in the current work or break timer
+        '''
+        if self.state == PomoState.WORK:
+            return self.__calculate_remaining_minutes(self.__countdown_started_time, self.work_minutes)
+        if self.state == PomoState.BREAK:
+            return self.__calculate_remaining_minutes(self.__countdown_started_time, self.break_minutes)
 
     @property
     def sessions_done(self) -> int:
@@ -138,6 +148,7 @@ class PomoTimer():
 
         # https://docs.python.org/3/library/threading.html#threading.Event
         self.__countdown_cancelled_event = Event()
+        self.__countdown_started_time = datetime.now(timezone.utc)
         Thread(
             target=PomoTimer.__countdown,
             args=(self.__countdown_cancelled_event, countdown_minutes, event_loop, self.__counter_file),
@@ -155,7 +166,9 @@ class PomoTimer():
         '''
         logging.info(f'{current_thread()}: countdown complete for user {self.username}')
 
-        if self.state == PomoState.BREAK:
+        # the session boundary is after the BREAK countdown, unless there is only one work session
+        # in which case there is no break, and the pomo completes
+        if self.state == PomoState.BREAK or self.total_sessions == 1:
             self.sessions_remaining -= 1
 
         if self.sessions_remaining > 0:
@@ -205,7 +218,13 @@ class PomoTimer():
         if self.total_sessions == 1:
             return f"work session is complete! Enjoy your {self.break_minutes} minute break!"
         else:
-            return f"work session {self.sessions_done + 1} is complete! Enjoy your {self.break_minutes} minute break!"
+            return f"work session {self.sessions_done + 1} of {self.total_sessions} is complete! Enjoy your {self.break_minutes} minute break!"
+
+
+    def __calculate_remaining_minutes(self, time_started, total_minutes):
+        end_time = time_started + timedelta(minutes = total_minutes)
+        return round((end_time - datetime.now(timezone.utc)).total_seconds() / 60)
+
 
     @staticmethod
     def __countdown(event: Event, timeout: int, event_loop, counter_file: Path, on_complete: Callable = None, on_cancel: Callable = None):
@@ -225,5 +244,12 @@ class PomoTimer():
             asyncio.run_coroutine_threadsafe(on_complete(), event_loop)
         else:
             asyncio.run_coroutine_threadsafe(on_cancel(), event_loop)
+
+
+    def set_countdown_started(self, started_time: datetime):
+        '''
+        Allow private variable __countdown_started_time to be modified by unit tests
+        '''
+        self.__countdown_started_time = started_time
 
 #####

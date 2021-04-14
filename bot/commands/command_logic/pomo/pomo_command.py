@@ -2,14 +2,13 @@ from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
 from bot.commands.command_logic.pomo.pomo_timer import PomoTimer, PomoState
 from bot.commands.command_logic.pomo import pomo_store
-from typing import Dict, List, Tuple
+from config import get_config
+from typing import Dict, List, Tuple, Optional
 from twitchio.dataclasses import Message, Context
 import time
 import asyncio
 
-DEFAULT_BREAK_TIME_MINS = 0
 DEFAULT_NUM_SESSIONS = 1
-
 MIN_WORK_MINUTES = 0
 MIN_BREAK_MINUTES = 0
 MAX_TOTAL_MINUTES = 300
@@ -79,14 +78,17 @@ async def handle_pomo(ctx: Message) -> None:
 
     work_time, break_time, sessions, topic = __get_pom_args(args)
 
-    if work_time < MIN_WORK_MINUTES or (break_time != 0 and break_time < MIN_BREAK_MINUTES) or (work_time + break_time) * sessions > MAX_TOTAL_MINUTES:
+    invalid_work_time = work_time < MIN_WORK_MINUTES
+    invalid_break_time = break_time is not None and break_time < MIN_BREAK_MINUTES
+    invalid_total_time = ((work_time + break_time) if break_time is not None else work_time) * sessions > MAX_TOTAL_MINUTES
+    if invalid_work_time or invalid_break_time or invalid_total_time:
         await ctx.channel.send(f"@{username}, oops! Please note min work is {MIN_WORK_MINUTES}, min break is {MIN_BREAK_MINUTES}, and max total minutes is {MAX_TOTAL_MINUTES}")
         return
 
     def on_complete():
         del __active_timers[username]
-        # WARNING: values() returns a view: i.e. it is not immutable and it will
-        # update when the dict changes. i don't think that will cause problems here? but ugh
+        # WARNING: values() returns a view: i.e. it is NOT immutable and it will
+        # update when the __active_timers dict changes. i don't think that will cause problems here? but something to be aware of
         pomo_store.update_timers(__active_timers.values())
     
     async def notify_user(username: str, message: str):
@@ -111,8 +113,11 @@ async def handle_pomo(ctx: Message) -> None:
 
 async def warn_active_user(msg: Message) -> None:
     pom_timer = __active_timers.get(msg.author.name)
-    if pom_timer and pom_timer.state == PomoState.WORK and pom_timer.minutes_remaining:
-        await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
+    if pom_timer and pom_timer.state == PomoState.WORK:
+        if pom_timer.minutes_remaining > 0:
+            await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
+        else:
+            await msg.channel.send(f"@{msg.author.name} your work session is ALMOST complete! sit tight!")
 
 #
 
@@ -126,9 +131,18 @@ async def __show_pomo_info(ctx: Message, message='') -> None:
 
 async def __show_pomo_update(pomo: PomoTimer, ctx: Message) -> None:
     if pomo.state == PomoState.WORK:
-        await ctx.channel.send(f'@{pomo.username}, you have {pomo.minutes_remaining} minutes left on your work session. You got this!')
+        await ctx.channel.send(f'@{pomo.username}, you have {__get_mins_remaining_string(pomo)} left on your work session. You got this!')
+    elif pomo.state == PomoState.BREAK:
+        await ctx.channel.send(f'@{pomo.username}, you still have {__get_mins_remaining_string(pomo)} left on your break. Prepare yourself')
+
+
+def __get_mins_remaining_string(pomo: PomoTimer) -> str:
+    if pomo.minutes_remaining > 1:
+        return f'{pomo.minutes_remaining} minutes'
+    elif pomo.minutes_remaining == 1:
+        return f'{pomo.minutes_remaining} minute'
     else:
-        await ctx.channel.send(f'@{pomo.username}, you still have {pomo.minutes_remaining} minutes left on your break. Prepare yourself')
+        return 'under a minute'
 
 
 def __cancel_pomo(username: str, cancelled_by: str = '') -> None:
@@ -142,7 +156,7 @@ def __get_message_args(message: str) -> List[str]:
     return args
 
 
-def __get_pom_args(args: List[str]) -> Tuple[int, int, int, str]:
+def __get_pom_args(args: List[str]) -> Tuple[int, Optional[int], int, str]:
     topic_idx = -1
     for idx, val in enumerate(args):
         if not val.isdigit():
@@ -157,7 +171,7 @@ def __get_pom_args(args: List[str]) -> Tuple[int, int, int, str]:
     pom_times = args[:topic_idx] if has_topic else args
 
     work_time = int(pom_times[0])
-    break_time = int(pom_times[1]) if len(pom_times) > 1 else DEFAULT_BREAK_TIME_MINS
+    break_time = int(pom_times[1]) if len(pom_times) > 1 else None
     sessions = int(pom_times[2]) if len(pom_times) > 2 else DEFAULT_NUM_SESSIONS
     topic = ' '.join([str(n) for n in args[topic_idx:]]) if has_topic else ''
 

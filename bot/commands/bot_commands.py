@@ -2,8 +2,10 @@ from bot.commands.command_logic.dyson import get_dyson_message
 from bot.commands.command_logic.tom2 import get_tom2_message
 from bot.commands.command_logic.pomo.pomo_command import handle_pomo
 from bot.commands.command_logic.simp import get_simp_quote
+from bot.commands.command_logic.pun import fetch_pun
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
+from config import get_config
 from twitchio.dataclasses import Context
 from random import randint
 from enum import Enum
@@ -34,6 +36,7 @@ class CommandKeys(Enum):
     CMD_UNDEFINED_ONLYFANS = 'onlyfans'
     CMD_UNDEFINED_TOM = 'tom2'
     CMD_UNDEFINED_GIVE_UP = 'giveup'
+    CMD_UNDEFINED_LMGTFY = 'lmgtfy'
     CMD_FLIP_FLIP = 'flip'
     CMD_FLIP_WHIP = 'whip'
     CMD_GRANT_SKWIRL = 'mrskwirl'
@@ -41,6 +44,7 @@ class CommandKeys(Enum):
     CMD_MABLE_SLEEPY = 'sleepy'
     CMD_MABLE_BOOP = 'boop'
     CMD_MABLE_COINTOSS = 'cointoss'
+    CMD_FABE_BAN = 'ban'
     CMD_FLAWER_PAT = 'pat'
     CMD_FLAWER_TUCK = 'tuck'
     CMD_SKY_DROPKICK = 'dropkick'
@@ -48,8 +52,23 @@ class CommandKeys(Enum):
     CMD_TEACHERLY_CONGRATS = 'congrats'
     CMD_KARANT_VIBE = 'vibe'
     CMD_HAM_FOCUS = 'focus'
+    CMD_TIME_LURKY = 'lurky'
+    CMD_DUCKIE_TWIN = 'duckietwin'
+    CMD_HUTCH_HUTCH = 'hutch'
+    CMD_HAMLIN_TEAZE = 'teaze'
+    CMD_FABE_PUN = 'pun'
+    CMD_STEVIE_BRB = 'brb'
+    CMD_BIK_RELAX = 'relax'
+    CMD_SPHYNX_WELCOMEJK = 'welcomejk'
+    CMD_LENNY_HELLO = 'hello'
+    CMD_EVEREST_EVEREST = 'everest'
+    CMD_SPHYNX_PAP = 'pap'
+    CMD_UNWAZ_SIGH = 'sigh'
+    CMD_JED_SMILEJAY = 'smilejay'
+    CMD_KP_FLUG = 'flug'
+    CMD_LENNY_JOKE = 'joke'
 
-
+    
 ### Channel commands ###
 
 
@@ -167,4 +186,84 @@ async def congrats(ctx: Context):
 
 async def focus(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_HAM_FOCUS.value)
-    await ctx.send(f'/me {ctx.author.name} is requesting that {message} focus on the task at hand! Never give up!')
+    if message == '':
+        await ctx.send(f'/me {ctx.author.name} is requesting that Rumple focus on the task at hand! Never give up!')
+    else: 
+        await ctx.send(f'/me {ctx.author.name} is requesting that {message} focus on the task at hand! Never give up!')
+
+async def lurky(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_TIME_LURKY.value)
+    await ctx.send(f'/me if you aint lurking ~(˘▾˘~) you aint working (~˘▾˘)~')
+
+duckietwin_counter = 0 
+async def duckietwin(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_DUCKIE_TWIN.value)
+    duckietwin_counter += 1
+    await ctx.send(f'/me Rumpy and Duckie have been the same person {duckietwin_counter} times!（ ＾○＾）人（＾○＾ ）')
+
+async def lmgtfy(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_UNDEFINED_LMGTFY.value)
+    message = message.split(" ")
+    username = "".join([name for name in message if "@" in name])
+    search_term = "+".join([words for words in message if "@" not in words])
+    await ctx.send(f'Here you go {username}: https://letmegooglethat.com/?q={search_term}')
+
+async def ban(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_FABE_BAN.value)
+    await ctx.send(f'/me {ctx.author.name} tried to banish {message} with the ban hammer! But {message} dodges ε=ε=ε=ε=┏( ￣▽￣)┛ hehe')
+
+async def hutch(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_HUTCH_HUTCH.value)
+    await ctx.send(f'/me The resident best D.Va player who got an epic team kill on OW, is an elder of the stream, and an overall legend KEKW' )
+
+async def teaze(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_HAMLIN_TEAZE.value)
+    word = str.capitalize(message)
+    await ctx.send(f'/me And{word}teazer')
+
+async def pun(ctx: Context):
+    pun_text = fetch_pun(get_config().get('pun_url'))
+    await ctx.send(f'/me {pun_text}')
+
+async def brb(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_STEVIE_BRB.value)
+    if ctx.author.name == '@AndRumpleteazer':
+        await ctx.send(f'/Rumple will be right back! Yakky will watch over you while she\'s gone. Best behaviour now everyone... andrumSmug')
+    else:
+        await ctx.send(f'/Okiedokie {ctx.author.name}, catch you later! We\'ll miss you in the meantime~ andrumHeart')
+
+async def relax(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_BIK_RELAX.value)
+    await ctx.send(f'/me {ctx.author.name} has finished their work and is here to relax and chill~ goodluck to everyone else!')
+
+async def welcomejk(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_WELCOMEJK.value)
+    await ctx.send(f'/me Welcome {message} to the Co-Procrastinating Stream. Where we attempt to... Wait... What was I supposed to be doing?')
+
+async def hello(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_HELLO.value)
+    await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Eat healthy, drink water and be mind-full! andrumHeart ')
+
+async def everest(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_EVEREST_EVEREST.value)
+    await ctx.send(f'/me Everest gives a hug to everyone in the chat and requests all to hug him back. andrumHeart ' )
+
+async def pap(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_PAP.value)
+    await ctx.send(f'/me No... just no... stop! Go. Away. Please... NotLikeThis ' ) 
+
+async def sigh(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_UNWAZ_SIGH.value)
+    await ctx.send(f'/me (* ´ Д｀)=з   ( ￣_￣)    (ᇂ_ᇂ|||)    (;¬_¬)' ) 
+
+async def smilejay(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_JED_SMILEJAY.value)
+    await ctx.send(f'/me Hey Jay! andrumHeart Just a reminder: You so precious when you S-M-I-L-E andrumSmug' )
+
+async def flug(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_KP_FLUG.value)
+    await ctx.send(f'/me hwy {message} ley ne hokd ypu tiggt tught tighy, I gorchu my frwn uwy')
+
+async def joke(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_JOKE.value)
+    await ctx.send(f'/me Why did the chicken cross the Moebius strip?........To get to the same side!')

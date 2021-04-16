@@ -267,3 +267,5 @@ async def flug(ctx: Context):
 async def joke(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_JOKE.value)
     await ctx.send(f'/me Why did the chicken cross the Moebius strip?........To get to the same side!')
+
+testestet

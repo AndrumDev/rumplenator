@@ -1,6 +1,6 @@
 from bot.commands.command_logic.dyson import get_dyson_message
 from bot.commands.command_logic.tom2 import get_tom2_message
-from bot.commands.command_logic.pomo import check_active_user, handle_pomo
+from bot.commands.command_logic.pomo.pomo_command import handle_pomo
 from bot.commands.command_logic.simp import get_simp_quote
 from bot.commands.command_logic.pun import fetch_pun
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS

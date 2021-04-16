@@ -1,6 +1,6 @@
 from bot.commands import bot_commands
 from bot.commands.bot_commands import CommandKeys
-from bot.commands.command_logic.pomo import check_active_user
+from bot.commands.command_logic.pomo.pomo_command import warn_active_user
 from bot.helpers.functions import get_message_command
 from config import get_config
 from twitchio.dataclasses import Message, Context
@@ -24,7 +24,7 @@ class Rumplenator(commands.Bot):
 
 
     async def event_ready(self):
-        print(f'Ready | {self.nick}')
+        print(f'Ready | {self.nick} on {self.initial_channels}')
         await self._ws.send_privmsg(get_config().get('channel'), "/me has landed!")
 
 
@@ -60,7 +60,6 @@ class Rumplenator(commands.Bot):
             raise NotImplementedError(f"Class `{bot_commands.__name__}` does not implement `{command_key}`.")
 
     
-    async def check_pom_state(self, ctx: Message):
-        if get_message_command(ctx.content) != CommandKeys.CMD_POMO.value:
-            await check_active_user(ctx)
-
+    async def check_pom_state(self, msg: Message):
+        if get_message_command(msg.content) != CommandKeys.CMD_POMO.value:
+            await warn_active_user(msg)

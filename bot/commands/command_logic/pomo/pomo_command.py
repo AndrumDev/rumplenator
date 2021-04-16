@@ -8,8 +8,8 @@ import time
 import asyncio
 
 DEFAULT_NUM_SESSIONS = 1
-MIN_WORK_MINUTES = 0
-MIN_BREAK_MINUTES = 0
+MIN_WORK_MINUTES = 10
+MIN_BREAK_MINUTES = 3
 MAX_TOTAL_MINUTES = 300
 
 __active_timers: Dict[str, PomoTimer] = {}

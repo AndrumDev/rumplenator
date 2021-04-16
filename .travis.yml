@@ -13,19 +13,16 @@ after_failure:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
   - ./send.sh failure $WEBHOOK_URL
-
-# lazily turning off automatic deployments
-
-# deploy:
-#   # use v2: https://docs.travis-ci.com/user/deployment-v2
-#   edge: true
-#   provider: elasticbeanstalk
-#   access_key_id: $AWS_ACCESS_KEY_ID
-#   secret_access_key: $AWS_SECRET_ACCESS_KEY
-#   region: eu-central-1
-#   app: rumplenator-prod-app
-#   env: rumplenator-prod-env
-#   bucket: rumplenator-source
-#   on:
-#     branch: main
+deploy:
+  # use v2: https://docs.travis-ci.com/user/deployment-v2
+  edge: true
+  provider: elasticbeanstalk
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  region: eu-central-1
+  app: rumplenator-prod-app
+  env: rumplenator-prod-env
+  bucket: rumplenator-source
+  on:
+    branch: main
   

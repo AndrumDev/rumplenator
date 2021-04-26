@@ -6,7 +6,7 @@ __FILE = get_config().get('storage_dir') / 'pomo_overlay_text.txt'
 
 
 def update_timers(pomo_timers: List[PomoTimer]):
-    with open(__FILE, 'w', newline='') as overlay_file:
+    with open(__FILE, 'w+', newline='') as overlay_file:
         contents = list()
         for timer in sorted(pomo_timers, key=lambda t: t.start_time):
             contents.append(__build_pomo_text(timer))

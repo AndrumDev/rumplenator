@@ -76,10 +76,10 @@ async def handle_pomo(ctx: Message) -> None:
         del __active_timers[username]
         # WARNING: values() returns a view: i.e. it is NOT immutable and it will
         # update when the __active_timers dict changes. i don't think that will cause problems here? but something to be aware of
-        update_pomo_overlay()
+        set_pomo_overlay()
 
     def on_countdown_start():
-        update_pomo_overlay()
+        set_pomo_overlay()
     
     async def notify_user(username: str, message: str):
         time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
@@ -110,7 +110,7 @@ async def warn_active_user(msg: Message) -> None:
             await msg.channel.send(f"@{msg.author.name} your work session is ALMOST complete! sit tight!")
 
 
-def update_pomo_overlay():
+def set_pomo_overlay():
     pomo_overlay.update_timers(__active_timers.values())
 
 #

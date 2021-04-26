@@ -1,6 +1,6 @@
 from bot.commands import bot_commands
 from bot.commands.bot_commands import CommandKeys
-from bot.commands.command_logic.pomo.pomo_command import warn_active_user, update_pomo_overlay
+from bot.commands.command_logic.pomo.pomo_command import warn_active_user, set_pomo_overlay
 from bot.helpers.functions import get_message_command
 from config import get_config
 from twitchio.dataclasses import Message, Context
@@ -21,7 +21,7 @@ class Rumplenator(commands.Bot):
             initial_channels=[config['channel']]
         )
         self.register_commands()
-        update_pomo_overlay()
+        set_pomo_overlay()
 
 
     async def event_ready(self):

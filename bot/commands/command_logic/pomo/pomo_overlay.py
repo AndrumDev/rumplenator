@@ -9,7 +9,7 @@ from contextlib import suppress
 __FILE = get_config().get('overlay_dir') / 'pomo_overlay_text.txt'
 
 # how long a line can be before getting truncated
-MAX_LINE_CHARS = 50
+MAX_LINE_CHARS = 55
 
 # how frequently the pomo data will be written to the file
 UPDATE_INTERVAL_SECONDS = 10

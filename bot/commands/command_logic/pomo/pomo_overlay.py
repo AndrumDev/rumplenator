@@ -9,7 +9,7 @@ from contextlib import suppress
 __FILE = get_config().get('overlay_dir') / 'pomo_overlay_text.txt'
 
 # how long a line can be before getting truncated
-MAX_LINE_CHARS = 50
+MAX_LINE_CHARS = 55
 
 # how frequently the pomo data will be written to the file
 UPDATE_INTERVAL_SECONDS = 10
@@ -30,7 +30,7 @@ def __update_timers():
     pomo_timers = get_active_pomo_timers()
     with open(__FILE, 'w+', newline='') as overlay_file:
         contents = list()
-        for timer in sorted(pomo_timers, key=lambda t: t.start_time):
+        for timer in sorted(pomo_timers, key=lambda t: t.minutes_remaining):
             contents.append(__build_pomo_text(timer))
         overlay_file.write('\n'.join(contents))
 

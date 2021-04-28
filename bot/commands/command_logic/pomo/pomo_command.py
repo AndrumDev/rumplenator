@@ -114,7 +114,7 @@ async def warn_active_user(msg: Message) -> None:
  
 
 async def __show_pomo_info(ctx: Message, message='') -> None:
-    message = f"@{ctx.author.name} want to start your own pomo? Type !pomo [number] to set a single timer. The full argument list is !pomo [work mins] [break mins] [# pomo sessions] [topic]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions, and [!pomo check] to check your time. Good luck!!"
+    message = f"@{ctx.author.name} want to start your own pomo? Type !pomo [number] to set a single timer. The full argument list is !pomo [work mins] [break mins] [num sessions] [topic]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions, and [!pomo check] to check your time. Good luck!!"
     await ctx.channel.send(message)
 
 

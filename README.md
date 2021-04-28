@@ -58,7 +58,7 @@ python -m pytest -s -k 'test_pomo_text_truncated'
 6. Run the bot locally:
 
 ```
-python -m main.py
+python -m main
 ```
 
 

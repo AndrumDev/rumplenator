@@ -178,7 +178,7 @@ class PomoTimer():
 
     def __calculate_remaining_minutes(self, time_started, total_minutes):
         end_time = time_started + timedelta(minutes = total_minutes)
-        return round((end_time - datetime.now(timezone.utc)).total_seconds() / 60)
+        return math.ceil((end_time - datetime.now(timezone.utc)).total_seconds() / 60)
 
 
     @staticmethod

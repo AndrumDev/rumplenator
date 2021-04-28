@@ -28,9 +28,9 @@ async def __repeat_task_at_interval(task: Callable, interval: int):
 
 def __update_timers():
     pomo_timers = get_active_pomo_timers()
-    with open(__FILE, 'w+', newline='') as overlay_file:
+    with open(__FILE, 'w+', newline='', encoding='utf-8') as overlay_file:
         contents = list()
-        for timer in sorted(pomo_timers, key=lambda t: t.start_time):
+        for timer in sorted(pomo_timers, key=lambda t: t.minutes_remaining):
             contents.append(__build_pomo_text(timer))
         overlay_file.write('\n'.join(contents))
 

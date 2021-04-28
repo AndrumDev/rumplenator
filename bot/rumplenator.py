@@ -1,6 +1,7 @@
 from bot.commands import bot_commands
 from bot.commands.bot_commands import CommandKeys
-from bot.commands.command_logic.pomo.pomo_command import warn_active_user, set_pomo_overlay
+from bot.commands.command_logic.pomo.pomo_command import warn_active_user
+from bot.commands.command_logic.pomo.pomo_overlay import start_pomo_overlay
 from bot.helpers.functions import get_message_command
 from config import get_config
 from twitchio.dataclasses import Message, Context
@@ -21,11 +22,11 @@ class Rumplenator(commands.Bot):
             initial_channels=[config['channel']]
         )
         self.register_commands()
-        set_pomo_overlay()
 
 
     async def event_ready(self):
         print(f'Ready | {self.nick} on {self.initial_channels}')
+        await start_pomo_overlay()
         await self._ws.send_privmsg(get_config().get('channel'), "/me has landed!")
 
 

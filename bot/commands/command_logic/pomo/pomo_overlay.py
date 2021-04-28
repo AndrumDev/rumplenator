@@ -1,11 +1,62 @@
+from bot.commands.command_logic.pomo.pomo_command import get_active_pomo_timers
 from bot.commands.command_logic.pomo.pomo_timer import PomoTimer, PomoState
 from config import get_config
-from typing import List
+from typing import List, Callable, Awaitable
+import asyncio
+from contextlib import suppress
 
-__FILE = get_config().get('storage_dir') / 'pomo_overlay_text.txt'
+# the location of the text file used as the overlay source
+__FILE = get_config().get('overlay_dir') / 'pomo_overlay_text.txt'
+
+# how long a line can be before getting truncated
 MAX_LINE_CHARS = 50
 
-def update_timers(pomo_timers: List[PomoTimer]):
+# how frequently the pomo data will be written to the file
+UPDATE_INTERVAL_SECONDS = 10
+
+class Periodic:
+    def __init__(self, func: Callable, interval: int):
+        self.func = func
+        self.interval = interval
+        self.is_started = False
+        self._task = None
+
+    async def start(self):
+        if not self.is_started:
+            self.is_started = True
+            # Start task to call func periodically:
+            self._task = asyncio.ensure_future(self._run())
+
+    async def stop(self):
+        if self.is_started:
+            self.is_started = False
+            # Stop task and await it stopped:
+            self._task.cancel()
+            with suppress(asyncio.CancelledError):
+                await self._task
+
+    async def _run(self):
+        while True:
+            await asyncio.sleep(self.interval)
+            self.func()
+
+
+
+async def start_pomo_overlay() -> Awaitable:
+    __update_timers()
+    # scheduler = Periodic(lambda: __update_timers(get_active_pomo_timers), UPDATE_INTERVAL_SECONDS)
+    # scheduler.start()
+    return asyncio.ensure_future(lambda: __repeat_task_at_interval(__update_timers, UPDATE_INTERVAL_SECONDS))
+
+
+async def __repeat_task_at_interval(task: Callable, interval: int):
+    while True:
+        await asyncio.sleep(interval)
+        task()
+
+
+def __update_timers():
+    pomo_timers = get_active_pomo_timers()
     with open(__FILE, 'w+', newline='') as overlay_file:
         contents = list()
         for timer in sorted(pomo_timers, key=lambda t: t.start_time):
@@ -17,17 +68,18 @@ def __build_pomo_text(pomo: PomoTimer) -> str:
     if (pomo.state == PomoState.WORK):
         topic = pomo.topic if pomo.topic != '' else 'work'
         sessions_count = __get_sessions_count_text(pomo)
-        line = f'{pomo.username} - {topic} {pomo.work_minutes}{sessions_count}'
+        line = f'{pomo.username} - {topic} {pomo.minutes_remaining}{sessions_count}'
         if len(line) > MAX_LINE_CHARS:
             trim_length = MAX_LINE_CHARS - len(sessions_count) - 5
             username_topic_str = f'{pomo.username} - {topic}'
-            return username_topic_str[:trim_length] + f'... {pomo.work_minutes}{sessions_count}'
+            return username_topic_str[:trim_length] + f'... {pomo.minutes_remaining}{sessions_count}'
         else:
             return line
 
     if (pomo.state == PomoState.BREAK):
         sessions_count = __get_sessions_count_text(pomo)
-        return f'{pomo.username} - relax! {pomo.break_minutes}{sessions_count}'
+        return f'{pomo.username} - relax! {pomo.minutes_remaining}{sessions_count}'
+
 
 def __get_sessions_count_text(pomo: PomoTimer) -> str:
     return f' ({pomo.sessions_done + 1} of {pomo.total_sessions})' if pomo.total_sessions > 1 else ''

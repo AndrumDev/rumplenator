@@ -42,7 +42,7 @@ async def test_pomo_text_topic():
         topic='duolingo',
         on_pomo_complete=_mock_callback,
         on_countdown_start=_mock_callback,
-        notify_user=_mock_callback
+        notify_user=_mock_notify_user
     )
     await pomo_timer.begin()
     pomo_text = pomo_overlay.__build_pomo_text(pomo_timer)
@@ -51,7 +51,7 @@ async def test_pomo_text_topic():
 
 
 @pytest.mark.asyncio
-def test_pomo_text_session():
+async def test_pomo_text_session():
     pomo_timer = PomoTimer(
         user=_create_mock_user(),
         work_minutes=50,
@@ -60,7 +60,7 @@ def test_pomo_text_session():
         topic='',
         on_pomo_complete=_mock_callback,
         on_countdown_start=_mock_callback,
-        notify_user=_mock_callback
+        notify_user=_mock_notify_user
     )
     await pomo_timer.begin()
     pomo_text = pomo_overlay.__build_pomo_text(pomo_timer)
@@ -69,7 +69,7 @@ def test_pomo_text_session():
 
 
 @pytest.mark.asyncio
-def test_pomo_text_truncated_with_sessions():
+async def test_pomo_text_truncated_with_sessions():
     pomo_timer = PomoTimer(
         user=_create_mock_user(),
         work_minutes=50,
@@ -78,15 +78,15 @@ def test_pomo_text_truncated_with_sessions():
         topic='ich sollte meine Deutsch-Hausaufgabe machen',
         on_pomo_complete=_mock_callback,
         on_countdown_start=_mock_callback,
-        notify_user=_mock_callback
+        notify_user=_mock_notify_user
     )
     await pomo_timer.begin()
     pomo_text = pomo_overlay.__build_pomo_text(pomo_timer)
-    assert pomo_text == 'test_user - ich sollte meine Deutsch... 50 (1 of 3)'
+    assert pomo_text == 'test_user - ich sollte meine Deutsch-Haus... 50 (1 of 3)'
     pomo_timer.cancel()
 
-
-def test_pomo_text_truncated_without_sessions():
+@pytest.mark.asyncio
+async def test_pomo_text_truncated_without_sessions():
     pomo_timer = PomoTimer(
         user=_create_mock_user(),
         work_minutes=50,
@@ -95,16 +95,16 @@ def test_pomo_text_truncated_without_sessions():
         topic='ich sollte meine Deutsch-Hausaufgabe machen',
         on_pomo_complete=_mock_callback,
         on_countdown_start=_mock_callback,
-        notify_user=_mock_callback
+        notify_user=_mock_notify_user
     )
     await pomo_timer.begin()
     pomo_text = pomo_overlay.__build_pomo_text(pomo_timer)
-    assert pomo_text == 'test_user - ich sollte meine Deutsch-Hausaufg... 50'
+    assert pomo_text == 'test_user - ich sollte meine Deutsch-Hausaufgabe m... 50'
     pomo_timer.cancel()
 
 
 @pytest.mark.asyncio
-def test_promo_break_text():
+async def test_promo_break_text():
     pomo_timer = PomoTimer(
         user=_create_mock_user(),
         work_minutes=50,
@@ -113,7 +113,7 @@ def test_promo_break_text():
         topic='ich sollte meine Deutsch-Hausaufgabe machen',
         on_pomo_complete=_mock_callback,
         on_countdown_start=_mock_callback,
-        notify_user=_mock_callback
+        notify_user=_mock_notify_user
     )
     
     await pomo_timer.begin()

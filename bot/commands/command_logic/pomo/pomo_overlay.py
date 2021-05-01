@@ -12,7 +12,7 @@ __FILE = get_config().get('overlay_dir') / 'pomo_overlay_text.txt'
 MAX_LINE_CHARS = 55
 
 # how frequently the pomo data will be written to the file
-UPDATE_INTERVAL_SECONDS = 10
+UPDATE_INTERVAL_SECONDS = 1
 
 
 async def start_pomo_overlay() -> Awaitable:

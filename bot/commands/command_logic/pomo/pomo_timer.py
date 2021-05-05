@@ -214,7 +214,7 @@ class Countdown(Thread):
         super().__init__(daemon=True)
         self.__timeout_seconds: int = timeout_mins * 60
         self.__on_complete: Callable = on_complete
-        self.__on_cancel: Callable = on_complete
+        self.__on_cancel: Callable = on_cancel
 
         # this property is exposed and read by the main thread
         self.seconds_remaining: int = None

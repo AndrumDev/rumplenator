@@ -256,9 +256,9 @@ class Countdown(Thread):
         # run the callbacks on the main thread
         logging.info(f'{current_thread()} countdown completed, cancelled = {cancelled}')
         if cancelled:
-            asyncio.run_coroutine_threadsafe(self.__on_complete(), self.__main_event_loop)
-        else:
             asyncio.run_coroutine_threadsafe(self.__on_cancel(), self.__main_event_loop)
+        else:
+            asyncio.run_coroutine_threadsafe(self.__on_complete(), self.__main_event_loop)
 
 
     def __add(self, mins: int) -> None:

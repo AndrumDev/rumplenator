@@ -1,9 +1,14 @@
+from config import get_config
 from threading import Event, Thread, current_thread
+from typing import Callable
+from pathlib import Path
 from typing import Callable, Optional
 from datetime import datetime, timezone, timedelta
+from twitchio.dataclasses import User
 import enum
 import asyncio
 import time
+import math
 import logging
 
 
@@ -21,9 +26,9 @@ class PomoTimerError(Exception):
 
 class PomoTimer():
 
-    def __init__(self, username: str, work_minutes: int, break_minutes: Optional[int], sessions: int, topic: str, on_pomo_complete: Callable, notify_user: Callable):
-        self.name: str = username
-        self.username: str = username
+    def __init__(self, user: User, work_minutes: int, break_minutes: Optional[int], sessions: int, topic: str, on_pomo_complete: Callable, notify_user: Callable, on_countdown_start: Callable):
+        self.user: str = User
+        self.username: str = user.name
 
         self.work_minutes: int = work_minutes
         self.break_minutes: Optional[int] = break_minutes
@@ -31,12 +36,15 @@ class PomoTimer():
         self.sessions_remaining: int = sessions
         self.topic: str = topic
         self.state: PomoState = None
+        self.start_time: datetime = None
         
         self.__countdown_cancelled_event: Event = None
         self.__countdown_started_time: datetime = None
         self.__cancelled_by: str = None
         self.__on_pomo_complete: Callable = on_pomo_complete
+        self.__on_countdown_start: Callable = on_countdown_start
         self.__notify_user: Callable = notify_user
+
 
     @property
     def minutes_remaining(self) -> int:
@@ -54,8 +62,9 @@ class PomoTimer():
 
 
     async def begin(self):
-        logging.info(f'{current_thread()}: beginning new pomo for {self.username}')
+        logging.info(f'{current_thread()}: beginning pomo for {self.username}')
 
+        self.start_time = datetime.now(timezone.utc)
         self.state = PomoState.WORK
         await self.__start_countdown()
         
@@ -90,6 +99,7 @@ class PomoTimer():
             raise PomoTimerError(f"Cannot start countdown, PomoTimer is invalid state (state = {self.state})")
         
         await self.__notify_user(self.username, start_message)
+        self.__on_countdown_start()
 
         # https://docs.python.org/3/library/threading.html#threading.Event
         self.__countdown_cancelled_event = Event()
@@ -168,13 +178,17 @@ class PomoTimer():
 
     def __calculate_remaining_minutes(self, time_started, total_minutes):
         end_time = time_started + timedelta(minutes = total_minutes)
-        return round((end_time - datetime.now(timezone.utc)).total_seconds() / 60)
+        return math.ceil((end_time - datetime.now(timezone.utc)).total_seconds() / 60)
 
 
     @staticmethod
     def __countdown(event: Event, timeout: int, event_loop, on_complete: Callable = None, on_cancel: Callable = None):
+        '''
+        Timer method which is run on a separate thread
+        '''
         logging.info(f'{current_thread()}: counting down {timeout} minutes')
         timeout_seconds = timeout * 60
+
         # blocking call
         cancelled = event.wait(timeout=timeout_seconds)
         # run the callbacks on the main thread

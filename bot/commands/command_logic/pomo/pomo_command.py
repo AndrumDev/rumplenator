@@ -2,8 +2,8 @@ from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
 from bot.commands.command_logic.pomo.pomo_timer import PomoTimer, PomoState
 from config import get_config
-from typing import Dict, List, Tuple, Optional
-from twitchio.dataclasses import Message, Context
+from typing import Dict, List, Tuple, Optional, Iterable
+from twitchio.dataclasses import Message, Context, User
 import time
 import asyncio
 
@@ -11,12 +11,19 @@ DEFAULT_NUM_SESSIONS = 1
 MIN_WORK_MINUTES = 10
 MIN_BREAK_MINUTES = 3
 MAX_TOTAL_MINUTES = 300
+MAX_TOPIC_LENGTH = 120
 
 __active_timers: Dict[str, PomoTimer] = {}
 
 
-# public methods
+def get_active_pomo_timers() -> Iterable:
+    '''
+    this returns a view on the pomos dict: its values change when the underlying dict changes
+    '''
+    return __active_timers.values()
 
+
+# public methods
 
 async def handle_pomo(ctx: Message) -> None:
     args: List[str] = __get_message_args(ctx.content)
@@ -63,31 +70,37 @@ async def handle_pomo(ctx: Message) -> None:
     invalid_work_time = work_time < MIN_WORK_MINUTES
     invalid_break_time = break_time is not None and break_time < MIN_BREAK_MINUTES
     invalid_total_time = ((work_time + break_time) if break_time is not None else work_time) * sessions > MAX_TOTAL_MINUTES
+    invalid_topic_length = len(topic) > MAX_TOPIC_LENGTH
     if invalid_work_time or invalid_break_time or invalid_total_time:
         await ctx.channel.send(f"@{username}, oops! Please note min work is {MIN_WORK_MINUTES}, min break is {MIN_BREAK_MINUTES}, and max total minutes is {MAX_TOTAL_MINUTES}")
         return
+    if invalid_topic_length:
+        await ctx.channel.send(f"sorry, @{username}! Max topic length is {MAX_TOPIC_LENGTH} characters, yours was {len(topic)}")
+        return 
 
     def on_complete():
         del __active_timers[username]
-        # TODO tabi update pomo file here
+
+    def on_countdown_start():
+        pass
     
     async def notify_user(username: str, message: str):
         time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
         await ctx.channel.send(f'@{username}, {message}')
 
     pomo_timer = PomoTimer(
-        username=username,
+        user=ctx.author,
         work_minutes=work_time,
         break_minutes=break_time,
         sessions=sessions,
         topic=topic,
         on_pomo_complete=on_complete,
+        on_countdown_start=on_countdown_start,
         notify_user=notify_user
     )
 
     __active_timers[username] = pomo_timer
 
-    # TODO tabi update pomo file here
     asyncio.create_task(pomo_timer.begin())
 
 
@@ -98,14 +111,10 @@ async def warn_active_user(msg: Message) -> None:
             await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
         else:
             await msg.channel.send(f"@{msg.author.name} your work session is ALMOST complete! sit tight!")
-
-#
-
-# private methods
-
+ 
 
 async def __show_pomo_info(ctx: Message, message='') -> None:
-    message = "Want to start your own pomodoro timer? Type !pomo[number] to set a personalised timer(mins). The full argument list is !pomo [work mins] [break mins] [# pomo sessions] [project name]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions, and [!pomo check] to check your time. Good luck!!"
+    message = f"@{ctx.author.name} want to start your own pomo? Type !pomo [number] to set a single timer. The full argument list is !pomo [work mins] [break mins] [num sessions] [topic]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions, and [!pomo check] to check your time. Good luck!!"
     await ctx.channel.send(message)
 
 

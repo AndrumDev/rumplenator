@@ -47,12 +47,18 @@ on windows, the dyson tests will fail. Run:
 python -m pytest -s --ignore-glob="*dyson*"
 ```
 
+tip: to run only a subset of tests, use `-k <pattern>` e.g.:
+
+```
+python -m pytest -s -k 'test_pomo_text_truncated'
+```
+
 5. Set local environment variables by copying `.example.env` to a new file named `.env`, and setting `TMI_TOKEN` and `CLIENT_ID`.
 
 6. Run the bot locally:
 
 ```
-python -m main.py
+python -m main
 ```
 
 

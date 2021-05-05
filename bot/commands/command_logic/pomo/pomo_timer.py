@@ -86,7 +86,7 @@ class PomoTimer():
         if username != '':
             self.__cancelled_by = username
 
-        self.__timer_queue.put((PomoOperation.CANCEL, ))
+        self.__timer_queue.put((PomoOperation.CANCEL, None, None))
 
 
     def increase_mins(self, mins):

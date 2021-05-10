@@ -61,11 +61,40 @@ async def handle_pomo(ctx: Message) -> None:
 
         return
 
+    if args[0] == 'skip':
+        if current_pomo:
+            await current_pomo.skip()
+        else:
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+
+        return
+
+    if args[0].startswith('-') or args[0].startswith('+'):
+        if current_pomo:
+            operation = args[0][0]
+            mins = args[0][1:]
+            if not mins.isdigit():
+                await ctx.channel.send(f"@{username}, that doesn't work")
+                return
+            if operation == '-':
+                current_pomo.decrease_mins(int(mins))
+            else:
+                current_pomo.increase_mins(int(mins))
+        else:
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+
+        return
+
     if not args[0].isdigit():
         await __show_pomo_info(ctx)
         return
 
+
     work_time, break_time, sessions, topic = __get_pom_args(args)
+
+    if current_pomo:
+        await ctx.channel.send(f'@{username} you already have a pomo running! Check your status with !pomo check, or use !pomo cancel to stop')
+        return
 
     invalid_work_time = work_time < MIN_WORK_MINUTES
     invalid_break_time = break_time is not None and break_time < MIN_BREAK_MINUTES
@@ -80,9 +109,6 @@ async def handle_pomo(ctx: Message) -> None:
 
     def on_complete():
         del __active_timers[username]
-
-    def on_countdown_start():
-        pass
     
     async def notify_user(username: str, message: str):
         time.sleep(MULTI_MESSAGE_TIMEOUT_SECONDS)
@@ -95,7 +121,6 @@ async def handle_pomo(ctx: Message) -> None:
         sessions=sessions,
         topic=topic,
         on_pomo_complete=on_complete,
-        on_countdown_start=on_countdown_start,
         notify_user=notify_user
     )
 

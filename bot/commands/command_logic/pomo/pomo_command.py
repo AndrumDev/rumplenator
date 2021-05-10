@@ -151,7 +151,7 @@ async def check_pomo_state(msg: Message) -> None:
  
 
 def __has_mod_bypass(msg: Message, pomo: PomoTimer):
-    return (msg.author.is_mod and has_pomo_mod_flag(msg)) or pomo.mod_mode
+    return (msg.author.is_mod and has_pomo_mod_flag(msg.content)) or pomo.mod_mode
     
 
 async def __show_pomo_info(ctx: Message, message='') -> None:

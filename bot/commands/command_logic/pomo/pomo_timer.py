@@ -84,10 +84,11 @@ class PomoTimer():
         
 
     def cancel(self, username=''):
-        if username != '':
-            self.__cancelled_by = username
+        if self.__current_timer:
+            if username != '':
+                self.__cancelled_by = username
 
-        self.__timer_queue.put((PomoOperation.CANCEL, None, None))
+            self.__timer_queue.put((PomoOperation.CANCEL, None, None))
 
 
     def increase_mins(self, mins):
@@ -206,7 +207,9 @@ class PomoTimer():
 
 class Countdown(Thread):
     '''
-
+    Runs a single countdown in a new thread.
+    self.seconds_remaining can be read to get the remaining time.
+    Items can be pushed to the Queue to instruct the thread to add/subtract time or cancel the countdown.
     '''
 
     INCREMENT_SECONDS: int = 1

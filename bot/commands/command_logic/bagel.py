@@ -16,7 +16,7 @@ def __read_bagel_file():
     return bagel_fillings
 
 
-def get_bagel_message(category=None) -> str:
+def get_bagel_message() -> str:
     fillings = __read_bagel_file()
-    return fillings[randint(0, len(bagel_fillings)-1)]
+    return fillings[randint(0, len(fillings)-1)]
     

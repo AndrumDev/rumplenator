@@ -5,3 +5,6 @@ def get_message_content(message: str, command_name: str):
 
 def get_message_command(message: str):
     return message.split()[0][1:]
+
+def has_pomo_mod_flag(message: str):
+    return '[pomo mod]' in message

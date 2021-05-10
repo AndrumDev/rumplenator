@@ -48,6 +48,7 @@ class PomoTimer():
         self.sessions_remaining: int = sessions
         self.topic: str = topic
         self.state: PomoState = None
+        self.mod_mode = False
         
         self.__cancelled_by: str = None
         self.__on_pomo_complete: Callable = on_pomo_complete

@@ -1,5 +1,5 @@
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
-from bot.helpers.functions import get_message_content
+from bot.helpers.functions import get_message_content, has_pomo_mod_flag
 from bot.commands.command_logic.pomo.pomo_timer import PomoTimer, PomoState
 from config import get_config
 from typing import Dict, List, Tuple, Optional, Iterable
@@ -12,6 +12,7 @@ MIN_WORK_MINUTES = 10
 MIN_BREAK_MINUTES = 3
 MAX_TOTAL_MINUTES = 300
 MAX_TOPIC_LENGTH = 120
+
 
 __active_timers: Dict[str, PomoTimer] = {}
 
@@ -64,6 +65,20 @@ async def handle_pomo(ctx: Message) -> None:
     if args[0] == 'skip':
         if current_pomo:
             await current_pomo.skip()
+        else:
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+
+        return
+
+    if args[0] == 'mod':
+        if not ctx.author.is_mod:
+            await ctx.channel.send(f"@{username} u cheeky sod (:")
+            
+            return
+        if current_pomo:
+            current_pomo.mod_mode = not current_pomo.mod_mode
+            status = 'on' if current_pomo.mod_mode else 'off'
+            await ctx.channel.send(f'@{username}, mod mode is {status}')
         else:
             await ctx.channel.send(f'@{username}, you do not have a running pomo session')
 
@@ -129,14 +144,18 @@ async def handle_pomo(ctx: Message) -> None:
     asyncio.create_task(pomo_timer.begin())
 
 
-async def warn_active_user(msg: Message) -> None:
-    pom_timer = __active_timers.get(msg.author.name)
-    if pom_timer and pom_timer.state == PomoState.WORK:
-        if pom_timer.minutes_remaining > 0:
-            await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pom_timer.minutes_remaining} minutes left. You got this!")
+async def check_pomo_state(msg: Message) -> None:
+    pomo = __active_timers.get(msg.author.name)
+    if pomo and pomo.state == PomoState.WORK and not __has_mod_bypass(msg, pomo):
+        if pomo.minutes_remaining > 1:
+            await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pomo.minutes_remaining} minutes left. You got this!")
         else:
             await msg.channel.send(f"@{msg.author.name} your work session is ALMOST complete! sit tight!")
  
+
+def __has_mod_bypass(msg: Message, pomo: PomoTimer):
+    return (msg.author.is_mod and has_pomo_mod_flag(msg.content)) or pomo.mod_mode
+    
 
 async def __show_pomo_info(ctx: Message, message='') -> None:
     message = f"@{ctx.author.name} want to start your own pomo? Type !pomo [number] to set a single timer. The full argument list is !pomo [work mins] [break mins] [num sessions] [topic]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions, and [!pomo check] to check your time. Good luck!!"

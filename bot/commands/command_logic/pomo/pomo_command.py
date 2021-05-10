@@ -71,6 +71,10 @@ async def handle_pomo(ctx: Message) -> None:
         return
 
     if args[0] == 'mod':
+        if not ctx.author.is_mod:
+            await ctx.channel.send(f"@{username} u cheeky sod (:")
+            
+            return
         if current_pomo:
             current_pomo.mod_mode = not current_pomo.mod_mode
             status = 'on' if current_pomo.mod_mode else 'off'

@@ -13,7 +13,6 @@ MIN_BREAK_MINUTES = 3
 MAX_TOTAL_MINUTES = 300
 MAX_TOPIC_LENGTH = 120
 
-MOD_BYPASS_FLAG = '[pomo mod]'
 
 __active_timers: Dict[str, PomoTimer] = {}
 

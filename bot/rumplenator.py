@@ -1,6 +1,6 @@
 from bot.commands import bot_commands
 from bot.commands.bot_commands import CommandKeys
-from bot.commands.command_logic.pomo.pomo_command import warn_active_user
+from bot.commands.command_logic.pomo.pomo_command import check_pomo_state
 from bot.commands.command_logic.pomo.pomo_overlay import start_pomo_overlay
 from bot.helpers.functions import get_message_command
 from config import get_config
@@ -31,7 +31,8 @@ class Rumplenator(commands.Bot):
 
 
     async def event_message(self, message: Message):
-        await self.check_pom_state(message)
+        if get_message_command(message.content) != CommandKeys.CMD_POMO.value:
+            await check_pomo_state(message)
         await self.handle_commands(message)
      
 
@@ -60,8 +61,3 @@ class Rumplenator(commands.Bot):
             await command_method(ctx)
         except AttributeError:
             raise NotImplementedError(f"Class `{bot_commands.__name__}` does not implement `{command_key}`.")
-
-    
-    async def check_pom_state(self, msg: Message):
-        if get_message_command(msg.content) != CommandKeys.CMD_POMO.value:
-            await warn_active_user(msg)

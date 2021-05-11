@@ -3,6 +3,7 @@ from bot.commands.command_logic.tom2 import get_tom2_message
 from bot.commands.command_logic.pomo.pomo_command import handle_pomo
 from bot.commands.command_logic.simp import get_simp_quote
 from bot.commands.command_logic.pun import fetch_pun
+from bot.commands.command_logic.bagel import get_bagel_message
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
 from config import get_config
@@ -67,6 +68,9 @@ class CommandKeys(Enum):
     CMD_JED_SMILEJAY = 'smilejay'
     CMD_KP_FLUG = 'flug'
     CMD_LENNY_JOKE = 'joke'
+    CMD_KIRBY_KIRBY = 'kirby'
+    CMD_GAIA_GAIA = 'gaia'
+    CMD_SUMO_BAGEL = 'bagel'
 
     
 ### Channel commands ###
@@ -267,3 +271,15 @@ async def flug(ctx: Context):
 async def joke(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_JOKE.value)
     await ctx.send(f'/me Why did the chicken cross the Moebius strip?........To get to the same side!')
+
+async def kirby(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_KIRBY_KIRBY.value)
+    await ctx.send(f'/me I like when you call me Kirbs andrumAw')
+
+async def gaia(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_GAIA_GAIA.value)
+    await ctx.send(f'/me Gaia needs to focus!')
+
+async def bagel(ctx: Context):
+    message = get_bagel_message()
+    await ctx.send(message)

@@ -3,6 +3,7 @@ from bot.commands.command_logic.pomo.pomo_timer import PomoTimer, PomoState
 from config import get_config
 from typing import List, Callable, Awaitable
 import asyncio
+import logging
 from contextlib import suppress
 
 # the location of the text file used as the overlay source
@@ -12,7 +13,7 @@ __FILE = get_config().get('overlay_dir') / 'pomo_overlay_text.txt'
 MAX_LINE_CHARS = 55
 
 # how frequently the pomo data will be written to the file
-UPDATE_INTERVAL_SECONDS = 1
+UPDATE_INTERVAL_SECONDS = 10
 
 
 async def start_pomo_overlay() -> Awaitable:
@@ -28,10 +29,13 @@ async def __repeat_task_at_interval(task: Callable, interval: int):
 
 def __update_timers():
     pomo_timers = get_active_pomo_timers()
+    logging.info(f'pomo overlay updating with ({len(pomo_timers)} running pomos)')
     with open(__FILE, 'w+', newline='', encoding='utf-8') as overlay_file:
         contents = list()
         for timer in sorted(pomo_timers, key=lambda t: t.minutes_remaining):
-            contents.append(__build_pomo_text(timer))
+            line = __build_pomo_text(timer)
+            contents.append(line)
+        logging.info(f'pomo overlay writing contents to file: {contents}')
         overlay_file.write('\n'.join(contents))
 
 

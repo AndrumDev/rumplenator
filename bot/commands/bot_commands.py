@@ -71,8 +71,9 @@ class CommandKeys(Enum):
     CMD_KIRBY_KIRBY = 'kirby'
     CMD_GAIA_GAIA = 'gaia'
     CMD_SUMO_BAGEL = 'bagel'
+    CMD_SOKURI_FORCE = 'force'
+    CMD_EGG_DAY = 'day'
 
-    
 ### Channel commands ###
 
 
@@ -230,8 +231,7 @@ async def pun(ctx: Context):
     await ctx.send(f'/me {pun_text}')
 
 async def brb(ctx: Context):
-    message = get_message_content(ctx.content, CommandKeys.CMD_STEVIE_BRB.value)
-    if ctx.author.name == '@AndRumpleteazer':
+    if ctx.author.name == 'andrumpleteazer':
         await ctx.send(f'/Rumple will be right back! Yakky will watch over you while she\'s gone. Best behaviour now everyone... andrumSmug')
     else:
         await ctx.send(f'/Okiedokie {ctx.author.name}, catch you later! We\'ll miss you in the meantime~ andrumHeart')
@@ -246,22 +246,22 @@ async def welcomejk(ctx: Context):
 
 async def hello(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_HELLO.value)
-    await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Eat healthy, drink water and be mind-full! andrumHeart ')
-
+     if message == '':
+        await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! andrumHeart ')
+    else:
+        await ctx.send(f'/me Well, hello there you {message}! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! andrumHeart ')
+   
 async def everest(ctx: Context):
-    message = get_message_content(ctx.content, CommandKeys.CMD_EVEREST_EVEREST.value)
     await ctx.send(f'/me Everest gives a hug to everyone in the chat and requests all to hug him back. andrumHeart ' )
 
 async def pap(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_PAP.value)
-    await ctx.send(f'/me No... just no... stop! Go. Away. Please... NotLikeThis ' ) 
+    await ctx.send(f'/me No... just no... stop! Go. Away. Please... andrumNotLikeThis ' ) 
 
 async def sigh(ctx: Context):
-    message = get_message_content(ctx.content, CommandKeys.CMD_UNWAZ_SIGH.value)
     await ctx.send(f'/me (* ´ Д｀)=з   ( ￣_￣)    (ᇂ_ᇂ|||)    (;¬_¬)' ) 
 
 async def smilejay(ctx: Context):
-    message = get_message_content(ctx.content, CommandKeys.CMD_JED_SMILEJAY.value)
     await ctx.send(f'/me Hey Jay! andrumHeart Just a reminder: You so precious when you S-M-I-L-E andrumSmug' )
 
 async def flug(ctx: Context):
@@ -269,17 +269,21 @@ async def flug(ctx: Context):
     await ctx.send(f'/me hwy {message} ley ne hokd ypu tiggt tught tighy, I gorchu my frwn uwy')
 
 async def joke(ctx: Context):
-    message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_JOKE.value)
     await ctx.send(f'/me Why did the chicken cross the Moebius strip?........To get to the same side!')
 
 async def kirby(ctx: Context):
-    message = get_message_content(ctx.content, CommandKeys.CMD_KIRBY_KIRBY.value)
     await ctx.send(f'/me I like when you call me Kirbs andrumAw')
 
 async def gaia(ctx: Context):
-    message = get_message_content(ctx.content, CommandKeys.CMD_GAIA_GAIA.value)
     await ctx.send(f'/me Gaia needs to focus!')
 
 async def bagel(ctx: Context):
     message = get_bagel_message()
     await ctx.send(message)
+
+async def force(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_SOKURI_FORCE.value)
+    await ctx.send(f'/me {message} WITH SUCH FORCE! andrumLetsGo ')
+
+async def day(ctx: Context):
+    await ctx.send(f'/me it\s like Wednesday or something... andrumOO ')

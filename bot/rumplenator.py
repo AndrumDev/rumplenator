@@ -6,6 +6,7 @@ from bot.helpers.functions import get_message_command
 from config import get_config
 from twitchio.dataclasses import Message, Context
 from twitchio.ext import commands
+import logging
 
 
 class Rumplenator(commands.Bot):
@@ -25,12 +26,14 @@ class Rumplenator(commands.Bot):
 
 
     async def event_ready(self):
-        print(f'Ready | {self.nick} on {self.initial_channels}')
+        logging.info(f'Ready | {self.nick} on {self.initial_channels}')
         await start_pomo_overlay()
         await self._ws.send_privmsg(get_config().get('channel'), "/me has landed!")
 
 
     async def event_message(self, message: Message):
+        logging.info(f'event: {message.author.name} - {message.content}')
+
         if get_message_command(message.content) != CommandKeys.CMD_POMO.value:
             await check_pomo_state(message)
         await self.handle_commands(message)
@@ -59,5 +62,6 @@ class Rumplenator(commands.Bot):
         try:
             command_method = getattr(bot_commands, command_key)
             await command_method(ctx)
-        except AttributeError:
-            raise NotImplementedError(f"Class `{bot_commands.__name__}` does not implement `{command_key}`.")
+        except AttributeError as e:
+            logger.warn(f"Class `{bot_commands.__name__}` does not implement `{command_key}`.")
+            logger.warn(e)

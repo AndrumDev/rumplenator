@@ -61,12 +61,6 @@ python -m pytest -s -k 'test_pomo_text_truncated'
 python -m main
 ```
 
-to log all output to a file:
-
-```
-python -m main >>debug.log 2>&1
-```
-
 
 # setup notes if you need to run the docker container on windows
 

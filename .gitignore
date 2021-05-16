@@ -1,3 +1,4 @@
+logs/
 # exclude everything in the directory but not the directory itself
 pomo_overlay_source/*
 !pomo_overlay_source/.gitkeep 

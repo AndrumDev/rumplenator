@@ -39,7 +39,7 @@ def __build_pomo_text(pomo: PomoTimer) -> str:
     if (pomo.state == PomoState.WORK):
         topic = pomo.topic if pomo.topic != '' else 'work'
         sessions_count = __get_sessions_count_text(pomo)
-        line = f'{pomo.username} - {topic} {pomo.minutes_remaining}{sessions_count}'
+        line = f'{pomo.username}: {topic} {pomo.minutes_remaining}{sessions_count}'
         if len(line) > MAX_LINE_CHARS:
             trim_length = MAX_LINE_CHARS - len(sessions_count) - 5
             username_topic_str = f'{pomo.username} - {topic}'
@@ -49,7 +49,7 @@ def __build_pomo_text(pomo: PomoTimer) -> str:
 
     if (pomo.state == PomoState.BREAK):
         sessions_count = __get_sessions_count_text(pomo)
-        return f'{pomo.username} - relax! {pomo.minutes_remaining}{sessions_count}'
+        return f'{pomo.username}: relax! {pomo.minutes_remaining}{sessions_count}'
 
 
 def __get_sessions_count_text(pomo: PomoTimer) -> str:

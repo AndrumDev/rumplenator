@@ -158,7 +158,7 @@ def __has_mod_bypass(msg: Message, pomo: PomoTimer):
     
 
 async def __show_pomo_info(ctx: Message, message='') -> None:
-    message = f"@{ctx.author.name} want to start your own pomo? Type !pomo [number] to set a single timer. The full argument list is !pomo [work mins] [break mins] [num sessions] [topic]. E.g. !pomo 25 5 4 Essay. Use [!pomo cancel] to cancel your sessions, and [!pomo check] to check your time. Good luck!!"
+    message = f"/me @{ctx.author.name} want to start your own work timer and appear on stream? Type !pomo [number] to set a single timer. The full argument list is !pomo [work mins] [break mins] [num sessions] [topic]. E.g. !pomo 25 5 4 Essay. Use '!pomo cancel' to cancel your sessions, '!pomo check' to check your time, and '!pomo +/-[mins]' to edit your current timer. Good luck!!"
     await ctx.channel.send(message)
 
 

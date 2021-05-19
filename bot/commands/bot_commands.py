@@ -73,6 +73,7 @@ class CommandKeys(Enum):
     CMD_SUMO_BAGEL = 'bagel'
     CMD_SOKURI_FORCE = 'force'
     CMD_EGG_DAY = 'day'
+    CMD_SAKO_BREAK = 'break' 
 
 ### Channel commands ###
 
@@ -246,7 +247,7 @@ async def welcomejk(ctx: Context):
 
 async def hello(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_HELLO.value)
-     if message == '':
+    if message == '':
         await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! andrumHeart ')
     else:
         await ctx.send(f'/me Well, hello there you {message}! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! andrumHeart ')
@@ -287,3 +288,7 @@ async def force(ctx: Context):
 
 async def day(ctx: Context):
     await ctx.send(f'/me it\s like Wednesday or something... andrumOO ')
+
+async def break(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_BREAK.value)
+    await ctx.send(f'/me Why not do something nice for yourself today {message}? Find some quiet, sit in stillness, breathe. Put your problems on pause. You deserve a break andrumCosy ')

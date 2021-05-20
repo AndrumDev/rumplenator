@@ -73,7 +73,7 @@ class CommandKeys(Enum):
     CMD_SUMO_BAGEL = 'bagel'
     CMD_SOKURI_FORCE = 'force'
     CMD_EGG_DAY = 'day'
-    CMD_SAKO_BREAK = 'break' 
+    CMD_SAKO_BREAK = 'breaktime' 
 
 ### Channel commands ###
 
@@ -289,6 +289,6 @@ async def force(ctx: Context):
 async def day(ctx: Context):
     await ctx.send(f'/me it\s like Wednesday or something... andrumOO ')
 
-async def break(ctx: Context):
+async def breaktime(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_BREAK.value)
     await ctx.send(f'/me Why not do something nice for yourself today {message}? Find some quiet, sit in stillness, breathe. Put your problems on pause. You deserve a break andrumCosy ')

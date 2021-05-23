@@ -74,6 +74,7 @@ class CommandKeys(Enum):
     CMD_SOKURI_FORCE = 'force'
     CMD_EGG_DAY = 'day'
     CMD_SAKO_BREAK = 'breaktime' 
+    CMD_FLIP_GODKINGMABL = 'godkingmable'
 
 ### Channel commands ###
 
@@ -292,3 +293,7 @@ async def day(ctx: Context):
 async def breaktime(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_BREAK.value)
     await ctx.send(f'/me Why not do something nice for yourself today {message}? Find some quiet, sit in stillness, breathe. Put your problems on pause. You deserve a break andrumCosy ')
+
+
+async def godkingmable(ctx: Context):
+    await ctx.send(f'/me TwitchLit A Cosmic Entity. They were here for the beginning of time... and will be there for the end... TwitchLit ')

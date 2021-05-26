@@ -74,13 +74,10 @@ class CommandKeys(Enum):
     CMD_SOKURI_FORCE = 'force'
     CMD_EGG_DAY = 'day'
     CMD_SAKO_BREAK = 'breaktime' 
+    CMD_STEVIE_HI = 'hi'
 
 ### Channel commands ###
 
-
-async def hi(ctx: Context):
-    print(ctx.__class__)
-    await ctx.send(f'Hello {ctx.author.name}!')
 
 async def kill(ctx: Context):
     await ctx.send('I cannot be killed™'.encode("utf-8").decode("utf-8"))
@@ -292,3 +289,7 @@ async def day(ctx: Context):
 async def breaktime(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_BREAK.value)
     await ctx.send(f'/me Why not do something nice for yourself today {message}? Find some quiet, sit in stillness, breathe. Put your problems on pause. You deserve a break andrumCosy ')
+
+async def hi(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_STEVIE_HI.value)
+    await ctx.send(f'Hi {message}, I\'m {ctx.author.name}, nice to meet you andrumWave !')

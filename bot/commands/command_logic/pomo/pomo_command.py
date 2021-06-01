@@ -100,6 +100,10 @@ async def handle_pomo(ctx: Message) -> None:
 
         return
 
+    if args[0] == 'moreinfo':
+        await __show_pomo_moreinfo(ctx)
+        return
+
     if not args[0].isdigit():
         await __show_pomo_info(ctx)
         return
@@ -158,9 +162,12 @@ def __has_mod_bypass(msg: Message, pomo: PomoTimer):
     
 
 async def __show_pomo_info(ctx: Message, message='') -> None:
-    message = f"/me @{ctx.author.name} want to start your own work timer and appear on stream? Type !pomo [number] to set a single timer. The full argument list is !pomo [work mins] [break mins] [num sessions] [topic]. E.g. !pomo 25 5 4 Essay. Use '!pomo cancel' to cancel your sessions, '!pomo check' to check your time, and '!pomo +/-[mins]' to edit your current timer. Good luck!!"
+    message = f"/me @{ctx.author.name} want to start your own work timer and appear on stream? Type !pomo [number] to set a single timer. Use !pomo cancel to stop it. See the About section for more useful features!"
     await ctx.channel.send(message)
 
+async def __show_pomo_moreinfo(ctx: Message, message='') -> None:
+    message = f"/me @{ctx.author.name} Extra bot features: !pomo [work mins] [break mins] [num sessions] [topic]. E.g. !pomo 25 5 4 Essay. '!pomo check' to check your time, and '!pomo +/-[mins]' to edit your current timer. See the About section if you forget!"
+    await ctx.channel.send(message)
 
 async def __show_pomo_update(pomo: PomoTimer, ctx: Message) -> None:
     if pomo.state == PomoState.WORK:

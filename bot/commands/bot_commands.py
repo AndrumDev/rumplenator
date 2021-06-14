@@ -76,6 +76,9 @@ class CommandKeys(Enum):
     CMD_SAKO_BREAK = 'breaktime' 
     CMD_FLIP_GODKINGMABL = 'godkingmable'
     CMD_STEVIE_HI = 'hi'
+    CMD_LENNY_SOKUWORK = 'sokuwork'
+    CMD_VAN_VAN = 'van'
+    CMD_FLIP_WAKEY = 'wakey'
 
 
 ### Channel commands ###
@@ -286,7 +289,7 @@ async def force(ctx: Context):
     await ctx.send(f'/me {message} WITH SUCH FORCE! andrumLetsGo ')
 
 async def day(ctx: Context):
-    await ctx.send(f'/me it\s like Wednesday or something... andrumOO ')
+    await ctx.send(f'/me it\'s like Wednesday or something... andrumOO ')
 
 async def breaktime(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_BREAK.value)
@@ -299,3 +302,13 @@ async def hi(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_STEVIE_HI.value)
     await ctx.send(f'Hi {message}, I\'m {ctx.author.name}, nice to meet you andrumWave !')
 
+async def sokuwork(ctx: Context):
+    await ctx.send(f'/me @sokuri_ is going to "work".... he is working hard.....or hardly working? We\'ll never know! But good luck andrumFlawer ')
+
+
+async def van(ctx: Context):
+    await ctx.send(f'/me duckPls beepbeep duckPls')
+
+async def wakey(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_WAKEY.value)
+    await ctx.send(f'/me andrumFlawer The Pandamonium gives positive vibes to {message} to help them out of their weary state! andrumFlawer ')

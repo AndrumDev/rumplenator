@@ -76,6 +76,8 @@ class CommandKeys(Enum):
     CMD_SAKO_BREAK = 'breaktime' 
     CMD_FLIP_GODKINGMABL = 'godkingmable'
     CMD_STEVIE_HI = 'hi'
+    CMD_SAKO_DRAWING = 'drawing'
+    CMD_NAT_NAT = 'nat'
 
 
 ### Channel commands ###
@@ -299,3 +301,8 @@ async def hi(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_STEVIE_HI.value)
     await ctx.send(f'Hi {message}, I\'m {ctx.author.name}, nice to meet you andrumWave !')
 
+async def drawing(ctx: Context):
+    await ctx.send(f'/me Life is art, live yours in color andrumAw Someone redeemed a 5min drawing! andrumFlawer ')
+
+async def nat(ctx: Context):
+    await ctx.send(f"/me nat and chat do a pat pat on your head. You're doing great, we show some love to you <3 " )

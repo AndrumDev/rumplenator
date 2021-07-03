@@ -91,10 +91,7 @@ async def kill(ctx: Context):
     await ctx.send('I cannot be killed™'.encode("utf-8").decode("utf-8"))
 
 async def bot_love(ctx: Context):
-    await ctx.send(f'aaawh thank you {ctx.author.name} andrumHeart If I was sentient I would love you too! xxx')
-
-async def raid(ctx: Context):
-    await ctx.send(' Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype Rumple Raid! andrumHeart andrumHype')
+    await ctx.send(f'aaawh thank you {ctx.author.name} rumpHeart If I was sentient I would love you too! xxx')
 
 async def ssimp(ctx: Context):
     await ctx.send('does she speak? notice me. u r beetiful asian quenn. can i wife u? oh you have a bf? im out.')
@@ -104,10 +101,10 @@ async def simp(ctx: Context):
     await ctx.send(message)
 
 async def wowie(ctx: Context):
-    await ctx.send('Thats awesome! But ur not just awesome, ur WOWIE! andrumHeart ')
+    await ctx.send('Thats awesome! But ur not just awesome, ur WOWIE! rumpHeart ')
 
 async def hype(ctx: Context):
-    await ctx.send('andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype andrumHype')
+    await ctx.send('rumpHype rumpHype rumpHype rumpHype rumpHype rumpHype rumpHype rumpHype rumpHype')
 
 async def pomo(ctx: Context):
     await handle_pomo(ctx)
@@ -189,11 +186,11 @@ async def whip(ctx: Context):
     await ctx.send(f'/me *cracks whip* BACK TO WORK!')
 
 async def vibe(ctx: Context):
-    await ctx.send(f'/me We vibin\'! andrumHype andrumSmug blobDance We vibin\'! andrumHype andrumSmug blobDance We vibin\'! andrumHype andrumSmug blobDance ')
+    await ctx.send(f'/me We vibin\'! rumpHype rumpSmug blobDance We vibin\'! rumpHype rumpSmug blobDance We vibin\'! rumpHype rumpSmug blobDance ')
 
 async def congrats(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_TEACHERLY_CONGRATS.value)
-    await ctx.send(f'/me Hurray for {message}! Compliments, cheers, and congratulations on your wonderful accomplishment! andrumHype andrumHeart andrumHype ')
+    await ctx.send(f'/me Hurray for {message}! Compliments, cheers, and congratulations on your wonderful accomplishment! rumpHype rumpHeart rumpHype ')
 
 async def focus(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_HAM_FOCUS.value)
@@ -237,10 +234,10 @@ async def pun(ctx: Context):
     await ctx.send(f'/me {pun_text}')
 
 async def brb(ctx: Context):
-    if ctx.author.name == 'andrumpleteazer':
-        await ctx.send(f'/Rumple will be right back! Yakky will watch over you while she\'s gone. Best behaviour now everyone... andrumSmug')
+    if ctx.author.name == 'rumppleteazer':
+        await ctx.send(f'/Rumple will be right back! Yakky will watch over you while she\'s gone. Best behaviour now everyone... rumpSmug')
     else:
-        await ctx.send(f'/Okiedokie {ctx.author.name}, catch you later! We\'ll miss you in the meantime~ andrumHeart')
+        await ctx.send(f'/Okiedokie {ctx.author.name}, catch you later! We\'ll miss you in the meantime~ rumpHeart')
 
 async def relax(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_BIK_RELAX.value)
@@ -253,22 +250,22 @@ async def welcomejk(ctx: Context):
 async def hello(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_LENNY_HELLO.value)
     if message == '':
-        await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! andrumHeart ')
+        await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! rumpHeart ')
     else:
-        await ctx.send(f'/me Well, hello there you {message}! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! andrumHeart ')
+        await ctx.send(f'/me Well, hello there you {message}! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! rumpHeart ')
    
 async def everest(ctx: Context):
-    await ctx.send(f'/me Everest gives a hug to everyone in the chat and requests all to hug him back. andrumHeart ' )
+    await ctx.send(f'/me Everest gives a hug to everyone in the chat and requests all to hug him back. rumpHeart ' )
 
 async def pap(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_PAP.value)
-    await ctx.send(f'/me No... just no... stop! Go. Away. Please... andrumNotLikeThis ' ) 
+    await ctx.send(f'/me No... just no... stop! Go. Away. Please... rumpNotLikeThis ' ) 
 
 async def sigh(ctx: Context):
     await ctx.send(f'/me (* ´ Д｀)=з   ( ￣_￣)    (ᇂ_ᇂ|||)    (;¬_¬)' ) 
 
 async def smilejay(ctx: Context):
-    await ctx.send(f'/me Hey Jay! andrumHeart Just a reminder: You so precious when you S-M-I-L-E andrumSmug' )
+    await ctx.send(f'/me Hey Jay! rumpHeart Just a reminder: You so precious when you S-M-I-L-E rumpSmug' )
 
 async def flug(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_KP_FLUG.value)
@@ -278,7 +275,7 @@ async def joke(ctx: Context):
     await ctx.send(f'/me Why did the chicken cross the Moebius strip?........To get to the same side!')
 
 async def kirby(ctx: Context):
-    await ctx.send(f'/me I like when you call me Kirbs andrumAw')
+    await ctx.send(f'/me I like when you call me Kirbs rumpAw')
 
 async def gaia(ctx: Context):
     await ctx.send(f'/me Gaia needs to focus!')
@@ -289,35 +286,35 @@ async def bagel(ctx: Context):
 
 async def force(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SOKURI_FORCE.value)
-    await ctx.send(f'/me {message} WITH SUCH FORCE! andrumLetsGo ')
+    await ctx.send(f'/me {message} WITH SUCH FORCE! rumpLetsGo ')
 
 async def day(ctx: Context):
-    await ctx.send(f'/me it\'s like Wednesday or something... andrumOO ')
+    await ctx.send(f'/me it\'s like Wednesday or something... rumpOO ')
 
 async def breaktime(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_BREAK.value)
-    await ctx.send(f'/me Why not do something nice for yourself today {message}? Find some quiet, sit in stillness, breathe. Put your problems on pause. You deserve a break andrumCosy ')
+    await ctx.send(f'/me Why not do something nice for yourself today {message}? Find some quiet, sit in stillness, breathe. Put your problems on pause. You deserve a break rumpCosy ')
 
 async def godkingmable(ctx: Context):
     await ctx.send(f'/me TwitchLit A Cosmic Entity. They were here for the beginning of time... and will be there for the end... TwitchLit ')
 
 async def hi(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_STEVIE_HI.value)
-    await ctx.send(f'Hi {message}, I\'m {ctx.author.name}, nice to meet you andrumWave !')
+    await ctx.send(f'Hi {message}, I\'m {ctx.author.name}, nice to meet you rumpWave !')
 
 async def drawing(ctx: Context):
-    await ctx.send(f'/me Life is art, live yours in color andrumAw Someone redeemed a 5min drawing! andrumFlawer ')
+    await ctx.send(f'/me Life is art, live yours in color rumpAw Someone redeemed a 5min drawing! rumpFlawer ')
 
 async def nat(ctx: Context):
     await ctx.send(f"/me nat and chat do a pat pat on your head. You're doing great, we show some love to you <3 " )
 
 async def sokuwork(ctx: Context):
-    await ctx.send(f'/me @sokuri_ is going to "work".... he is working hard.....or hardly working? We\'ll never know! But good luck andrumFlawer ')
+    await ctx.send(f'/me @sokuri_ is going to "work".... he is working hard.....or hardly working? We\'ll never know! But good luck rumpFlawer ')
 
 async def van(ctx: Context):
     await ctx.send(f'/me duckPls beepbeep duckPls')
 
 async def wakey(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_WAKEY.value)
-    await ctx.send(f'/me andrumFlawer The Pandamonium gives positive vibes to {message} to help them out of their weary state! andrumFlawer ')
+    await ctx.send(f'/me rumpFlawer The Pandamonium gives positive vibes to {message} to help them out of their weary state! rumpFlawer ')
 

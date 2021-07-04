@@ -81,6 +81,9 @@ class CommandKeys(Enum):
     CMD_LENNY_SOKUWORK = 'sokuwork'
     CMD_VAN_VAN = 'van'
     CMD_FLIP_WAKEY = 'wakey'
+    CMD_STEIN_STEIN = 'stein'
+    CMD_SAKO_MOTIVATE = 'motivate'
+    CMD_UNDEFINED_FLOOP = 'foop'
 
 
 
@@ -318,3 +321,16 @@ async def wakey(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_WAKEY.value)
     await ctx.send(f'/me rumpFlawer The Pandamonium gives positive vibes to {message} to help them out of their weary state! rumpFlawer ')
 
+async def stein(ctx: Context):
+    await ctx.send(f'/me Steinway lurks behind the shadows. You are now blessed with luck for your working session. Good Luck HYPERS duckPls')
+
+async def motivate(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_MOTIVATE.value)
+    await ctx.send(f" /me rumpFlawer rumpTired Are you getting tired {message}? THINK BIG. TRUST YOURSELF AND MAKE IT HAPPEN! rumpFlawer rumpLetsGo " )
+
+async def floop(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_MOTIVATE.value)
+    if message == '':
+        await ctx.send(f"/me *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer " )
+    else:
+        await ctx.send(f"/me *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} ")

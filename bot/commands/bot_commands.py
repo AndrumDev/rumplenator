@@ -83,7 +83,7 @@ class CommandKeys(Enum):
     CMD_FLIP_WAKEY = 'wakey'
     CMD_STEIN_STEIN = 'stein'
     CMD_SAKO_MOTIVATE = 'motivate'
-    CMD_UNDEFINED_FLOOP = 'foop'
+    CMD_UNDEFINED_FLOOP = 'floop'
 
 
 
@@ -326,11 +326,11 @@ async def stein(ctx: Context):
 
 async def motivate(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_MOTIVATE.value)
-    await ctx.send(f" /me rumpFlawer rumpTired Are you getting tired {message}? THINK BIG. TRUST YOURSELF AND MAKE IT HAPPEN! rumpFlawer rumpLetsGo " )
+    await ctx.send(f"/me rumpFlawer rumpTired Are you getting tired {message}? THINK BIG. TRUST YOURSELF AND MAKE IT HAPPEN! rumpFlawer rumpLetsGo " )
 
 async def floop(ctx: Context):
-    message = get_message_content(ctx.content, CommandKeys.CMD_SAKO_MOTIVATE.value)
+    message = get_message_content(ctx.content, CommandKeys.CMD_UNDEFINED_FLOOP.value)
     if message == '':
-        await ctx.send(f"/me *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer " )
+        await ctx.send(f"/me *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer " )
     else:
-        await ctx.send(f"/me *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} ")
+        await ctx.send(f"/me *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} ")

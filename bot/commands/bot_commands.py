@@ -84,7 +84,7 @@ class CommandKeys(Enum):
     CMD_STEIN_STEIN = 'stein'
     CMD_SAKO_MOTIVATE = 'motivate'
     CMD_UNDEFINED_FLOOP = 'floop'
-
+    CMD_SERAPH_HATSINCHAT = 'hatsinchat'
 
 
 ### Channel commands ###
@@ -333,4 +333,7 @@ async def floop(ctx: Context):
     if message == '':
         await ctx.send(f"/me *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... this is fow you-wu rumpFlawer " )
     else:
-        await ctx.send(f"/me *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} ")
+        await ctx.send(f"/me *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} *boops your nose* uh hewwo?!! *cries* rumpWaa *peeks* um hi... {message} ") 
+
+async def hatsinchat(ctx: Context):
+    await ctx.send(f'/me PartyHat hats are POG! PartyHat rumpWow PartyHat PartyHat hats are POG! PartyHat rumpWow PartyHat ')

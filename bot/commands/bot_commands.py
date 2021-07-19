@@ -85,15 +85,16 @@ class CommandKeys(Enum):
     CMD_SAKO_MOTIVATE = 'motivate'
     CMD_UNDEFINED_FLOOP = 'floop'
     CMD_SERAPH_HATSINCHAT = 'hatsinchat'
-
-
+    CMD_CHEBY_DEBONAIR = 'debonair'
+    CMD_CRANKY_TABLE = 'table'
+    CMD_STATIC_YUCKY = 'yucky'
 ### Channel commands ###
 
 
 async def kill(ctx: Context):
     await ctx.send('I cannot be killed™'.encode("utf-8").decode("utf-8"))
 
-async def bot_love(ctx: Context):
+async def botlove(ctx: Context):
     await ctx.send(f'aaawh thank you {ctx.author.name} rumpHeart If I was sentient I would love you too! xxx')
 
 async def ssimp(ctx: Context):
@@ -237,7 +238,7 @@ async def pun(ctx: Context):
     await ctx.send(f'/me {pun_text}')
 
 async def brb(ctx: Context):
-    if ctx.author.name == 'rumppleteazer':
+    if ctx.author.name == 'rumplestudy':
         await ctx.send(f'/Rumple will be right back! Yakky will watch over you while she\'s gone. Best behaviour now everyone... rumpSmug')
     else:
         await ctx.send(f'/Okiedokie {ctx.author.name}, catch you later! We\'ll miss you in the meantime~ rumpHeart')
@@ -337,3 +338,16 @@ async def floop(ctx: Context):
 
 async def hatsinchat(ctx: Context):
     await ctx.send(f'/me PartyHat hats are POG! PartyHat rumpWow PartyHat PartyHat hats are POG! PartyHat rumpWow PartyHat ')
+
+async def debonair(ctx: Context):
+    await ctx.send(f'/me [ADJ] confident, stylish, and charming (typically used of a man).')
+
+async def table(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_CRANKY_TABLE.value)
+    if message == 'flip':
+        await ctx.send(f' (╯°□°）╯︵ ┻━┻ ')
+    elif message == 'unflip':
+        await ctx.send(f' ┬─┬ ノ( ゜-゜ノ)' )
+
+async def yucky(ctx: Context):
+    await ctx.send(f"/me It's Yakky, not yucky rumpMad " )

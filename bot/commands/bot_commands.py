@@ -88,7 +88,7 @@ class CommandKeys(Enum):
     CMD_CHEBY_DEBONAIR = 'debonair'
     CMD_CRANKY_TABLE = 'table'
     CMD_STATIC_YUCKY = 'yucky'
-    CMD_ASHLEY_MRPOMS = 'MrPoms'
+    CMD_ASHLEY_MRPOMS = 'mrpoms'
 ### Channel commands ###
 
 
@@ -353,5 +353,5 @@ async def table(ctx: Context):
 async def yucky(ctx: Context):
     await ctx.send(f"/me It's Yakky, not yucky rumpMad " )
 
-async def MrPoms(ctx: Context):
+async def mrpoms(ctx: Context):
     await ctx.send(f"/me rumpMad DID YOU WORK OUT??? rumpMad" )

@@ -370,4 +370,4 @@ async def oranges(ctx: Context):
     await ctx.send(f"https://clips.twitch.tv/VivaciousPunchyChowderRiPepperonis-u1ulYmYe5Wm9T4MP")
 
 async def dog(ctx: Context):
-    await ctx.send(f"/meDog is the new Twitch Bae! rumpVom" )
+    await ctx.send(f"/me Dog is the new Twitch Bae! rumpVom" )

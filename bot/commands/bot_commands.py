@@ -89,6 +89,7 @@ class CommandKeys(Enum):
     CMD_CRANKY_TABLE = 'table'
     CMD_STATIC_YUCKY = 'yucky'
     CMD_ASHLEY_MRPOMS = 'mrpoms'
+    CMD_SPHYNX_HARNESS = 'harness'
 ### Channel commands ###
 
 
@@ -355,3 +356,8 @@ async def yucky(ctx: Context):
 
 async def mrpoms(ctx: Context):
     await ctx.send(f"/me rumpMad DID YOU WORK OUT??? rumpMad" )
+
+async def harness(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_HARNESS.value)
+    await ctx.send(f"/me {ctx.author.name} has harnessed {message}'s energy and is now more vibrant and lovely rumpWow " )
+

@@ -90,6 +90,11 @@ class CommandKeys(Enum):
     CMD_STATIC_YUCKY = 'yucky'
     CMD_ASHLEY_MRPOMS = 'mrpoms'
     CMD_SPHYNX_HARNESS = 'harness'
+    CMD_MANGO_ORANGES = 'oranges'
+    CMD_SAKO_DOG = 'dog'
+
+
+
 ### Channel commands ###
 
 
@@ -361,3 +366,8 @@ async def harness(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SPHYNX_HARNESS.value)
     await ctx.send(f"/me {ctx.author.name} has harnessed {message}'s energy and is now more vibrant and lovely rumpWow " )
 
+async def oranges(ctx: Context):
+    await ctx.send(f"https://clips.twitch.tv/VivaciousPunchyChowderRiPepperonis-u1ulYmYe5Wm9T4MP")
+
+async def dog(ctx: Context):
+    await ctx.send(f"/me Dog is the new Twitch Bae! rumpVom" )

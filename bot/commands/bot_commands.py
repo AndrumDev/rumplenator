@@ -92,6 +92,7 @@ class CommandKeys(Enum):
     CMD_SPHYNX_HARNESS = 'harness'
     CMD_MANGO_ORANGES = 'oranges'
     CMD_SAKO_DOG = 'dog'
+    CMD_FLIP_SPIRITBOMB = 'spiritbomb'
 
 
 
@@ -371,3 +372,7 @@ async def oranges(ctx: Context):
 
 async def dog(ctx: Context):
     await ctx.send(f"/me Dog is the new Twitch Bae! rumpVom" )
+
+async def spiritbomb(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_SPIRITBOMB.value)
+    await ctx.send(f"/me EVERYONE! RAISE YOUR HANDS AND LEND {message} YOUR ENERGY! :raised_hand::cyclone::raised_back_of_hand: ")

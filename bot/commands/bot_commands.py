@@ -93,7 +93,8 @@ class CommandKeys(Enum):
     CMD_MANGO_ORANGES = 'oranges'
     CMD_SAKO_DOG = 'dog'
     CMD_FLIP_SPIRITBOMB = 'spiritbomb'
-
+    CMD_JAZ_MATH = 'math'
+    CMD_FLIP_HELL = 'hell'
 
 
 ### Channel commands ###
@@ -170,7 +171,7 @@ async def cointoss(ctx: Context):
 
 async def pat(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_FLAWER_PAT.value)
-    await ctx.send(f'/me gentle pats on {message}\'s head. well done! you\'re doin great my friend (ｏ・・)ノ”(ᴗ ᴗ。) <3 ')
+    await ctx.send(f'/me gentle pats on {message.split()[0]}\'s head. well done! you\'re doin great my friend (ｏ・・)ノ”(ᴗ ᴗ。) <3 ')
 
 async def dropkick(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_SKY_DROPKICK.value)
@@ -192,7 +193,7 @@ async def tuck(ctx: Context):
     if message == '':
         return()
     else:
-        await ctx.send(f"/me it\'s {message}\'s bedtime! get comfy in bed and have sweet dreams my friend! thanks for being here, we\'ll miss you! (︶｡︶✽)zzz")
+        await ctx.send(f"/me it\'s {message.split()[0]}\'s bedtime! get comfy in bed and have sweet dreams my friend! thanks for being here, we\'ll miss you! (︶｡︶✽)zzz")
 
 async def whip(ctx: Context):
     await ctx.send(f'/me *cracks whip* BACK TO WORK!')
@@ -264,7 +265,7 @@ async def hello(ctx: Context):
     if message == '':
         await ctx.send(f'/me Well, hello there you magnificent people! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! rumpHeart ')
     else:
-        await ctx.send(f'/me Well, hello there you {message}! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! rumpHeart ')
+        await ctx.send(f'/me Well, hello there {message}! Hope you are having a good day and getting your work done! Pls eat well, drink water and be mind-full! rumpHeart ')
    
 async def everest(ctx: Context):
     await ctx.send(f'/me Everest gives a hug to everyone in the chat and requests all to hug him back. rumpHeart ' )
@@ -328,7 +329,7 @@ async def van(ctx: Context):
 
 async def wakey(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_WAKEY.value)
-    await ctx.send(f'/me rumpFlawer The Pandamonium gives positive vibes to {message} to help them out of their weary state! rumpFlawer ')
+    await ctx.send(f'/me rumpFlawer {ctx.author.name} sends positive vibes to {message} to help them out of their weary state! rumpFlawer ')
 
 async def stein(ctx: Context):
     await ctx.send(f'/me Steinway lurks behind the shadows. You are now blessed with luck for your working session. Good Luck HYPERS duckPls')
@@ -375,4 +376,11 @@ async def dog(ctx: Context):
 
 async def spiritbomb(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_SPIRITBOMB.value)
-    await ctx.send(f"/me EVERYONE! RAISE YOUR HANDS AND LEND {message} YOUR ENERGY! :raised_hand::cyclone::raised_back_of_hand: ")
+    await ctx.send(f"/me EVERYONE! RAISE YOUR HANDS AND LEND {message} YOUR ENERGY! :raised_hand: :cyclone: :raised_back_of_hand: ")
+
+async def math(ctx: Context):
+    await ctx.send(f"/me ItsBoshyTime math not found ItsBoshyTime math not found ItsBoshyTime ")
+
+async def hell(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_HELL.value)
+    await ctx.send(f"/me Well well well {message.split()[0]} Hope you are having a good day... IN HELL rumpDevil and getting your work done IN HELL, drink water IN HELL, and be mind-full IN HELL rumpDevil "

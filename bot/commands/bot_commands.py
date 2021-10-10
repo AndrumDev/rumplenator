@@ -95,7 +95,7 @@ class CommandKeys(Enum):
     CMD_FLIP_SPIRITBOMB = 'spiritbomb'
     CMD_JAZ_MATH = 'math'
     CMD_FLIP_HELL = 'hell'
-
+    CMD_KP_HAVA = 'hava'
 
 ### Channel commands ###
 
@@ -383,4 +383,8 @@ async def math(ctx: Context):
 
 async def hell(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_HELL.value)
-    await ctx.send(f"/me Well well well {message.split()[0]} Hope you are having a good day... IN HELL rumpDevil and getting your work done IN HELL, drink water IN HELL, and be mind-full IN HELL rumpDevil "
+    await ctx.send(f"/me Well well well {message.split()[0]} Hope you are having a good day... IN HELL rumpDevil and getting your work done IN HELL, drink water IN HELL, and be mind-full IN HELL rumpDevil")
+
+async def hava(ctx: Context):
+    message = get_message_content(ctx.content, CommandKeys.CMD_KP_HAVA.value)
+    await ctx.send(f"/me hava nice day, {message.split()[0]} lmaoo FeelsBirthdayMan")

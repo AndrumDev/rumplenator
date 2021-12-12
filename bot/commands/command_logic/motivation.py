@@ -6,7 +6,7 @@ __quotes_file_path = get_config().get('resource_dir') / 'motivational_quotes.txt
 
 
 def get_motivational_quote() -> str:
-    with open(__quotes_file_path, "r") as file:
+    with open(__quotes_file_path, "r", encoding="utf-8") as file:
         lines = file.readlines()
         return random.choice(lines)
     

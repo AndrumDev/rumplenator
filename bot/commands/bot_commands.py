@@ -4,6 +4,7 @@ from bot.commands.command_logic.pomo.pomo_command import handle_pomo
 from bot.commands.command_logic.simp import get_simp_quote
 from bot.commands.command_logic.pun import fetch_pun
 from bot.commands.command_logic.bagel import get_bagel_message
+from bot.commands.command_logic.motivation import get_motivational_quote
 from bot.helpers.constants import MULTI_MESSAGE_TIMEOUT_SECONDS
 from bot.helpers.functions import get_message_content
 from config import get_config
@@ -93,9 +94,11 @@ class CommandKeys(Enum):
     CMD_MANGO_ORANGES = 'oranges'
     CMD_SAKO_DOG = 'dog'
     CMD_FLIP_SPIRITBOMB = 'spiritbomb'
+    CMD_SUMO_MOTIVATE = 'motivate'
     CMD_JAZ_MATH = 'math'
     CMD_FLIP_HELL = 'hell'
     CMD_KP_HAVA = 'hava'
+
 
 ### Channel commands ###
 
@@ -376,7 +379,10 @@ async def dog(ctx: Context):
 
 async def spiritbomb(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_SPIRITBOMB.value)
-    await ctx.send(f"/me EVERYONE! RAISE YOUR HANDS AND LEND {message} YOUR ENERGY! :raised_hand: :cyclone: :raised_back_of_hand: ")
+    await ctx.send(f"/me EVERYONE! RAISE YOUR HANDS AND LEND {message} YOUR ENERGY! :raised_hand::cyclone::raised_back_of_hand: ")
+
+async def motivate(ctx: Context):
+    await ctx.send(f"/me {get_motivational_quote()}")
 
 async def math(ctx: Context):
     await ctx.send(f"/me ItsBoshyTime math not found ItsBoshyTime math not found ItsBoshyTime ")
@@ -388,3 +394,4 @@ async def hell(ctx: Context):
 async def hava(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_KP_HAVA.value)
     await ctx.send(f"/me hava nice day, {message.split()[0]} lmaoo FeelsBirthdayMan")
+

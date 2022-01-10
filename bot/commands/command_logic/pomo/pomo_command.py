@@ -39,7 +39,7 @@ async def handle_pomo(ctx: Message) -> None:
 
         return
 
-    if args[0] == 'cancel':
+    if args[0] == 'complete':
         if ctx.author.is_mod and len(args) >= 2 and args[1][0] == '@':
             target_user_name = args[1][1::]
             target_pomo = __active_timers.get(target_user_name)
@@ -70,15 +70,15 @@ async def handle_pomo(ctx: Message) -> None:
 
         return
 
-    if args[0] == 'mod':
-        if not ctx.author.is_mod:
-            await ctx.channel.send(f"@{username} u cheeky sod (:")
+    if args[0] == 'chat':
+        if not ctx.author.is_mod and not 'vip' in ctx.author.badges.keys(): 
+            await ctx.channel.send(f"@{username} Oops! This feature is only available to VIPs and Mods.")
             
             return
         if current_pomo:
             current_pomo.mod_mode = not current_pomo.mod_mode
             status = 'on' if current_pomo.mod_mode else 'off'
-            await ctx.channel.send(f'@{username}, mod mode is {status}')
+            await ctx.channel.send(f'@{username}, chat mode is {status}')
         else:
             await ctx.channel.send(f'@{username}, you do not have a running pomo session')
 
@@ -112,7 +112,7 @@ async def handle_pomo(ctx: Message) -> None:
     work_time, break_time, sessions, topic = __get_pom_args(args)
 
     if current_pomo:
-        await ctx.channel.send(f'@{username} you already have a pomo running! Check your status with !pomo check, or use !pomo cancel to stop')
+        await ctx.channel.send(f'@{username} you already have a pomo running! Check your status with !pomo check, or use !pomo complete to stop')
         return
 
     invalid_work_time = work_time < MIN_WORK_MINUTES
@@ -162,7 +162,7 @@ def __has_mod_bypass(msg: Message, pomo: PomoTimer):
     
 
 async def __show_pomo_info(ctx: Message, message='') -> None:
-    message = f"/me @{ctx.author.name} want to start your own work timer and appear on stream? Type !pomo [number] to set a single timer. Use !pomo cancel to stop it. See the About section for more useful features!"
+    message = f"/me @{ctx.author.name} want to start your own work timer and appear on stream? Type !pomo [number] to set a single timer. Use !pomo complete to cancel it. See the About section for more useful features!"
     await ctx.channel.send(message)
 
 async def __show_pomo_moreinfo(ctx: Message, message='') -> None:
@@ -210,7 +210,8 @@ def __get_pom_args(args: List[str]) -> Tuple[int, Optional[int], int, str]:
     has_topic = topic_idx != -1
     pom_times = args[:topic_idx] if has_topic else args
 
-    work_time = int(pom_times[0])
+
+    work_time = int(pom_times[0])  ### Maybe change the order of this? so !pomo work 10 
     break_time = int(pom_times[1]) if len(pom_times) > 1 else None
     sessions = int(pom_times[2]) if len(pom_times) > 2 else DEFAULT_NUM_SESSIONS
     topic = ' '.join([str(n) for n in args[topic_idx:]]) if has_topic else ''

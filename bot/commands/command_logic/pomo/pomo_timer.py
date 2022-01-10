@@ -159,7 +159,7 @@ class PomoTimer():
             await self.__start_countdown()
         else:
             self.state = PomoState.COMPLETE
-            await self.__notify_user(self.username, "your pomodoro sessions have finished, well done!")
+            await self.__notify_user(self.username, "your pomodoro sessions have finished, well done on all your hard work!")
             self.__on_pomo_complete()
 
 
@@ -174,7 +174,7 @@ class PomoTimer():
         if self.__cancelled_by:
             await self.__notify_user(self.username, f"your pomo session has been cancelled by {self.__cancelled_by}")
         else:
-            await self.__notify_user(self.username, "your pomo session has been cancelled")
+            await self.__notify_user(self.username, "your pomo session is complete. Well done!")
 
         self.__on_pomo_complete()
 

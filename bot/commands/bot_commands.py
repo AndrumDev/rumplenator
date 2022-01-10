@@ -98,6 +98,7 @@ class CommandKeys(Enum):
     CMD_JAZ_MATH = 'math'
     CMD_FLIP_HELL = 'hell'
     CMD_KP_HAVA = 'hava'
+    CMD_SUMO_MOTIVATION = 'motivation'
 
 
 ### Channel commands ###
@@ -379,9 +380,9 @@ async def dog(ctx: Context):
 
 async def spiritbomb(ctx: Context):
     message = get_message_content(ctx.content, CommandKeys.CMD_FLIP_SPIRITBOMB.value)
-    await ctx.send(f"/me EVERYONE! RAISE YOUR HANDS AND LEND {message} YOUR ENERGY! :raised_hand::cyclone::raised_back_of_hand: ")
+    await ctx.send(f"/me EVERYONE! RAISE YOUR HANDS AND LEND {message} YOUR ENERGY! :raised_hand: :cyclone: :raised_back_of_hand: ")
 
-async def motivate(ctx: Context):
+async def motivation(ctx: Context):
     await ctx.send(f"/me {get_motivational_quote()}")
 
 async def math(ctx: Context):

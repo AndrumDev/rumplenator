@@ -8,9 +8,9 @@ import time
 import asyncio
 
 DEFAULT_NUM_SESSIONS = 1
-MIN_WORK_MINUTES = 10
+MIN_WORK_MINUTES = 5
 MIN_BREAK_MINUTES = 3
-MAX_TOTAL_MINUTES = 300
+MAX_TOTAL_MINUTES = 600
 MAX_TOPIC_LENGTH = 120
 
 
@@ -39,18 +39,23 @@ async def handle_pomo(ctx: Message) -> None:
 
         return
 
+    if args[0].startswith('@'):
+        target_user_name = args[0]
+        await ctx.channel.send(f"/me {target_user_name} want to start your own work timer and appear on stream? Type !pomo [number] to set a single timer. Use !pomo complete to cancel it. See the About section for more useful features!")
+        return
+
     if args[0] == 'complete':
         if ctx.author.is_mod and len(args) >= 2 and args[1][0] == '@':
             target_user_name = args[1][1::]
             target_pomo = __active_timers.get(target_user_name)
             if not target_pomo:
-                await ctx.channel.send(f'@{username}, {target_user_name} does not have an active pomo timer')
+                await ctx.channel.send(f'@{username}, {target_user_name} does not have an active pomo timer.')
             else:
                 __cancel_pomo(target_user_name, username)
         elif current_pomo:
             __cancel_pomo(username)
         else:
-            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session.')
 
         return
 
@@ -58,7 +63,7 @@ async def handle_pomo(ctx: Message) -> None:
         if current_pomo:
             await __show_pomo_update(current_pomo, ctx)
         else:
-            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session.')
 
         return
 
@@ -66,13 +71,13 @@ async def handle_pomo(ctx: Message) -> None:
         if current_pomo:
             await current_pomo.skip()
         else:
-            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session.')
 
         return
 
     if args[0] == 'chat':
-        if not ctx.author.is_mod and not 'vip' in ctx.author.badges.keys(): 
-            await ctx.channel.send(f"@{username} Oops! This feature is only available to VIPs and Mods.")
+        if not ctx.author.is_mod and not 'subscriber' in ctx.author.badges.keys():
+            await ctx.channel.send(f"@{username} Oops! This feature is only available to subscribers")
             
             return
         if current_pomo:
@@ -80,7 +85,7 @@ async def handle_pomo(ctx: Message) -> None:
             status = 'on' if current_pomo.mod_mode else 'off'
             await ctx.channel.send(f'@{username}, chat mode is {status}')
         else:
-            await ctx.channel.send(f'@{username}, you do not have a running pomo session')
+            await ctx.channel.send(f'@{username}, you do not have a running pomo session.')
 
         return
 
@@ -152,7 +157,7 @@ async def check_pomo_state(msg: Message) -> None:
     pomo = __active_timers.get(msg.author.name)
     if pomo and pomo.state == PomoState.WORK and not __has_mod_bypass(msg, pomo):
         if pomo.minutes_remaining > 1:
-            await msg.channel.send(f"@{msg.author.name}, stay focussed! Only {pomo.minutes_remaining} minutes left. You got this!")
+            await msg.channel.send(f"Stay focussed @{msg.author.name}! {pomo.minutes_remaining} minutes left. You got this! If you want to chat, please use [!pomo chat] otherwise I'll bonk you! BOP")
         else:
             await msg.channel.send(f"@{msg.author.name} your work session is ALMOST complete! sit tight!")
  
@@ -171,9 +176,9 @@ async def __show_pomo_moreinfo(ctx: Message, message='') -> None:
 
 async def __show_pomo_update(pomo: PomoTimer, ctx: Message) -> None:
     if pomo.state == PomoState.WORK:
-        await ctx.channel.send(f'@{pomo.username}, you have {__get_mins_remaining_string(pomo)} left on your work session. You got this!')
+        await ctx.channel.send(f' Checking time... you have {__get_mins_remaining_string(pomo)} left on your work session @{pomo.username}. You got this!')
     elif pomo.state == PomoState.BREAK:
-        await ctx.channel.send(f'@{pomo.username}, you still have {__get_mins_remaining_string(pomo)} left on your break. Prepare yourself')
+        await ctx.channel.send(f'Checking time... you have {__get_mins_remaining_string(pomo)} left on your break @{pomo.username}. Take it easy~')
 
 
 def __get_mins_remaining_string(pomo: PomoTimer) -> str:

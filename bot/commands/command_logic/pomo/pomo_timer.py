@@ -14,7 +14,7 @@ import logging
 
 class PomoState(enum.Enum):
     '''
-    
+    A timer can be in any of of these states
     '''
     WORK = 'work'
     BREAK = 'break'
@@ -24,7 +24,8 @@ class PomoState(enum.Enum):
 
 class PomoOperation(enum.Enum):
     '''
-
+    A timer's remaining time can be modified using these operations,
+    or it can be cancelled.
     '''
     ADD = 'add'
     SUBTRACT = 'subtract'
@@ -56,23 +57,26 @@ class PomoTimer():
 
         # per-countdown state properties:
         self.__current_timer: Countdown = None
-        self.__timer_queue: Queue = None
+        self.__ops_queue: Queue = None
 
     @property
     def minutes_remaining(self) -> int:
         '''
-        Returns the minutes remaining in the current work or break timer
+        Returns the minutes remaining in the current phase (work or break)
         '''
         return seconds_to_mins(self.__current_timer.seconds_remaining)
 
 
     @property
     def sessions_done(self) -> int:
+        '''
+        Returns the number of work sessions remaining until the pomo is complete
+        '''
         return self.total_sessions - self.sessions_remaining
 
 
     def reset_countdown(self):
-        self.__timer_queue = None
+        self.__ops_queue = None
         self.__current_timer = None
 
 
@@ -88,22 +92,30 @@ class PomoTimer():
             if username != '':
                 self.__cancelled_by = username
 
-            self.__timer_queue.put((PomoOperation.CANCEL, None, None))
+            self.__ops_queue.put((PomoOperation.CANCEL, None, None))
 
 
     def increase_mins(self, mins):
+        '''
+        Ad-hoc extension of the current countdown by the given mins.
+        Any subsequent WORK or BREAK timers in the session are unaffected.
+        '''
         async def notify_user_callback(seconds_remaining: int):
            await self.__notify_user(self.username, f'your current timer has been increased to {seconds_to_mins(seconds_remaining)}!')
 
         if self.__current_timer:
-            self.__timer_queue.put((PomoOperation.ADD, mins, notify_user_callback))
+            self.__ops_queue.put((PomoOperation.ADD, mins, notify_user_callback))
 
     
     def decrease_mins(self, mins):
+        '''
+        Ad-hoc reduction of the current countdown by the given mins.
+        Any subsequent WORK or BREAK timers in the session are unaffected.
+        '''
         async def notify_user_callback(seconds_remaining: int):
            await self.__notify_user(self.username, f'your current timer has been decreased to {seconds_to_mins(seconds_remaining)}!')
         if self.__current_timer:
-            self.__timer_queue.put((PomoOperation.SUBTRACT, mins, notify_user_callback))
+            self.__ops_queue.put((PomoOperation.SUBTRACT, mins, notify_user_callback))
 
 
     async def __start_countdown(self):
@@ -131,10 +143,10 @@ class PomoTimer():
         
         await self.__notify_user(self.username, start_message)
 
-        self.__timer_queue = Queue()
+        self.__ops_queue = Queue()
         self.__current_timer = Countdown(
             countdown_minutes,
-            self.__timer_queue,
+            self.__ops_queue,
             event_loop,
             self.__on_countdown_complete,
             self.__on_countdown_cancelled
@@ -283,3 +295,4 @@ def seconds_to_mins(seconds: int) -> int:
     return math.ceil(seconds / 60)
 
 #####
+
